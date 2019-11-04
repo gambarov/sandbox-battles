@@ -1,4 +1,4 @@
-local class = require('cartel-framework.exts.middleclass')
+local class = require('manada.exts.middleclass')
 
 local Test = class( 'Test' )
 
