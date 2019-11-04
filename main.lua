@@ -1,3 +1,5 @@
-local test = {}
-test['test'] = 5
-print(test.test)
+require('cartel-framework.core')
+
+cartel.test:testPrint()
+
+local map = require('cartel-framework.mapGenerator'):new({ width = 15 });
