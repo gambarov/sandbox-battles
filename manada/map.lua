@@ -2,9 +2,6 @@ local class = require('manada.exts.middleclass')
 
 local Map = class('Map')
 
--- Необходимые модули для работы класса
-local draggable = require("manada.plugins.draggable")
-
 function Map:initialize(params)
 
     params = params or {}
@@ -32,7 +29,7 @@ function Map:initialize(params)
 
     end
 
-    self._group = draggable.new(self._group)
+    self._group = manada.plugins.draggable:new(self._group)
 
 end
 

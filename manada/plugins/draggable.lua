@@ -1,16 +1,16 @@
 local Plugin = {}
 
-function Plugin.new(instance)
+function Plugin:new( instance )
 
     if not instance then
-        error("ERROR: " .. "Expected display object")
+        error( "ERROR: " .. "Expected display object" )
     end
 
-    function instance:touch(event)
+    function instance:touch( event )
 
         if event.phase == "began" then
 
-            display.getCurrentStage():setFocus(self._group, event.id)
+            display.getCurrentStage():setFocus( self._group, event.id )
             self.isFocus = true
             self.markX = self.x
             self.markY = self.y
@@ -24,7 +24,7 @@ function Plugin.new(instance)
 
             elseif event.phase == "ended" or event.phase == "cancelled" then
 
-                display.getCurrentStage():setFocus(self._group, nil)
+                display.getCurrentStage():setFocus( self._group, nil )
                 self.isFocus = false
 
             end
@@ -34,7 +34,7 @@ function Plugin.new(instance)
 
     end
 
-    instance:addEventListener("touch")
+    instance:addEventListener( "touch" )
     return instance
 
 end
