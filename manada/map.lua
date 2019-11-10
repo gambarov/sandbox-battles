@@ -7,8 +7,8 @@ function Map:initialize(params)
     params = params or {}
 
     self._width = params.width or 10
-    self._height = params.height or 10
-    self._cellSize = params.cellSize or 32
+    self._height = params.height or 15
+    self._cellSize = params.cellSize or 128
 
     self._cells = {}
     self._group = display.newGroup()

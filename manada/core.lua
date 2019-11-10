@@ -2,6 +2,9 @@ local class = require( "manada.libs.middleclass" )
 
 local Core = class( "Core" )
 
+-- Сторонние библиотеки для работы
+local visualMonitor = require("manada.libs.visualMonitor")
+
 Core.plugins = {}
 
 function Core:initialize( params )
@@ -15,7 +18,7 @@ function Core:initialize( params )
     end
 
     local loadPlugin = function( name )
-        Core.plugins[ name ] = require( "manada.plugins." .. name)
+        self.plugins[ name ] = require( "manada.plugins." .. name)
         self._plugins[ #self._plugins + 1 ] =  Core.plugins[ name ]
     end
 
@@ -27,9 +30,9 @@ function Core:initialize( params )
     -- Загрузка плагинов
     loadPlugin( "draggable" )
 
-    require("manada.libs.visualMonitor"):new()
+    visualMonitor:new()
     display.setStatusBar( display.HiddenStatusBar ) 
 
 end
 
-manada = Core:new()
+manada = Core:new()`
