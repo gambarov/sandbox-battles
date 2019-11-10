@@ -1,4 +1,4 @@
-local class = require("manada.exts.middleclass")
+local class = require("manada.libs.middleclass")
 
 local Utils = class("Utils")
 
@@ -10,7 +10,7 @@ function Utils:splite(str, delimeter)
 
     for field, s in string.gmatch(str, "([^" .. delimeter .. "]*)(" .. delimeter .. "?)") do
         table.insert(t, field)
-        
+
         if s == "" then
             return t
         end

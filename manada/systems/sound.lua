@@ -1,4 +1,4 @@
-local class = require( "manada.exts.middleclass" )
+local class = require( "manada.libs.middleclass" )
 
 local Sound = class( "Sound" )
 

@@ -1,4 +1,4 @@
-local class = require( "manada.exts.middleclass" )
+local class = require( "manada.libs.middleclass" )
 
 local Core = class( "Core" )
 
@@ -27,7 +27,7 @@ function Core:initialize( params )
     -- Загрузка плагинов
     loadPlugin( "draggable" )
 
-    require("manada.exts.visualMonitor"):new()
+    require("manada.libs.visualMonitor"):new()
     display.setStatusBar( display.HiddenStatusBar ) 
 
 end
