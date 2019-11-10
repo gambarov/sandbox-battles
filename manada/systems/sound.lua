@@ -79,6 +79,13 @@ function Sound:add(name, path, baseDir)
 
 end
 
+function Sound:play(name, ext, options)
+
+    options = options or {}
+    return audio.play(self:get(name, ext), options)
+
+end
+
 function Sound:setDefaultExt( ext )
     self._defaulfExt = ext
 end

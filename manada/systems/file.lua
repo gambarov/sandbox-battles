@@ -14,5 +14,4 @@ function File:getExtensionFromPath(path)
 
 end
 
-
 return File
