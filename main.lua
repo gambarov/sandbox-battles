@@ -1,8 +1,6 @@
-require('manada.core')
+require( "manada.core" )
 
-manada.test:testPrint()
-
-local map = require('manada.map'):new({ cellSize = 128, height = 18 });
+local map = require( "manada.map" ):new({ cellSize = 128, height = 18 });
 local group = map:getGroup()
 group.x, group.y = display.contentCenterX - group.width / 2, display.contentCenterY - group.height / 2
 
@@ -18,8 +16,6 @@ local function getEmitter(particleName, group)
 
     local emitterParams = json.decode( emitterData )
     emitterParams.textureFileName = path .. ".png"
-
-    print("INFO: " .. emitterParams.textureFileName)
 
     local emitter = display.newEmitter( emitterParams )
 

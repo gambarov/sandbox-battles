@@ -6,14 +6,15 @@ function Core:initialize( params )
 
     self._systems = {}
 
-    -- Load a system.
 	local loadSystem = function( name )
 		self[ name ] = require( "manada.systems." .. name ):new()
 		self._systems[ #self._systems + 1 ] = self[ name ]
     end
-    
+
+    -- Загрузка всех систем, порядок загрузки имеет значение
     loadSystem("utils")
     loadSystem("file")
+    loadSystem("sound")
 
     require("manada.exts.visualMonitor"):new()
     display.setStatusBar( display.HiddenStatusBar ) 

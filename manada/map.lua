@@ -2,6 +2,9 @@ local class = require('manada.exts.middleclass')
 
 local Map = class('Map')
 
+-- Необходимые модули для работы класса
+local draggable = require("manada.plugins.draggable")
+
 function Map:initialize(params)
 
     params = params or {}
@@ -29,23 +32,7 @@ function Map:initialize(params)
 
     end
 
-    self._group:addEventListener("touch", function (event)
-        if event.phase == "began" then
-            display.getCurrentStage():setFocus( self._group, event.id )
-            self._group.isFocus = true
-            self._group.markX = self._group.x
-            self._group.markY = self._group.y
-          elseif self._group.isFocus then
-            if event.phase == "moved" then
-                self._group.x = event.x - event.xStart + self._group.markX
-                self._group.y = event.y - event.yStart + self._group.markY
-            elseif event.phase == "ended" or event.phase == "cancelled" then
-              display.getCurrentStage():setFocus( self._group, nil )
-              self._group.isFocus = false
-            end
-          end
-          return true
-    end)
+    self._group = draggable.new(self._group)
 
 end
 
