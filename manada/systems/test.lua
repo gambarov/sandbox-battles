@@ -4,7 +4,7 @@ local Test = class( 'Test' )
 
 function Test:initialize( params )
 
-    self._testStr = "This is test print"
+    self._testStr = "########################################"
 
 end
 

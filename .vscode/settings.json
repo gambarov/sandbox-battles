@@ -1,5 +1,13 @@
 {
     "Lua.diagnostics.disable": [
-        "trailing-space"
+        "trailing-space",
+        "lowercase-global"
+    ],
+    "Lua.diagnostics.globals": [
+        "display",
+        "physics",
+        "system",
+        "Runtime",
+        "audio"
     ]
 }

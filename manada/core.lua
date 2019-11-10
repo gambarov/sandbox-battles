@@ -14,6 +14,9 @@ function Core:initialize( params )
     
     loadSystem('test');
 
+    require('manada.exts.visualMonitor'):new()
+    display.setStatusBar( display.HiddenStatusBar ) 
+
 end
 
 manada = Core:new()
