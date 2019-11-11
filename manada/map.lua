@@ -1,8 +1,8 @@
-local class = require('manada.libs.middleclass')
+local class = require( "manada.libs.middleclass" )
 
-local Map = class('Map')
+local Map = class( "Map" )
 
-function Map:initialize(params)
+function Map:initialize( params )
 
     params = params or {}
 

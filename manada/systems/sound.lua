@@ -21,17 +21,17 @@ function Sound:initialize( params )
 
 end
 
-function Sound:get(name, ext)
+function Sound:add(name, path, baseDir)
 
-    ext = ext or self:getDefaultExt()
+    local ext = manada.file:getFileExtension(path)
 
-    local sound = self._sounds[ name ][ ext ]
-
-    if not sound then
-        print("WARNING: " .. "can't find sound \"" .. name .. "." .. ext .. "\"")
+    -- Если идет перезапись значения, то очищаем из памяти старое
+    if self._sounds[ name ][ ext ] then
+        self:remove(name, ext)
     end
 
-    return sound
+    local sound = audio.loadSound( path, baseDir or system.ResourceDirectory )
+    self._sounds[ name ][ ext ] = sound
 
 end
 
@@ -65,17 +65,17 @@ function Sound:remove(name, ext)
 
 end
 
-function Sound:add(name, path, baseDir)
+function Sound:get(name, ext)
 
-    local ext = manada.file:getFileExtension(path)
+    ext = ext or self:getDefaultExt()
 
-    -- Если идет перезапись значения, то очищаем из памяти старое
-    if self._sounds[ name ][ ext ] then
-        self:remove(name, ext)
+    local sound = self._sounds[ name ][ ext ]
+
+    if not sound then
+        print("WARNING: " .. "can't find sound \"" .. name .. "." .. ext .. "\"")
     end
 
-    local sound = audio.loadSound( path, baseDir or system.ResourceDirectory )
-    self._sounds[ name ][ ext ] = sound
+    return sound
 
 end
 
