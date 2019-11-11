@@ -6,6 +6,7 @@ local Core = class( "Core" )
 local visualMonitor = require("manada.libs.visualMonitor")
 
 Core.plugins = {}
+Core.Debug = true
 
 function Core:initialize( params )
 
@@ -30,9 +31,13 @@ function Core:initialize( params )
     -- Загрузка плагинов
     loadPlugin( "draggable" )
 
-    visualMonitor:new()
+    if self.Debug then
+        visualMonitor:new()
+    end
+
+
     display.setStatusBar( display.HiddenStatusBar ) 
 
 end
 
-manada = Core:new()`
+manada = Core:new()

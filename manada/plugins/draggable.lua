@@ -10,7 +10,7 @@ function Plugin:new( instance )
 
         if event.phase == "began" then
 
-            display.getCurrentStage():setFocus( self._group, event.id )
+            display.getCurrentStage():setFocus( instance, event.id )
             self.isFocus = true
             self.markX = self.x
             self.markY = self.y
@@ -24,7 +24,7 @@ function Plugin:new( instance )
 
             elseif event.phase == "ended" or event.phase == "cancelled" then
 
-                display.getCurrentStage():setFocus( self._group, nil )
+                display.getCurrentStage():setFocus( instance, nil )
                 self.isFocus = false
 
             end

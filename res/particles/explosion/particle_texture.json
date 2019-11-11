@@ -13,7 +13,7 @@
 	"rotatePerSecondVariance": 0,
 	"particleLifespan": 0.3,
 	"minRadius": 0,
-	"configName": "fire",
+	"configName": "explosion",
 	"tangentialAcceleration": 700,
 	"rotationStart": 0,
 	"startColorVarianceGreen": 0,

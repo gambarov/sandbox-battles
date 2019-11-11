@@ -11,7 +11,7 @@ function Map:initialize(params)
     self._cellSize = params.cellSize or 128
 
     self._cells = {}
-    self._group = display.newGroup()
+    self._group = params.parentGroup or display.newGroup()
 
     for i = 1, self._width do
 

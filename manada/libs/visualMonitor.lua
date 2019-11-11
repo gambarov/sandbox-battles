@@ -52,8 +52,8 @@ local function update( event )
 
 		M.group.text.text = "Delta Time: " .. tostring( min( display.fps, int( 1000 / ( curTime - prevTime ) ) ) ) .. " " .. 
 	"FPS: ".. tostring( currentFPS .. " (" .. minFPS .. "-" .. maxFPS .. ")" ) .. " " ..
-    " Texture Memory: ".. tostring( int( system.getInfo( "textureMemoryUsed" ) * 0.0001 ) * 0.01 ) .. "mb " ..
-    " System Memory: ".. tostring( int( collectgarbage( "count" ) * 0.1 ) * 0.01 ) .. "mb " ..
+    " Texture Memory: ".. tostring( int( system.getInfo( "textureMemoryUsed" ) * 0.001 ) ) .. "kb " ..
+    " System Memory: ".. tostring( int( collectgarbage( "count" ) ) ) .. "kb " ..
     " Stage Objects: " .. tostring( int( deepNumChildren( display.getCurrentStage() ) ) )
 	end
 	M.group:toFront()
