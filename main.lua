@@ -6,7 +6,7 @@ group.x, group.y = display.contentCenterX - group.width / 2, display.contentCent
 
 local json = require( "json" )
 
-local function getEmitter(particleName, group)
+local function addEmitter(particleName, group)
 
     local path = "res\\particles\\" .. particleName .. "\\particle_texture";
 
@@ -18,27 +18,12 @@ local function getEmitter(particleName, group)
     emitterParams.textureFileName = path .. ".png"
 
     local emitter = display.newEmitter( emitterParams )
-
+    
     if group then
         group:insert(emitter)
+        emitter.absolutePosition = group
     end
 
     return emitter
 
 end
-
-for i = 1, 10 do
-
-    local emitter = getEmitter( "explosion", map:getGroup() )
-   
-    emitter.x = math.random( 0, display.contentWidth )
-    emitter.y = math.random( 0, display.contentHeight )
-
-end
-
-timer.performWithDelay(1500, function ()
-    
-    display.remove(map:getGroup())
-    map = nil
-
-end, 1)
