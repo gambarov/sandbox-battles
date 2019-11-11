@@ -27,3 +27,18 @@ local function addEmitter(particleName, group)
     return emitter
 
 end
+
+local params = 
+{
+    visual = display.newRect(100, 100, 100, 100)
+}
+
+local physics = require( "physics" )
+physics.start()
+
+local GameObject = require( "src.scenes.game.gameObject" )
+local PhysicsComponent = require("src.scenes.game.physicsComponent")
+
+local rectangle = GameObject:new( params )
+rectangle:addComponent( "physics", PhysicsComponent)
+rectangle:removeComponent( "dwqqdad" )
