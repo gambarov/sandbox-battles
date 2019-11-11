@@ -4,32 +4,45 @@ local GameObject = class( "GameObject" )
 
 local remove = table.remove
 
-function GameObject:initialize(params)
+function GameObject:initialize( params )
 
-   self._components = {} 
-    
+    params = params or {}
+    self._components = {} 
+   
+    for k, v in pairs( params ) do
+        -- Кастомные св-ва
+        self[ "_" .. k ] = v
+
+        -- Если текущее св-во — св-во самого экранного объекта
+        if self._visual and self._visual[ k ] then
+            self._visual[ k ] = v
+        end
+    end
+
+end
+
+function GameObject:addComponent(name, component, params)
+
+    if self._components[ name ] then
+        self:removeComponent(name)
+    end
+
+    params = params or {}
+
+    self._components[ name ] = component:new( self._visual, params )
+
 end
 
 function GameObject:removeComponent(name)
-    
+
     if not self._components[ name ] then
-        print( "WARNING: " .. "Can't remove nil component" )
+        print( "WARNING: " .. "Can't remove \"" .. name .. "\" component because it's dont's exist" )
         return false
     end
 
     self._components[ name ]:destroy()
     self._components[ name ] = nil
     return true
-
-end
-
-function GameObject:addComponent(name, component)
-
-    if self._components[ name ] then
-        self:removeComponent(name)
-    end
-
-    self._components[name] = component:new(self._displayObject)
 
 end
 
@@ -42,8 +55,8 @@ function GameObject:destroy()
     self._components = nil
 
     -- Удаляем экранный объект
-    display.remove( self._displayObject )
-    self._displayObject = nil
+    display.remove( self._visual )
+    self._visual = nil
 
 end
 
