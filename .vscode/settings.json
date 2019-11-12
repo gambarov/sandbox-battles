@@ -9,5 +9,6 @@
         "system",
         "Runtime",
         "audio"
-    ]
+    ],
+    "lua.targetVersion": "5.3"
 }

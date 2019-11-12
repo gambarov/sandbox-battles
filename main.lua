@@ -30,15 +30,26 @@ end
 
 local params = 
 {
-    visual = display.newRect(100, 100, 100, 100)
+    visual = display.newRect(100, 100, 100, 100),
 }
 
 local physics = require( "physics" )
 physics.start()
+physics.setGravity( 0, 0 )
 
-local GameObject = require( "src.scenes.game.gameObject" )
-local PhysicsComponent = require("src.scenes.game.physicsComponent")
+local GameObject = require( "src.scenes.game.gameObjects.gameObject" )
+
+local PhysicsComponent = require( "src.scenes.game.gameObjects.components.physicsComponent" )
+local AIControlComponent = require( "src.scenes.game.gameObjects.components.controls.AIControlComponent" )
 
 local rectangle = GameObject:new( params )
-rectangle:addComponent( "physics", PhysicsComponent)
-rectangle:removeComponent( "dwqqdad" )
+rectangle:getVisual():setFillColor( 0, 0, 0 )
+group:insert( rectangle:getVisual() )
+rectangle:addComponent( "physics", PhysicsComponent )
+rectangle:addComponent( "control", AIControlComponent )
+
+Runtime:addEventListener( "enterFrame", function ( event )
+    
+    rectangle:update()
+
+end)

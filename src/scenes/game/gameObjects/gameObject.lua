@@ -21,6 +21,13 @@ function GameObject:initialize( params )
 
 end
 
+function GameObject:update()
+    
+    for name, _ in pairs( self._components ) do
+        self._components[name]:update()
+    end
+
+end
 function GameObject:addComponent(name, component, params)
 
     if self._components[ name ] then
@@ -29,14 +36,14 @@ function GameObject:addComponent(name, component, params)
 
     params = params or {}
 
-    self._components[ name ] = component:new( self._visual, params )
+    self._components[ name ] = component:new( self:getVisual(), params )
 
 end
 
 function GameObject:removeComponent(name)
 
     if not self._components[ name ] then
-        print( "WARNING: " .. "Can't remove \"" .. name .. "\" component because it's dont's exist" )
+        print( "WARNING: " .. "Can't remove \"" .. name .. "\" component because it's doesn't exist" )
         return false
     end
 
@@ -44,6 +51,10 @@ function GameObject:removeComponent(name)
     self._components[ name ] = nil
     return true
 
+end
+
+function GameObject:getVisual()
+    return self._visual
 end
 
 function GameObject:destroy()
