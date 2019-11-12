@@ -27,6 +27,7 @@ function Core:initialize( params )
     loadSystem( "utils" )
     loadSystem( "file"  )
     loadSystem( "sound" )
+    loadSystem( "time"  )
 
     -- Загрузка плагинов
     loadPlugin( "draggable" )
