@@ -18,24 +18,16 @@ function Core:initialize( params )
 		self._systems[ #self._systems + 1 ] = self[ name ]
     end
 
-    local loadPlugin = function( name )
-        self.plugins[ name ] = require( "manada.plugins." .. name)
-        self._plugins[ #self._plugins + 1 ] =  Core.plugins[ name ]
-    end
-
     -- Загрузка всех систем, порядок загрузки имеет значение
-    loadSystem( "utils" )
-    loadSystem( "file"  )
-    loadSystem( "sound" )
-    loadSystem( "time"  )
-
-    -- Загрузка плагинов
-    loadPlugin( "draggable" )
+    loadSystem( "utils"  )
+    loadSystem( "file"   )
+    loadSystem( "sound"  )
+    loadSystem( "time"   )
+    loadSystem( "plugin" )
 
     if self.Debug then
         visualMonitor:new()
     end
-
 
     display.setStatusBar( display.HiddenStatusBar ) 
 

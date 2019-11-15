@@ -29,7 +29,7 @@ function Map:initialize( params )
 
     end
 
-    self._group = manada.plugins.draggable:new(self._group)
+    self._group = manada.plugin:new( self._group, "draggable" )
 
 end
 
