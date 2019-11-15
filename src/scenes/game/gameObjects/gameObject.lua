@@ -28,6 +28,7 @@ function GameObject:update()
     end
 
 end
+
 function GameObject:addComponent(name, component, params)
 
     if self._components[ name ] then

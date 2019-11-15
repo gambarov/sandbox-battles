@@ -1,5 +1,6 @@
 local class = require( "manada.libs.middleclass" )
 
+-- Объявление класса
 local Core = class( "Core" )
 
 -- Сторонние библиотеки для работы
@@ -11,14 +12,13 @@ Core.Debug = true
 function Core:initialize( params )
 
     self._systems = {}
-    self._plugins = {}
 
-	local loadSystem = function( name )
-		self[ name ] = require( "manada.systems." .. name ):new()
+	local loadSystem = function( name, params )
+		self[ name ] = require( "manada.systems." .. name ):new( params or {} )
 		self._systems[ #self._systems + 1 ] = self[ name ]
     end
 
-    -- Загрузка всех систем, порядок загрузки имеет значение
+    -- Загрузка всех систем
     loadSystem( "utils"  )
     loadSystem( "file"   )
     loadSystem( "sound"  )
