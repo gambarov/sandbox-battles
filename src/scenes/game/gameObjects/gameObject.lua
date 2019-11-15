@@ -29,7 +29,7 @@ function GameObject:update()
 
 end
 
-function GameObject:addComponent(name, component, params)
+function GameObject:addComponent( name, component, params)
 
     if self._components[ name ] then
         self:removeComponent(name)
@@ -41,16 +41,27 @@ function GameObject:addComponent(name, component, params)
 
 end
 
-function GameObject:removeComponent(name)
+function GameObject:removeComponent( name )
 
-    if not self._components[ name ] then
-        print( "WARNING: " .. "Can't remove \"" .. name .. "\" component because it's doesn't exist" )
-        return false
+    if self:getComponent( name ) then
+        self._components[ name ]:destroy()
+        self._components[ name ] = nil
+        return true
     end
 
-    self._components[ name ]:destroy()
-    self._components[ name ] = nil
-    return true
+    return false
+
+end
+
+function GameObject:getComponent( name )
+    
+    local component = self._components[ name ]
+
+    if not component then
+        print( "WARNING: " .. "Can't get \"" .. name .. "\" component because it's doesn't exist" )
+    end
+
+    return component
 
 end
 
@@ -61,7 +72,7 @@ end
 function GameObject:destroy()
     -- Удаляем все компоненты объекта
     for name, _ in pairs( self._components ) do
-        self:removeComponent(name)
+        self:removeComponent( name )
     end
 
     self._components = nil

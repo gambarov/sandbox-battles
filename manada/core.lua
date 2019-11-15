@@ -1,3 +1,5 @@
+-- Created by @jusD3N
+
 local class = require( "manada.libs.middleclass" )
 
 -- Объявление класса
@@ -11,10 +13,13 @@ Core.Debug = true
 
 function Core:initialize( params )
 
+    params = params or {}
+    params.systems = params.systems or {}
+
     self._systems = {}
 
-	local loadSystem = function( name, params )
-		self[ name ] = require( "manada.systems." .. name ):new( params or {} )
+	local loadSystem = function( name )
+		self[ name ] = require( "manada.systems." .. name ):new( params.systems[ name ] or {} )
 		self._systems[ #self._systems + 1 ] = self[ name ]
     end
 
@@ -24,6 +29,7 @@ function Core:initialize( params )
     loadSystem( "sound"  )
     loadSystem( "time"   )
     loadSystem( "plugin" )
+    loadSystem( "isheet" )
 
     if self.Debug then
         visualMonitor:new()
@@ -33,4 +39,9 @@ function Core:initialize( params )
 
 end
 
-manada = Core:new()
+return 
+{
+    initialize = function ( self, params )
+        manada = Core:new( params )
+    end
+}

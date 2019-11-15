@@ -1,4 +1,4 @@
-require( "manada.core" )
+require( "manada.core" ):initialize(  )
 
 local map = require( "manada.map" ):new();
 local group = map:getGroup()
