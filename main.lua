@@ -1,6 +1,6 @@
-require( "manada.core" ):initialize(  )
+require( "manada.Core" ):initialize(  )
 
-local map = require( "manada.map" ):new();
+local map = manada.Map:new()
 local group = map:getGroup()
 group.x, group.y = display.contentCenterX - group.width / 2, display.contentCenterY - group.height / 2
 
@@ -37,12 +37,10 @@ local physics = require( "physics" )
 physics.start()
 physics.setGravity( 0, 0 )
 
-local GameObject = require( "src.scenes.game.gameObjects.gameObject" )
-
-local PhysicsComponent = require( "src.scenes.game.gameObjects.components.physicsComponent" )
+local PhysicsComponent = require( "src.scenes.game.gameObjects.components.PhysicsComponent" )
 local AIControlComponent = require( "src.scenes.game.gameObjects.components.controls.AIControlComponent" )
 
-local rectangle = GameObject:new( params )
+local rectangle = manada.GameObject:new( params )
 rectangle:getVisual():setFillColor( 0, 0, 0 )
 group:insert( rectangle:getVisual() )
 rectangle:addComponent( "physics", PhysicsComponent )

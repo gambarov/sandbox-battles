@@ -20,6 +20,7 @@ function Time:initialize( params )
 
 end
 
+-- TODO: Обновлять следует в общем игровом цикле 
 function Time:enterFrame( event )
 
 	self._frames = self._frames + 1

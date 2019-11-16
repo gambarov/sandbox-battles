@@ -31,6 +31,9 @@ function Core:initialize( params )
     loadSystem( "plugin" )
     loadSystem( "isheet" )
 
+    self.Map = require( "manada.Map" )
+    self.GameObject = require( "manada.GameObject" )
+
     if self.Debug then
         visualMonitor:new()
     end
