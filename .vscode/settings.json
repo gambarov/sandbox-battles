@@ -8,7 +8,8 @@
         "physics",
         "system",
         "Runtime",
-        "audio"
+        "audio",
+        "timer"
     ],
     "lua.targetVersion": "5.3"
 }

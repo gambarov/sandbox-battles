@@ -32,7 +32,7 @@ function Core:initialize( params )
     loadSystem( "isheet" )
 
     self.Map = require( "manada.Map" )
-    self.GameObject = require( "manada.GameObject" )
+    self.ContainerObject = require( "manada.ContainerObject" )
 
     if self.Debug then
         visualMonitor:new()
