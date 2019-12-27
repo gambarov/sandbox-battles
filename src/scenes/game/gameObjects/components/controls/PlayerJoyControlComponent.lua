@@ -6,7 +6,7 @@ local controller = require( "src.libs.controller.virtual_controller_factory" ).n
 
 function Component:initialize( containerObject, params )
 
-    assert(containerObject:get( "visual" ), "Physics component required visual component from container object")
+    assert(containerObject:get( "display" ), "Physics component required visual component from container object")
 
     params = params or {}
 
@@ -26,7 +26,7 @@ function Component:initialize( containerObject, params )
 		touchHandler = {
             onTouch = function ( self, x, y )
                 print(x, y)
-                containerObject:get( "visual" ):getVisual():setLinearVelocity( x, y )
+                containerObject:get( "display" ):getObject():setLinearVelocity( x, y )
             end
 		}
     }

@@ -8,13 +8,13 @@ function Component:initialize( containerObject, params )
 
     params = params or {}
 
-    assert(containerObject:get( "visual" ), "Physics component required visual component from container object")
+    assert(containerObject:get( "display" ), "Physics component required visual component from container object")
 
     self._containerObject = containerObject
     self._bodyType = params.bodyType or "dynamic"
     self._params = params.params or { density = 1.0, friction = 0.0, bounce = 0.2 }
 
-    physics.addBody(self._containerObject:get( "visual" ):getVisual(), self._bodyType, self._params)
+    physics.addBody(self._containerObject:get( "display" ):getObject(), self._bodyType, self._params)
 
 end
 
@@ -23,7 +23,7 @@ end
 
 function Component:destroy()
 
-    physics.removeBody(self._containerObject:get( "visual" ):getVisual())
+    physics.removeBody(self._containerObject:get( "display" ):getObject())
     self._containerObjectt = nil
 
 end

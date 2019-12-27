@@ -28,11 +28,6 @@ local function addEmitter(particleName, group)
 
 end
 
-local params = 
-{
-    visual = display.newRect(100, 100, 100, 100),
-}
-
 local physics = require( "physics" )
 physics.start()
 physics.setGravity( 0, 0 )
@@ -40,14 +35,14 @@ physics.setGravity( 0, 0 )
 local PhysicsComponent = require( "src.scenes.game.gameObjects.components.PhysicsComponent" )
 local AIControlComponent = require( "src.scenes.game.gameObjects.components.controls.AIControlComponent" )
 local PlayerControlComponent = require( "src.scenes.game.gameObjects.components.controls.PlayerJoyControlComponent" )
-local VisualComponent = require( "src.scenes.game.gameObjects.components.VisualComponent" )
+local DisplayComponent = require( "src.scenes.game.gameObjects.components.DisplayComponent" )
 
-local rectangle = manada.ContainerObject:new( params )
-rectangle:add( "visual", VisualComponent, { visual = display.newRect(100, 100, 100, 100) } )
-local visual = rectangle:get( "visual" ):getVisual()
+local rectangle = manada.ContainerObject:new()
+rectangle:add( "display", DisplayComponent, { displayObject = display.newRect(100, 100, 100, 100) } )
+local displayObject = rectangle:get( "display" ):getObject()
 
-visual:setFillColor( 0, 0, 0 )
-group:insert( visual )
+displayObject:setFillColor( 0, 0, 0 )
+group:insert( displayObject )
 rectangle:add( "physics", PhysicsComponent )
 rectangle:add( "control", PlayerControlComponent )
 
