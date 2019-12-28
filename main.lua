@@ -38,11 +38,11 @@ local PlayerControlComponent = require( "src.scenes.game.gameObjects.components.
 local DisplayComponent = require( "src.scenes.game.gameObjects.components.DisplayComponent" )
 
 local rectangle = manada.ContainerObject:new()
-rectangle:add( "display", DisplayComponent, { displayObject = display.newRect(100, 100, 100, 100) } )
-local displayObject = rectangle:get( "display" ):getObject()
+--rectangle:add( "display", DisplayComponent, { displayObject = display.newRect(100, 100, 100, 100) } )
+-- local displayObject = rectangle:get( "display" ):getObject()
 
-displayObject:setFillColor( 0, 0, 0 )
-group:insert( displayObject )
+-- displayObject:setFillColor( 0, 0, 0 )
+-- group:insert( displayObject )
 rectangle:add( "physics", PhysicsComponent )
 rectangle:add( "control", PlayerControlComponent )
 

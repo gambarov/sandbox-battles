@@ -2,6 +2,8 @@ local class = require( "manada.libs.middleclass" )
 
 local Component = class( "DisplayComponent" )
 
+Component.requires = {}
+
 function Component:initialize( containerObject, params )
 
     params = params or {}

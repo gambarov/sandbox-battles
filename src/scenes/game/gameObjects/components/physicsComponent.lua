@@ -4,11 +4,11 @@ local Component = class( "Component" )
 
 local physics = require( "physics" )
 
+Component.requires = { "display" }
+
 function Component:initialize( containerObject, params )
 
     params = params or {}
-
-    assert(containerObject:get( "display" ), "Physics component required visual component from container object")
 
     self._containerObject = containerObject
     self._bodyType = params.bodyType or "dynamic"

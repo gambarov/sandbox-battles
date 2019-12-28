@@ -2,12 +2,11 @@ local class = require( "manada.libs.middleclass" )
 
 local Component = class( "AIControlComponent" )
 
+Component.requires = { "display" }
+
 function Component:initialize( containerObject, params )
 
     params = params or {}
-
-    assert(containerObject:get( "display" ), "Physics component required visual component from container object")
-
     self._containerObject = containerObject
     
 end

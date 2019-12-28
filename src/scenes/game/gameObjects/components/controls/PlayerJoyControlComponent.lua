@@ -4,9 +4,9 @@ local Component = class( "PlayerJoyControlComponent" )
 
 local controller = require( "src.libs.controller.virtual_controller_factory" ).newController()
 
-function Component:initialize( containerObject, params )
+Component.requires = { "display" }
 
-    assert(containerObject:get( "display" ), "Physics component required visual component from container object")
+function Component:initialize( containerObject, params )
 
     params = params or {}
 

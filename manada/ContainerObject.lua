@@ -1,10 +1,10 @@
-local class = require( "manada.libs.middleclass" )
+local class = require("manada.libs.middleclass")
 
-local ContainerObject = class( "GameObject" )
+local ContainerObject = class("GameObject")
 
 local remove = table.remove
 
-function ContainerObject:initialize( params )
+function ContainerObject:initialize(params)
 
     params = params or {}
     self._components = {} 
@@ -19,19 +19,24 @@ function ContainerObject:update()
 
 end
 
-function ContainerObject:add( name, component, params )
+function ContainerObject:add(name, component, params)
 
-    if self._components[ name ] then
+    if self._components[name] then
         self:removeComponent(name)
+    end
+
+    for i = 1, #component.requires, 1 do
+        local requireSystem = component.requires[i]
+        assert(self:get(requireSystem), "Component \"" .. name .. "\" required \"" .. requireSystem .. "\" component")
     end
 
     params = params or {}
 
-    self._components[ name ] = component:new( self, params )
+    self._components[name] = component:new(self, params)
 
 end
 
-function ContainerObject:remove( name )
+function ContainerObject:remove(name)
 
     if self:getComponent( name ) then
         self._components[ name ]:destroy()
@@ -43,7 +48,7 @@ function ContainerObject:remove( name )
 
 end
 
-function ContainerObject:get( name )
+function ContainerObject:get(name)
     
     local component = self._components[ name ]
 
