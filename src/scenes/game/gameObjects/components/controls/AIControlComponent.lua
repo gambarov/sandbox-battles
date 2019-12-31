@@ -11,18 +11,16 @@ function Component:initialize( containerObject, params )
     
 end
 
-function Component:update()
+function Component:update(dt)
 
-    if self._containerObject:get( "display" ):getObject() then
-        self._containerObject:get( "display" ):getObject():setLinearVelocity( 10 * manada.time:delta(), 10 * manada.time:delta() )
+    if self._containerObject:get( "display" ) and self._containerObject:get( "display" ):getObject().bodyType then
+        self._containerObject:get( "display" ):getObject():setLinearVelocity( 10 * dt, 10 * dt )
     end
 
 end
 
 function Component:destroy()
-
     self._containerObject = nil
-
 end
 
 return Component

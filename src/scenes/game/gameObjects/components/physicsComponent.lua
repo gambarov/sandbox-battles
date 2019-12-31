@@ -18,12 +18,15 @@ function Component:initialize( containerObject, params )
 
 end
 
-function Component:update()
+function Component:update(dt)
 end
 
 function Component:destroy()
 
-    physics.removeBody(self._containerObject:get( "display" ):getObject())
+    if self._containerObject:get("display") then
+        physics.removeBody(self._containerObject:get( "display" ):getObject())
+    end
+    
     self._containerObjectt = nil
 
 end

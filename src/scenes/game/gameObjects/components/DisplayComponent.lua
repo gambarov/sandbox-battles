@@ -13,7 +13,7 @@ function Component:initialize( containerObject, params )
         -- Кастомные св-ва
         self[ "_" .. k ] = v
 
-        -- Если текущее св-во — св-во самого экранного объекта
+        -- Назначение св-в самого экранного объекта
         if self._displayObject and self._displayObject[ k ] then
             self._displayObject[ k ] = v
         end
@@ -29,6 +29,7 @@ function Component:update()
 end
 
 function Component:destroy()
+    display.remove(self._displayObject)
     self._displayObject = nil;
 end
 
