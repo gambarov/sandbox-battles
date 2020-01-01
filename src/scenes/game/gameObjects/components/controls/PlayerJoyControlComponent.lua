@@ -25,10 +25,8 @@ function Component:initialize( containerObject, params )
 		rangeY = 200,
 		touchHandler = {
             onTouch = function ( self, x, y )
-                if containerObject:has("display") and containerObject:get("display"):getObject().bodyType then
-                    containerObject:get("display"):getObject():setLinearVelocity(x, y)
-                else
-                    print("no")
+                if containerObject:hasComponent("display") and containerObject:getDisplayObject().bodyType then
+                    containerObject:getDisplayObject():setLinearVelocity(x, y)
                 end
             end
 		}
@@ -46,14 +44,14 @@ end
 
 function Component:destroy()
 
+    display.remove(self._moveJoy.nob)
+    display.remove(self._moveJoy.container)
+
+    self._moveJoy = nil
     self._displayGroup = nil
     self._containerObject = nil
 
-    display.remove(self._moveJoy.nob)
-    display.remove(self._moveJoy.container)
-    self._moveJoy = nil
     controller = nil
-
 end
 
 return Component

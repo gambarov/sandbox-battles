@@ -19,18 +19,22 @@ function Component:initialize( containerObject, params )
         end
     end
 
-end
+    containerObject.getDisplayObject = function()
+        return self._displayObject
+    end
 
-function Component:getObject()
-    return self._displayObject    
-end  
+end
 
 function Component:update()
 end
 
 function Component:destroy()
+    self._containerObject.getDisplayObject = nil
+    self._containerObject = nil
+
     display.remove(self._displayObject)
     self._displayObject = nil;
+    
 end
 
 return Component

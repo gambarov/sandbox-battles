@@ -14,7 +14,7 @@ function Component:initialize( containerObject, params )
     self._bodyType = params.bodyType or "dynamic"
     self._params = params.params or { density = 1.0, friction = 0.0, bounce = 0.2 }
 
-    physics.addBody(self._containerObject:get( "display" ):getObject(), self._bodyType, self._params)
+    physics.addBody(self._containerObject:getDisplayObject(), self._bodyType, self._params)
 
 end
 
@@ -23,12 +23,11 @@ end
 
 function Component:destroy()
 
-    if self._containerObject:has("display") then
-        physics.removeBody(self._containerObject:get( "display" ):getObject())
+    if self._containerObject:hasComponent("display") then
+        physics.removeBody(self._containerObject:getDisplayObject())
     end
     
     self._containerObjectt = nil
-
 end
 
 return Component
