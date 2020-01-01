@@ -13,7 +13,7 @@ end
 
 function Component:update(dt)
 
-    if self._containerObject:get( "display" ) and self._containerObject:get( "display" ):getObject().bodyType then
+    if self._containerObject:has( "display" ) and self._containerObject:get( "display" ):getObject().bodyType then
         self._containerObject:get( "display" ):getObject():setLinearVelocity( 10 * dt, 10 * dt )
     end
 

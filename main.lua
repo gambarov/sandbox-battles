@@ -47,7 +47,7 @@ local function createGameObject()
     displayObject:setFillColor( 0, 0, 0 )
     group:insert( displayObject )
     gameObject:add( "physics", PhysicsComponent )
-    gameObject:add( "control", AIControlComponent )
+    gameObject:add( "control", PlayerControlComponent )
 
     return gameObject
 end
@@ -65,12 +65,12 @@ end)
 timer.performWithDelay(1000, 
 function()
     gameObjects[#gameObjects+1] = createGameObject()
-end, -1)
+end, 1)
 
-timer.performWithDelay(2000, 
-function() 
-    if gameObjects[1] then
-        gameObjects[1]:destroy()
-        gameObjects[1] = nil
-    end
-end, -1)
+-- timer.performWithDelay(2000, 
+-- function() 
+--     if gameObjects[1] then
+--         gameObjects[1]:destroy()
+--         gameObjects[1] = nil
+--     end
+-- end, -1)

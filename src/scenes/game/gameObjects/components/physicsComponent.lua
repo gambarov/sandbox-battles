@@ -23,7 +23,7 @@ end
 
 function Component:destroy()
 
-    if self._containerObject:get("display") then
+    if self._containerObject:has("display") then
         physics.removeBody(self._containerObject:get( "display" ):getObject())
     end
     

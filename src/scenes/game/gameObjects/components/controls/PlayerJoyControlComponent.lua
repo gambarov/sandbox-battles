@@ -25,8 +25,10 @@ function Component:initialize( containerObject, params )
 		rangeY = 200,
 		touchHandler = {
             onTouch = function ( self, x, y )
-                if containerObject:get("display") and containerObject:get("display"):getObject().bodyType then
+                if containerObject:has("display") and containerObject:get("display"):getObject().bodyType then
                     containerObject:get("display"):getObject():setLinearVelocity(x, y)
+                else
+                    print("no")
                 end
             end
 		}

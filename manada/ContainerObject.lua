@@ -21,26 +21,26 @@ function ContainerObject:update(dt)
 
 end
 
-function ContainerObject:add(name, component, params)
-
-    if self._components[name] then
+function ContainerObject:set(name, component, params)
+    -- Удаляем существующий компонент, если такой есть
+    if self:has(name) then
         self:remove(name)
     end
 
+    -- Проверка зависимостей
     for i = 1, #component.requires, 1 do
         local requireSystem = component.requires[i]
-        assert(self:get(requireSystem), "Component \"" .. name .. "\" required \"" .. requireSystem .. "\" component")
+        assert(self:has(requireSystem), "Component \"" .. name .. "\" required \"" .. requireSystem .. "\" component")
     end
 
     params = params or {}
-
     self._components[name] = component:new(self, params)
 
 end
 
 function ContainerObject:remove(name)
 
-    if self:get( name ) then
+    if self:has(name) then
         self._components[ name ]:destroy()
         self._components[ name ] = nil
         return true
@@ -52,20 +52,20 @@ end
 
 function ContainerObject:get(name)
     
-    if not self._components then
-        print("WARNING: " .. "Сan’t get \"" .. name .. "\" component because no component has been added yet")
-        return false
-    end
-
-    local component = self._components[ name ]
-
-    if not component then
-        print( "WARNING: " .. "Can't get \"" .. name .. "\" component because it's don't exist" )
-        return false
-    end
-
+    assert(self._components, "Сan’t get \"" .. name .. "\" component because no component has been added yet")
+    local component = self._components[name]
+    assert(component, "Can't get \"" .. name .. "\" component because it's don't exist")
     return component
 
+end
+
+function ContainerObject:has(name)
+
+    if not self._components then
+        return false
+    end
+
+    return not self._components[name] == nil
 end
 
 function ContainerObject:destroy()
