@@ -31,6 +31,7 @@ function Core:initialize( params )
     loadSystem( "plugin"   )
     loadSystem( "isheet"   )
     loadSystem( "services" )
+    loadSystem( "random"   )
 
     self.Map = require( "manada.Map" )
     self.GameObject = require( "manada.GameObject" )

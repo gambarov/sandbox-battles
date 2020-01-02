@@ -42,6 +42,7 @@ local gameObjectFactory = require("src.scenes.game.gameObjects.factories.TestGOF
 
 local gameObjects = {}
 gameObjects[#gameObjects+1] = gameObjectFactory:create({ displayObject = display.newRect(group, 100, 100, 100, 100) })
+gameObjects[1]:setComponent("input", require("src.scenes.game.gameObjects.factories.components.input.AIComponent"))
 
 Runtime:addEventListener("enterFrame", function ( event )
     
