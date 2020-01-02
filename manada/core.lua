@@ -24,12 +24,13 @@ function Core:initialize( params )
     end
 
     -- Загрузка всех систем
-    loadSystem( "utils"  )
-    loadSystem( "file"   )
-    loadSystem( "sound"  )
-    loadSystem( "time"   )
-    loadSystem( "plugin" )
-    loadSystem( "isheet" )
+    loadSystem( "utils"    )
+    loadSystem( "file"     )
+    loadSystem( "sound"    )
+    loadSystem( "time"     )
+    loadSystem( "plugin"   )
+    loadSystem( "isheet"   )
+    loadSystem( "services" )
 
     self.Map = require( "manada.Map" )
     self.GameObject = require( "manada.GameObject" )

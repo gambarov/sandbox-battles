@@ -36,7 +36,6 @@ function Component:initialize( containerObject, params )
     self._displayGroup = params.displayGroup or display.newGroup()
 
     controller:displayController( self._displayGroup )
-
 end
 
 function Component:update(dt)

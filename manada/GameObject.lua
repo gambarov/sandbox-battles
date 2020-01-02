@@ -5,10 +5,8 @@ local GameObject = class("GameObject")
 local remove = table.remove
 
 function GameObject:initialize(params)
-
     params = params or {}
     self._components = {} 
-
 end
 
 function GameObject:update(dt)
@@ -24,7 +22,7 @@ end
 function GameObject:setComponent(name, component, params)
     -- Удаляем существующий компонент, если такой есть
     if self:hasComponent(name) then
-        self:removComponente(name)
+        self:removeComponent(name)
     end
 
     -- Проверка зависимостей

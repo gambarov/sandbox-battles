@@ -20,9 +20,10 @@ function Map:initialize( params )
         for j = 1, self._height do
 
             local rect = display.newRect(self._group, self._cellSize * j - self._cellSize / 2, self._cellSize * i - self._cellSize / 2, self._cellSize, self._cellSize)
-            rect:setFillColor( 1, 1, 0.8 ) 
+            rect:setFillColor( 0.25, 0.25, 0.25 ) 
             rect:setStrokeColor( 1, 0, 0 )
             rect.strokeWidth = 4
+            rect.alpha = 0.75
             self._cells[i][j] = { rect = rect, type = "floor" }
 
         end

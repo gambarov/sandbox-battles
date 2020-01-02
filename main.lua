@@ -2,7 +2,13 @@ require( "manada.Core" ):initialize( )
 
 local map = manada.Map:new()
 local group = map:getGroup()
-group.x, group.y = display.contentCenterX - group.width / 2, display.contentCenterY - group.height / 2
+
+-- Перемещаем основную группу в центр экрана
+group.x, group.y = 0.5 * display.pixelHeight, 0.5 * display.pixelWidth
+-- Смещаем ее тоску привязки, чтобы все наэкранные объекты в группе были также в центре
+group.anchorChildren = true
+group.anchorX = 0.5
+group.anchorY = 0.5
 
 local json = require( "json" )
 
@@ -32,27 +38,12 @@ local physics = require( "physics" )
 physics.start()
 physics.setGravity(0, 0)
 
-local PhysicsComponent = require("src.scenes.game.gameObjects.components.PhysicsComponent")
-local AIControlComponent = require( "src.scenes.game.gameObjects.components.controls.AIControlComponent" )
-local PlayerControlComponent = require( "src.scenes.game.gameObjects.components.controls.PlayerJoyControlComponent" )
-local DisplayComponent = require( "src.scenes.game.gameObjects.components.DisplayComponent" )
+local gameObjectFactory = require("src.scenes.game.gameObjects.factories.TestGOFactory"):new()
 
 local gameObjects = {}
+gameObjects[#gameObjects+1] = gameObjectFactory:create({ displayObject = display.newRect(group, 100, 100, 100, 100) })
 
-local function createGameObject()
-    local gameObject = manada.GameObject:new()
-    gameObject:setComponent("display", DisplayComponent, { displayObject = display.newRect(math.random(100, 700), math.random(100, 700), 100, 100)  })
-    local displayObject = gameObject:getDisplayObject()
-
-    displayObject:setFillColor(0, 0, 0)
-    group:insert(displayObject)
-    gameObject:setComponent("physics", PhysicsComponent)
-    gameObject:setComponent("control", PlayerControlComponent)
-
-    return gameObject
-end
-
-Runtime:addEventListener( "enterFrame", function ( event )
+Runtime:addEventListener("enterFrame", function ( event )
     
     for i = #gameObjects, 1, -1 do
         if gameObjects[i] then
@@ -61,20 +52,3 @@ Runtime:addEventListener( "enterFrame", function ( event )
     end
 
 end)
-
-timer.performWithDelay(1000, 
-function()
-    gameObjects[#gameObjects+1] = createGameObject()
-end, 1)
-
-timer.performWithDelay(2000, 
-function() 
-    if gameObjects[1] then
-        print(gameObjects[1].getDisplayObject)
-        gameObjects[1]:removeComponent("control")
-        gameObjects[1]:removeComponent("physics")
-        gameObjects[1]:removeComponent("display")
-        print(gameObjects[1].getDisplayObject)
-
-    end
-end, 1)
