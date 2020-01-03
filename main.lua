@@ -39,4 +39,4 @@ physics.start()
 physics.setGravity(0, 0)
 
 local gameObjectFactory = require("src.scenes.game.gameObjects.factories.TestGOFactory"):new()
-manada:addGameObject(gameObjectFactory, { displayObject = display.newRect(group, 100, 100, 100, 100) })
+manada:addGameObject(gameObjectFactory, { displayObject = display.newRect(group, 0.5 * display.pixelHeight, 0.5 * display.pixelWidth, 128, 128) })

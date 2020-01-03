@@ -12,13 +12,13 @@ function Component:initialize( containerObject, params )
 
     self._containerObject = containerObject
     
-	local joyRadius = display.contentHeight / 6
+	local joyRadius = ((display.pixelHeight * 0.1) + (display.pixelWidth * 0.1)) / 2
 
     local moveJoyProps = {
 		nToCRatio = 0.5,
 		radius = joyRadius,
-		x = joyRadius * 1.5,
-		y = display.contentHeight - (joyRadius * 1.75),
+		x = display.pixelHeight * 0.15,
+		y = display.pixelWidth * 0.80,
 		restingXValue = 0,
 		restingYValue = 0,
 		rangeX = 200,
