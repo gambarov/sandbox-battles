@@ -16,13 +16,11 @@ function Time:initialize( params )
     
 	self._start = time()
 
-    Runtime:addEventListener( "enterFrame", self )
-
 end
 
 -- TODO: Обновлять следует в общем игровом цикле 
 function Time:enterFrame( event )
-
+	
 	self._frames = self._frames + 1
 
 	local timer = getTimer()

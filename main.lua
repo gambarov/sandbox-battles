@@ -39,17 +39,4 @@ physics.start()
 physics.setGravity(0, 0)
 
 local gameObjectFactory = require("src.scenes.game.gameObjects.factories.TestGOFactory"):new()
-
-local gameObjects = {}
-gameObjects[#gameObjects+1] = gameObjectFactory:create({ displayObject = display.newRect(group, 100, 100, 100, 100) })
-gameObjects[1]:setComponent("input", require("src.scenes.game.gameObjects.factories.components.input.AIComponent"))
-
-Runtime:addEventListener("enterFrame", function ( event )
-    
-    for i = #gameObjects, 1, -1 do
-        if gameObjects[i] then
-            gameObjects[i]:update(manada.time:delta())
-        end
-    end
-
-end)
+manada:addGameObject(gameObjectFactory, { displayObject = display.newRect(group, 100, 100, 100, 100) })
