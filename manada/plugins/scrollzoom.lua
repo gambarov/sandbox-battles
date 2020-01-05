@@ -82,7 +82,6 @@ function Plugin:new(instance)
                 if numTotalTouches == 1 then
                     self.x = event.x - event.xStart + self.markX
                     self.y = event.y - event.yStart + self.markY
-                    return result
                 end
 
                 if self.distance then
