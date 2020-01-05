@@ -66,14 +66,13 @@ function scene:create( event )
 
 	map = manada.Map:new({ parent = mainGroup })
 	mainGroup = manada.plugin:new(mainGroup, "scrollzoom")
-	-- mainGroup = manada.plugin:new(mainGroup, "draggable")
 
 	-- Перемещаем игровую группу в центр экрана
-	masterGroup.x, masterGroup.y = math.floor(0.5 * display.pixelHeight), math.floor(0.5 * display.pixelWidth)
+	mainGroup.x, mainGroup.y = math.floor(0.5 * display.pixelHeight), math.floor(0.5 * display.pixelWidth)
 	-- Смещаем ее тоску привязки, чтобы все наэкранные объекты в группе были также в центре
-	masterGroup.anchorChildren = true
-	masterGroup.anchorX = 0.5
-	masterGroup.anchorY = 0.5
+	mainGroup.anchorChildren = true
+	mainGroup.anchorX = 0.5
+	mainGroup.anchorY = 0.5
 
 end
 

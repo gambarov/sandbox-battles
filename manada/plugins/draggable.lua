@@ -10,7 +10,7 @@ function Plugin:new( instance )
 
         if event.phase == "began" then
 
-            display.getCurrentStage():setFocus( instance, event.id )
+            display.getCurrentStage():setFocus(instance)
             self.isFocus = true
             self.markX = self.x
             self.markY = self.y
@@ -30,8 +30,7 @@ function Plugin:new( instance )
             end
         end
 
-        return false
-
+        return true
     end
 
     instance:addEventListener( "touch" )
