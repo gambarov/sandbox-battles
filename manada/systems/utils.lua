@@ -3,7 +3,6 @@ local class = require("manada.libs.middleclass")
 local Utils = class("Utils")
 
 function Utils:splite(str, delimeter)
-
     delimeter = delimeter or "%s"
     local t = {}
 
@@ -17,7 +16,6 @@ function Utils:splite(str, delimeter)
 end
 
 function Utils:count(table)
-
     local count = 0
 
     for k, v in pairs(table) do
@@ -25,6 +23,20 @@ function Utils:count(table)
     end
 
     return count
+end
+
+function Utils:getByIndex(table, index)
+    local i = 0
+
+    for k, v in pairs(table) do
+        if index == i then
+            return v
+        end
+
+        i = i + 1
+    end
+
+    return nil
 end
 
 return Utils

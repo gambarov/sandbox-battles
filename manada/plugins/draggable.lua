@@ -30,7 +30,7 @@ function Plugin:new( instance )
             end
         end
 
-        return true
+        return false
 
     end
 

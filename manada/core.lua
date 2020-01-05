@@ -42,8 +42,6 @@ function Core:initialize( params )
         visualMonitor:new()
     end
 
-    display.setStatusBar( display.HiddenStatusBar ) 
-
     self._gameObjects = {}
 
     Runtime:addEventListener("enterFrame", self)
@@ -74,6 +72,10 @@ end
 
 function Core:addGameObject(factory, params)
     self._gameObjects[#self._gameObjects + 1] = factory:create(params)
+end
+
+function Core:getGameObjects()
+    return self._gameObjects
 end
 
 return 

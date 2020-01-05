@@ -11,7 +11,7 @@ function Map:initialize( params )
     self._cellSize = params.cellSize or 128
 
     self._cells = {}
-    self._group = params.parentGroup or display.newGroup()
+    self._parent = params.parent
 
     for i = 1, self._width do
 
@@ -19,7 +19,7 @@ function Map:initialize( params )
 
         for j = 1, self._height do
 
-            local rect = display.newRect(self._group, 
+            local rect = display.newRect(self._parent, 
             self._cellSize * j - self._cellSize / 2, 
             self._cellSize * i - self._cellSize / 2, 
             self._cellSize, self._cellSize)
@@ -34,18 +34,6 @@ function Map:initialize( params )
 
     end
 
-    self._group = manada.plugin:new( self._group, "draggable" )
-
 end
-
-function Map:getCells()
-    return self._cells
-end
-
-function Map:getGroup()
-    return self._group
-end
-
-
 
 return Map

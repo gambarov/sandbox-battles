@@ -1,5 +1,7 @@
 
 local composer = require( "composer" )
+local physics = require( "physics" )
+local gameObjectFactory = require("src.scenes.game.gameObjects.factories.TestGOFactory"):new()
 
 local scene = composer.newScene()
 
@@ -8,8 +10,41 @@ local scene = composer.newScene()
 -- the scene is removed entirely (not recycled) via "composer.removeScene()"
 -- -----------------------------------------------------------------------------------
 
+physics.start()
+physics.setGravity(0, 0)
 
+local map
+local cameraTarget
 
+local masterGroup	-- Главная группа отображения
+local mainGroup		-- Группа отображения карты, игровых объектов и т.д. 
+local uiGroup		-- Группа отображения пользовательского интерфейса
+
+local function addGameObjectOnScreen(event)
+    -- Если произведено нажатие и пользователь не перемещал карту
+    if event.phase == "ended" and event.x == event.xStart and event.y == event.yStart then
+        local x, y = mainGroup:contentToLocal(event.x, event.y)
+		manada:addGameObject(gameObjectFactory, { displayObject = display.newRect(mainGroup, x, y, 128, 128) })
+		cameraTarget = manada:getGameObjects()[1]:getDisplayObject()
+    end
+
+end
+
+local function enterFrame(event)
+
+	-- Если в данный момент скроллится/зумится/etc карта, то слежение за объектом не действует
+	if mainGroup and mainGroup.isFocus then
+		return
+	end
+
+	-- Слежение камеры за целью
+	if cameraTarget and cameraTarget.x and cameraTarget.y then
+		local x, y = cameraTarget:localToContent( 0, 0 )
+		x, y = display.contentCenterX - x, display.contentCenterY - y
+		mainGroup.x, mainGroup.y = mainGroup.x + x, mainGroup.y + y
+	end
+		
+end
 
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
@@ -18,8 +53,27 @@ local scene = composer.newScene()
 -- create()
 function scene:create( event )
 
-	local sceneGroup = self.view
-	-- Code here runs when the scene is first created but has not yet appeared on screen
+	physics.pause()
+
+	masterGroup = display.newGroup()
+	mainGroup = display.newGroup()
+	uiGroup = display.newGroup()
+
+	scene.view:insert(masterGroup)
+
+	masterGroup:insert(mainGroup)
+	masterGroup:insert(uiGroup)
+
+	map = manada.Map:new({ parent = mainGroup })
+	mainGroup = manada.plugin:new(mainGroup, "scrollzoom")
+	-- mainGroup = manada.plugin:new(mainGroup, "draggable")
+
+	-- Перемещаем игровую группу в центр экрана
+	masterGroup.x, masterGroup.y = math.floor(0.5 * display.pixelHeight), math.floor(0.5 * display.pixelWidth)
+	-- Смещаем ее тоску привязки, чтобы все наэкранные объекты в группе были также в центре
+	masterGroup.anchorChildren = true
+	masterGroup.anchorX = 0.5
+	masterGroup.anchorY = 0.5
 
 end
 
@@ -35,7 +89,10 @@ function scene:show( event )
 
 	elseif ( phase == "did" ) then
 		-- Code here runs when the scene is entirely on screen
-
+		physics.start()
+		
+		mainGroup:addEventListener("touch", addGameObjectOnScreen)
+		Runtime:addEventListener("enterFrame", enterFrame)
 	end
 end
 
