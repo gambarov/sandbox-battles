@@ -34,6 +34,7 @@ function Core:initialize( params )
     loadSystem( "isheet"   )
     loadSystem( "services" )
     loadSystem( "random"   )
+    loadSystem( "camera"   )
 
     self.Map = require( "manada.Map" )
     self.GameObject = require( "manada.GameObject" )
@@ -43,14 +44,13 @@ function Core:initialize( params )
     end
 
     self._gameObjects = {}
-
     Runtime:addEventListener("enterFrame", self)
-
 end
 
 function Core:enterFrame(event)
 
-    self.time:enterFrame(event)
+    self.time:update(event)
+    self.camera:update(self.time:delta())
 
     for i = #self._gameObjects, 1, -1 do
 
