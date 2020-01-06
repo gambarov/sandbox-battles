@@ -71,7 +71,12 @@ function Core:enterFrame(event)
 end
 
 function Core:addGameObject(factory, params)
-    self._gameObjects[#self._gameObjects + 1] = factory:create(params)
+    -- Попытка создать объект
+    local object = factory:create(params)
+
+    if object then
+        self._gameObjects[#self._gameObjects + 1] = object
+    end
 end
 
 function Core:getGameObjects()

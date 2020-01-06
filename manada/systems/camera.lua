@@ -50,8 +50,8 @@ function Camera:update(dt)
 
         -- Слежение камеры за целью
         if target and target.x and target.y then
-            local x, y = target:localToContent( 0, 0 )
-            x, y = display.contentCenterX - x, display.contentCenterY - y
+            local x, y = target:localToContent( 0, 0 )                                      -- Получаем глобальные координаты цели (т.е. относительно самого экрана)
+            x, y = display.contentCenterX - x, display.contentCenterY - y                   -- Получаем нужное смещение
             parent.x, parent.y = parent.x + (x / speed * dt), parent.y + (y / speed * dt)
         end
     end

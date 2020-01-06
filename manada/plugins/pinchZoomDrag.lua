@@ -26,6 +26,8 @@ function Plugin:new(instance)
 
     function instance:touch(event)
         
+        print("1")
+
 		local result = true
         local phase = event.phase
         local previousTouches = self.previousTouches
@@ -109,6 +111,7 @@ function Plugin:new(instance)
 
             -- Handle touch ended and/or cancelled phases
             elseif ( "ended" == phase or "cancelled" == phase ) then
+
                 if previousTouches[event.id] then
                     self.numPreviousTouches = self.numPreviousTouches - 1
                     previousTouches[event.id] = nil

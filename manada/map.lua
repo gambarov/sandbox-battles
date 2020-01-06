@@ -36,4 +36,8 @@ function Map:initialize( params )
 
 end
 
+function Map:getCellSize()
+    return self._cellSize
+end
+
 return Map

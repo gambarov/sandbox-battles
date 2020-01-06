@@ -2,6 +2,7 @@
 local composer = require( "composer" )
 local physics = require( "physics" )
 local gameObjectFactory = require("src.scenes.game.gameObjects.factories.TestGOFactory"):new()
+local barrierFactory = require("src.scenes.game.gameObjects.factories.BarrierFactory"):new()
 
 local scene = composer.newScene()
 
@@ -16,19 +17,25 @@ physics.setGravity(0, 0)
 local map
 
 local masterGroup	-- Главная группа отображения
+local bgGroup
 local mainGroup		-- Группа отображения карты, игровых объектов и т.д. 
 local uiGroup		-- Группа отображения пользовательского интерфейса
 
 local function addGameObjectOnScreen(event)
-    -- Если произведено нажатие и пользователь не перемещал карту
-    if event.phase == "ended" and event.x == event.xStart and event.y == event.yStart then
-        local x, y = mainGroup:contentToLocal(event.x, event.y)
-		manada:addGameObject(gameObjectFactory, { displayObject = display.newRect(mainGroup, x, y, 128, 128) })
+
+	local xObjectSpawn, yObjectSpawn = mainGroup:contentToLocal(event.x, event.y)
+
+    -- Если произведено нажатие и пользователь не перемещал карту и точка касания находится внутри карты
+	if event.phase == "ended" and event.x == event.xStart and event.y == event.yStart and xObjectSpawn > 0 and yObjectSpawn > 0 and xObjectSpawn < mainGroup.width and yObjectSpawn < mainGroup.height then
+		print(xObjectSpawn, yObjectSpawn)
+		local mx, my = xObjectSpawn / map:getCellSize(), yObjectSpawn / map:getCellSize()
+		mx, my = math.ceil(mx), math.ceil(my)
+		manada:addGameObject(barrierFactory, { displayObject = display.newRect(mainGroup, mx * map:getCellSize() - map:getCellSize() / 2, my * map:getCellSize() - map:getCellSize() / 2, map:getCellSize(), map:getCellSize()) })
 		manada.camera:add("main", { target = manada:getGameObjects()[1]:getDisplayObject(), parent = mainGroup, speed = 10 })
 		return true
-    end
-
+	end
 end
+ 
 
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
@@ -40,11 +47,12 @@ function scene:create( event )
 	physics.pause()
 
 	masterGroup = display.newGroup()
-	mainGroup = display.newGroup()
-	uiGroup = display.newGroup()
+	bgGroup 	= display.newGroup()
+	mainGroup 	= display.newGroup()
+	uiGroup 	= display.newGroup()
 
 	scene.view:insert(masterGroup)
-
+	masterGroup:insert(bgGroup)
 	masterGroup:insert(mainGroup)
 	masterGroup:insert(uiGroup)
 
@@ -57,6 +65,12 @@ function scene:create( event )
 	mainGroup.anchorChildren = true
 	mainGroup.anchorX = 0.5
 	mainGroup.anchorY = 0.5
+
+	local bg = display.newRect(bgGroup, display.pixelHeight / 2, display.pixelWidth / 2, display.pixelHeight, display.pixelWidth)
+	bg:setFillColor({ 1, 1, 1 })
+	bg:addEventListener("touch", function (event)
+		return mainGroup:touch(event)
+	end)
 end
 
 
