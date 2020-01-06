@@ -20,6 +20,21 @@ function Camera:set(name)
     end
 end
 
+function Camera:remove(name)
+
+    local camera = self._cameras[name]
+
+    -- Если удаляется текущая камера, то сбрасываем позицию в центр
+    if self._cameras[name] and self._activeCamera and self._cameras[name] == self._activeCamera then
+        local parent = self._activeCamera.parent
+        self._activeCamera = nil
+        parent.x, parent.y = math.floor(0.5 * display.pixelHeight), math.floor(0.5 * display.pixelWidth)
+        parent = nil
+    end
+    
+    self._cameras[name] = nil
+end
+
 function Camera:update(dt)
     
     if self._activeCamera then

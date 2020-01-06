@@ -14,7 +14,6 @@ physics.start()
 physics.setGravity(0, 0)
 
 local map
-local cameraTarget
 
 local masterGroup	-- Главная группа отображения
 local mainGroup		-- Группа отображения карты, игровых объектов и т.д. 
@@ -73,7 +72,6 @@ function scene:show( event )
 	elseif ( phase == "did" ) then
 		-- Code here runs when the scene is entirely on screen
 		physics.start()
-		
 		mainGroup:addEventListener("touch", addGameObjectOnScreen)
 	end
 end
