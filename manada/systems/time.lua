@@ -15,11 +15,9 @@ function Time:initialize( params )
     self._frames = 0
     
 	self._start = time()
-
 end
 
--- TODO: Обновлять следует в общем игровом цикле 
-function Time:enterFrame( event )
+function Time:update( event )
 	
 	self._frames = self._frames + 1
 
@@ -28,7 +26,6 @@ function Time:enterFrame( event )
 	self._previousTime = timer
 
 	self._fps = ( self._frames / ( time() - self._start ) ) or 0
-
 end
 
 function Time:delta()
@@ -41,12 +38,9 @@ end
 
 function Time:destroy()
 
-    Runtime:removeEventListener( "enterFrame", self )
-
 	self._dt = nil
 	self._previousTime = nil
     self._fpsFactor = nil
-    
 end
 
 return Time

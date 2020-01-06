@@ -25,25 +25,10 @@ local function addGameObjectOnScreen(event)
     if event.phase == "ended" and event.x == event.xStart and event.y == event.yStart then
         local x, y = mainGroup:contentToLocal(event.x, event.y)
 		manada:addGameObject(gameObjectFactory, { displayObject = display.newRect(mainGroup, x, y, 128, 128) })
-		cameraTarget = manada:getGameObjects()[1]:getDisplayObject()
+		manada.camera:add("main", { target = manada:getGameObjects()[1]:getDisplayObject(), parent = mainGroup, speed = 10 })
+		return true
     end
 
-end
-
-local function enterFrame(event)
-
-	-- Если в данный момент скроллится/зумится/etc карта, то слежение за объектом не действует
-	if mainGroup and mainGroup.isFocus then
-		return
-	end
-
-	-- Слежение камеры за целью
-	if cameraTarget and cameraTarget.x and cameraTarget.y then
-		local x, y = cameraTarget:localToContent( 0, 0 )
-		x, y = display.contentCenterX - x, display.contentCenterY - y
-		mainGroup.x, mainGroup.y = mainGroup.x + x, mainGroup.y + y
-	end
-		
 end
 
 -- -----------------------------------------------------------------------------------
@@ -65,7 +50,7 @@ function scene:create( event )
 	masterGroup:insert(uiGroup)
 
 	map = manada.Map:new({ parent = mainGroup })
-	mainGroup = manada.plugin:new(mainGroup, "scrollzoom")
+	mainGroup = manada.plugin:new(mainGroup, "pinchZoomDrag")
 
 	-- Перемещаем игровую группу в центр экрана
 	mainGroup.x, mainGroup.y = math.floor(0.5 * display.pixelHeight), math.floor(0.5 * display.pixelWidth)
@@ -73,7 +58,6 @@ function scene:create( event )
 	mainGroup.anchorChildren = true
 	mainGroup.anchorX = 0.5
 	mainGroup.anchorY = 0.5
-
 end
 
 
@@ -91,7 +75,6 @@ function scene:show( event )
 		physics.start()
 		
 		mainGroup:addEventListener("touch", addGameObjectOnScreen)
-		Runtime:addEventListener("enterFrame", enterFrame)
 	end
 end
 
