@@ -23,6 +23,24 @@ function Component:initialize( containerObject, params )
         return self._displayObject
     end
 
+    containerObject.intersectsWith = function(self, gameObject)
+
+        if not gameObject or not gameObject["getDisplayObject"] then
+            return false
+        end 
+
+        local object = self:getDisplayObject()
+        local other = gameObject:getDisplayObject()
+
+        if (object.x - object.width / 2 >= other.x - other.width / 2 and 
+            object.x - object.width / 2 <= other.x + other.width / 2) and 
+           (object.y - object.height >= other.y - object.height and 
+            object.y - object.height <= other.y + other.height / 2) then
+            return true
+        end
+
+        return false
+    end
 end
 
 function Component:update()

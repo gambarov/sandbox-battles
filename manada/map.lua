@@ -2,38 +2,38 @@ local class = require( "manada.libs.middleclass" )
 
 local Map = class( "Map" )
 
+Map.GeneratorsDir = "src.scenes.game.map.generators."
+
 function Map:initialize( params )
 
     params = params or {}
 
-    self._width = params.width or 10
-    self._height = params.height or 15
-    self._cellSize = params.cellSize or 128
-
-    self._cells = {}
+    self._width = params.width
+    self._height = params.height
+    self._cellSize = params.cellSize
     self._parent = params.parent
 
-    for i = 1, self._width do
+    local generator = require(Map.GeneratorsDir .. params.generator)
+    self._cells = generator:go(params)
+end
 
-        self._cells[i] = {}
+function Map:getCell(x, y)
+    if self._cells[x] then 
+        return self._cells[x][y]
+    end
+end
 
-        for j = 1, self._height do
+function Map:setCell(x, y, params)
+    -- Пытаемся получить клетку
+    local cell = self:getCell(x, y)
 
-            local rect = display.newRect(self._parent, 
-            self._cellSize * j - self._cellSize / 2, 
-            self._cellSize * i - self._cellSize / 2, 
-            self._cellSize, self._cellSize)
-
-            rect:setFillColor( 0.25, 0.25, 0.25 ) 
-            rect:setStrokeColor( 1, 0, 0 )
-            rect.strokeWidth = 4
-            rect.alpha = 0.75
-            self._cells[i][j] = { rect = rect, type = "open" }
-
+    if cell then
+        for k, v in pairs(params) do
+            cell[k] = v
         end
 
+        self._cells[x][y] = cell
     end
-
 end
 
 function Map:getCellSize()

@@ -63,11 +63,16 @@ function Core:enterFrame(event)
             else
                 self._gameObjects[i]:update(self.time:delta())
             end
-            
         end
-
     end
+end
 
+function Core:setActiveMap(map)
+    self._activeMap = map
+end
+
+function Core:getActiveMap()
+    return self._activeMap
 end
 
 function Core:addGameObject(factory, params)
@@ -80,7 +85,7 @@ function Core:addGameObject(factory, params)
 end
 
 function Core:getGameObjects()
-    return self._gameObjects
+    return self._gameObjects or false
 end
 
 return 

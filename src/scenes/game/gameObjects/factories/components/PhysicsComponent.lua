@@ -15,7 +15,7 @@ function Component:initialize( containerObject, params )
     self._params = params.params or { density = 1.0, friction = 0.0, bounce = 0.2 }
 
     physics.addBody(self._containerObject:getDisplayObject(), self._bodyType, self._params)
-
+    self._containerObject:getDisplayObject().isFixedRotation = true
 end
 
 function Component:update(dt)

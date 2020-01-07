@@ -11,6 +11,8 @@ end
 
 function GameObject:update(dt)
     
+    self._totalFrames = (self._totalFrames or 0) + 1
+
     if self._components then
         for name, _ in pairs( self._components ) do
             self._components[name]:update(dt)
@@ -45,7 +47,6 @@ function GameObject:removeComponent(name)
     end
 
     return false
-
 end
 
 function GameObject:getComponent(name)
@@ -66,10 +67,16 @@ function GameObject:hasComponent(name)
     return self._components[name]
 end
 
+function GameObject:getFrames()
+    return self._totalFrames or 0
+end
+
 function GameObject:destroy()
     -- Удаляем все компоненты объекта
-    for name, _ in pairs(self._components) do
-        self:remove(name)
+    if self._components then
+        for name, _ in pairs(self._components) do
+            self:removeComponent(name)
+        end
     end
 
     self._components = nil

@@ -26,8 +26,6 @@ function Plugin:new(instance)
 
     function instance:touch(event)
         
-        print("1")
-
 		local result = true
         local phase = event.phase
         local previousTouches = self.previousTouches
