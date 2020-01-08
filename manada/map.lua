@@ -3,6 +3,7 @@ local class = require( "manada.libs.middleclass" )
 local Map = class( "Map" )
 
 Map.GeneratorsDir = "src.scenes.game.map.generators."
+Map.TouchHandlersDir = "src.scenes.game.map.touchHandlers."
 
 function Map:initialize( params )
 
@@ -17,10 +18,22 @@ function Map:initialize( params )
     self._cells = generator:go(params)
 end
 
+function Map:setTouchHandler(name, params)
+    -- Обработчик нажатия по полю
+    local handler = require(Map.TouchHandlersDir .. name):new(params)
+    self:getDisplayGroup():addEventListener("touch", function(event) handler:handle(event) end)
+end
+
+function Map:getCells()
+    return self._cells
+end
+
 function Map:getCell(x, y)
-    if self._cells[x] then 
+    if self:getCells()[x] then 
         return self._cells[x][y]
     end
+
+    print("Can't get cell")
 end
 
 function Map:setCell(x, y, params)
@@ -34,6 +47,10 @@ function Map:setCell(x, y, params)
 
         self._cells[x][y] = cell
     end
+end
+
+function Map:getDisplayGroup()
+    return self._parent
 end
 
 function Map:getCellSize()

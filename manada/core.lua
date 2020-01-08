@@ -81,7 +81,10 @@ function Core:addGameObject(factory, params)
 
     if object then
         self._gameObjects[#self._gameObjects + 1] = object
+        return true
     end
+
+    return false
 end
 
 function Core:getGameObjects()

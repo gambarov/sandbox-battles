@@ -19,19 +19,6 @@ local bgGroup		-- Группа отображения заднего фона
 local mainGroup		-- Группа отображения карты, игровых объектов и т.д. 
 local uiGroup		-- Группа отображения пользовательского интерфейса
 
-local function addGameObjectOnScreen(event)
-	-- Получаем точку спавна относительно карты
-	local xObjectSpawn, yObjectSpawn = mainGroup:contentToLocal(event.x, event.y)
-
-    -- Если произведено нажатие и пользователь не перемещал карту и точка касания находится внутри карты
-	if event.phase == "ended" and event.x == event.xStart and event.y == event.yStart and xObjectSpawn > 0 and yObjectSpawn > 0 and xObjectSpawn < mainGroup.width and yObjectSpawn < mainGroup.height then
-		-- manada:addGameObject(barrierFactory, { displayObject = display.newRect(mainGroup, xObjectSpawn, yObjectSpawn, map:getCellSize(), map:getCellSize()) })
-		-- manada.camera:add("main", { target = manada:getGameObjects()[#manada:getGameObjects()]:getDisplayObject(), parent = mainGroup, speed = 10 })
-		return true
-	end
-end
- 
-
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
 -- -----------------------------------------------------------------------------------
@@ -52,6 +39,7 @@ function scene:create( event )
 	masterGroup:insert(uiGroup)
 
 	manada:setActiveMap(manada.Map:new({ generator = "simple", parent = mainGroup, width = 10, height = 15, cellSize = 128 }))
+	manada:getActiveMap():setTouchHandler("blockSpawnHandler", { factory = barrierFactory })
 	mainGroup = manada.plugin:new(mainGroup, "pinchZoomDrag")
 
 	-- Перемещаем игровую группу в центр экрана
@@ -83,7 +71,6 @@ function scene:show( event )
 	elseif ( phase == "did" ) then
 		-- Code here runs when the scene is entirely on screen
 		physics.start()
-		mainGroup:addEventListener("touch", addGameObjectOnScreen)
 	end
 end
 
