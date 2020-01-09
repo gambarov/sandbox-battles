@@ -49,8 +49,6 @@ function Component:destroy()
     self._moveJoy = nil
     self._displayGroup = nil
     self._containerObject = nil
-
-    controller = nil
 end
 
 return Component

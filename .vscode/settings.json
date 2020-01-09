@@ -9,7 +9,9 @@
         "system",
         "Runtime",
         "audio",
-        "timer"
+        "timer",
+        "native",
+        "transition"
     ],
     "lua.targetVersion": "5.3"
 }

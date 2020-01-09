@@ -39,8 +39,6 @@ function scene:create( event )
 	masterGroup:insert(uiGroup)
 
 	manada:setActiveMap(manada.Map:new({ generator = "simple", parent = mainGroup, width = 10, height = 15, cellSize = 128 }))
-	manada:getActiveMap():setTouchHandler("blockSpawnHandler", { factory = barrierFactory })
-	mainGroup = manada.plugin:new(mainGroup, "pinchZoomDrag")
 
 	-- Перемещаем игровую группу в центр экрана
 	mainGroup.x, mainGroup.y = math.floor(0.5 * display.pixelHeight), math.floor(0.5 * display.pixelWidth)
@@ -71,6 +69,12 @@ function scene:show( event )
 	elseif ( phase == "did" ) then
 		-- Code here runs when the scene is entirely on screen
 		physics.start()
+		manada:getActiveMap():setTouchHandler("blockSpawnHandler", { factory = barrierFactory })
+		timer.performWithDelay(5000, function ()
+			print("touch handler changed!")
+			manada:getActiveMap():setTouchHandler("blockRemoveHandler")
+		end)
+		mainGroup = manada.plugin:new(mainGroup, "pinchZoomDrag")
 	end
 end
 
