@@ -11,7 +11,8 @@
         "audio",
         "timer",
         "native",
-        "transition"
+        "transition",
+        "graphics"
     ],
     "lua.targetVersion": "5.3"
 }
