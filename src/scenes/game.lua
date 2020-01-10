@@ -1,8 +1,7 @@
 
 local composer = require( "composer" )
 local physics = require( "physics" )
-local gameObjectFactory = require("src.scenes.game.gameObjects.factories.TestGOFactory"):new()
-local barrierFactory = require("src.scenes.game.gameObjects.factories.BarrierFactory"):new()
+
 
 local scene = composer.newScene()
 
@@ -40,6 +39,8 @@ function scene:create( event )
 
 	manada:setActiveMap(manada.Map:new({ generator = "simple", parent = mainGroup, width = 10, height = 15, cellSize = 128 }))
 
+	uiGroup = require("src.scenes.game.ui")
+
 	-- Перемещаем игровую группу в центр экрана
 	mainGroup.x, mainGroup.y = math.floor(0.5 * display.pixelHeight), math.floor(0.5 * display.pixelWidth)
 	-- Смещаем ее тоску привязки, чтобы все наэкранные объекты в группе были также в центре
@@ -61,6 +62,7 @@ end
 function scene:show( event )
 
 	local sceneGroup = self.view
+
 	local phase = event.phase
 
 	if ( phase == "will" ) then
@@ -69,11 +71,6 @@ function scene:show( event )
 	elseif ( phase == "did" ) then
 		-- Code here runs when the scene is entirely on screen
 		physics.start()
-		manada:getActiveMap():setTouchHandler("blockSpawnHandler", { factory = barrierFactory })
-		timer.performWithDelay(5000, function ()
-			print("touch handler changed!")
-			manada:getActiveMap():setTouchHandler("blockRemoveHandler")
-		end)
 		mainGroup = manada.plugin:new(mainGroup, "pinchZoomDrag")
 	end
 end

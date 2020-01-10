@@ -36,10 +36,7 @@ function Handler:handle(event)
 
         if cell and cell.type and cell.type == "barrier" then
             if destroyBlockIn(x, y) then
-                print("block has been removed!")
                 map:setCell(i, j, { type = "open" })
-            else
-                print("can't remove block")
             end
         end
 
