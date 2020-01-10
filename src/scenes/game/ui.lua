@@ -1,5 +1,6 @@
 -- need sliding panel
 local widget = require("widget")
+
 local gameObjectFactory = require("src.scenes.game.gameObjects.factories.TestGOFactory"):new()
 local barrierFactory = require("src.scenes.game.gameObjects.factories.BarrierFactory"):new()
 
