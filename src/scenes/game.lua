@@ -37,7 +37,7 @@ function scene:create( event )
 	masterGroup:insert(mainGroup)
 	masterGroup:insert(uiGroup)
 
-	manada:setActiveMap(manada.Map:new({ generator = "simple", parent = mainGroup, width = 10, height = 15, cellSize = 128 }))
+	manada:setActiveMap(manada.Map:new({ generator = "simple", parent = mainGroup, width = 10, height = 15, cellSize = 256 }))
 
 	uiGroup = require("src.scenes.game.ui")
 

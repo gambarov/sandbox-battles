@@ -35,6 +35,7 @@ function Core:initialize( params )
     loadSystem( "services" )
     loadSystem( "random"   )
     loadSystem( "camera"   )
+    loadSystem( "data"     )
 
     self.Map = require( "manada.Map" )
     self.GameObject = require( "manada.GameObject" )

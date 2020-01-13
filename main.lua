@@ -29,4 +29,15 @@ end
 system.activate( "multitouch" )
 display.setStatusBar( display.HiddenStatusBar ) 
 
+manada.data:set("settings", 
+{
+    soundVolume = 100,
+    soundOn = true
+})
+
+manada.data:set("objects", 
+{
+    { name = "human", health = 100, damage = 15 }
+})
+
 composer:gotoScene("src.scenes.game")
