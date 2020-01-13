@@ -27,17 +27,13 @@ end
 
 -- Activate multitouch
 system.activate( "multitouch" )
+
 display.setStatusBar( display.HiddenStatusBar ) 
 
-manada.data:set("settings", 
-{
-    soundVolume = 100,
-    soundOn = true
-})
-
-manada.data:set("objects", 
-{
-    { name = "human", health = 100, damage = 15 }
-})
+if manada.data:empty() then
+    local defaultData = require("src.defaultData")
+    manada.data:set("settings", defaultData.settings)
+    manada.data:set("gameObjects", defaultData.gameObjects)
+end
 
 composer:gotoScene("src.scenes.game")

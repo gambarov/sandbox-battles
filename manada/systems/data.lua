@@ -59,6 +59,10 @@ function Data:get(name)
     return self._contents[name]
 end
 
+function Data:empty()
+    return manada.utils:count(self._contents) == 0
+end
+
 function Data:system( event )
     -- Если произошло закрытие приложения, сохраняем данные
 	if event.type == "applicationExit" or event.type == "applicationSuspend" then
