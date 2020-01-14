@@ -30,6 +30,7 @@ system.activate( "multitouch" )
 
 display.setStatusBar( display.HiddenStatusBar ) 
 
+-- Первый запуск приложения 
 if manada.data:empty() then
     local defaultData = require("src.defaultData")
     manada.data:set("settings", defaultData.settings)

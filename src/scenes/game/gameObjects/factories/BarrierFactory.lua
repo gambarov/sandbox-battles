@@ -13,9 +13,16 @@ end
 function Factory:create(params)
     -- Создаем новый игровой объект
     local gameObject = manada.GameObject:new()
-    -- Координаты спавна объекта и размер клетки
-    gameObject:setComponent("display", DisplayComponent, { displayObject = display.newRect(params.parent, params.x, params.y, params.width, params.height)  })
+    local sheet = manada.isheet:get("gameObjects")
+
+    local barrier = display.newImage(params.parent, sheet.image, sheet.info:getFrameIndex("BlockBox1"), params.x, params.y)
+    barrier.width, barrier.height = params.width, params.height
+
+    gameObject:setComponent("display", DisplayComponent, { displayObject = barrier })
     gameObject:setComponent("physics", PhysicsComponent, { bodyType = "static" })
+
+    sheet = nil
+
     return gameObject
 end
 

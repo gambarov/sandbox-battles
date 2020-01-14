@@ -9,24 +9,25 @@ function Generator:go(params)
 
     local cells = {}
 
+    local sheet = manada.isheet:get("gameObjects")
+
     for i = 1, params.width do
 
         cells[i] = {}
 
         for j = 1, params.height do
 
-            local rect = display.newRect(params.parent, 
+            local rect = display.newImage(params.parent, sheet.image, 
+            sheet.info:getFrameIndex("GroundTile" .. manada.random:range(1, 2) .. "A"),
             params.cellSize * j - params.cellSize / 2, 
-            params.cellSize * i - params.cellSize / 2, 
-            params.cellSize, params.cellSize)
-            rect:setFillColor( 0.25, 0.25, 0.25 ) 
-            rect:setStrokeColor( 1, 0, 0 )
-            rect.strokeWidth = 4
-            rect.alpha = 0.75
+            params.cellSize * i - params.cellSize / 2)
+            rect.width, rect.height = params.cellSize, params.cellSize
             cells[i][j] = { object = rect, type = "open" }
         end
     end
 
+    sheet = nil
+    
     return cells
 end
 
