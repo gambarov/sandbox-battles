@@ -2,10 +2,11 @@ local class = require("manada.libs.middleclass")
 
 local GameObject = class("GameObject")
 
-local remove = table.remove
-
 function GameObject:initialize(params)
     params = params or {}
+
+    self.name = params.name or "GameObject"
+
     self._components = {} 
 end
 
@@ -35,7 +36,6 @@ function GameObject:setComponent(name, component, params)
 
     params = params or {}
     self._components[name] = component:new(self, params)
-
 end
 
 function GameObject:removeComponent(name)

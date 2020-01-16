@@ -6,10 +6,21 @@ Component.requires = { "display" }
 
 function Component:initialize(gameObject, params)
     self._gameObject = gameObject
-    gameObject:getDisplayObject():addEventListener("attack", self)
+    self._visual = gameObject:getDisplayObject()
+
+    self._weapon = display.newRect(self._visual.parent, self._visual.x, self._visual.y, 145, 25)
+    self._weapon.anchorX, self._weapon.anchorY = 0, 0
+    self._visual:addEventListener("attack", self)
+end
+
+function Component:update()
+    -- Оружие всегда находится с владельцем
+    self._weapon.x, self._weapon.y = self._visual.x, self._visual.y
+    self._weapon.rotation = self._visual.rotation
 end
 
 function Component:attack()
+    -- Спавн сняряда
     print("Game Object attacked!")
 end
 

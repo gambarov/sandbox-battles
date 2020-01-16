@@ -5,6 +5,7 @@ local Factory = class("NPCFactory")
 local PhysicsComponent  = require("src.scenes.game.gameObjects.factories.components.PhysicsComponent")
 local AIComponent       = require("src.scenes.game.gameObjects.factories.components.input.AIComponent")
 local DisplayComponent  = require("src.scenes.game.gameObjects.factories.components.DisplayComponent")
+local WeaponComponent   = require("src.scenes.game.gameObjects.factories.components.WeaponComponent")
 
 function Factory:initialize(params)
 end
@@ -18,6 +19,7 @@ function Factory:create(params)
     gameObject:setComponent("display", DisplayComponent, { displayObject = soldier })
     gameObject:setComponent("physics", PhysicsComponent, { bodyType = "dynamic", params = { shape = shape, density = 1.0, friction = 0.0, bounce = 0.2 } })
     gameObject:setComponent("input", AIComponent)
+    gameObject:setComponent("weapon", WeaponComponent)
 
     return gameObject
 end

@@ -91,7 +91,7 @@ function Core:addGameObject(factory, params)
 end
 
 function Core:getGameObjects()
-    return self._gameObjects or false
+    return self._gameObjects
 end
 
 return 
