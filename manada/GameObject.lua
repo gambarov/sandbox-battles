@@ -3,10 +3,19 @@ local class = require("manada.libs.middleclass")
 local GameObject = class("GameObject")
 
 function GameObject:initialize(params)
+
     params = params or {}
 
-    self.name = params.name or "GameObject"
+    self._visual = params.visual
 
+    for k, v in pairs(params) do 
+        -- Св-ва DisplayObject
+        if self._visual and self._visual[k] then
+            self._visual[k] = v
+        end
+    end
+
+    self._totalFrames = 0
     self._components = {} 
 end
 
@@ -21,6 +30,75 @@ function GameObject:update(dt)
     end
 
 end
+
+-- МЕТОДЫ DISPLAY OBJECT
+
+function GameObject:getVisual(prop)
+    return self._visual
+end
+
+function GameObject:getParent()
+    if self:getVisual() then
+        return self._visual.parent
+    end
+end
+
+function GameObject:getX()
+    if self:getVisual() then
+        return self._visual.x
+    end
+end
+
+function GameObject:getY()
+    if self:getVisual() then
+        return self._visual.y
+    end
+end
+
+function GameObject:setX(value)
+    if self:getVisual() then
+        self._visual.x = value
+    end
+end
+
+function GameObject:setY(value)
+    if self:getVisual() then
+        self._visual.y = value
+    end
+end
+
+function GameObject:getPosition()
+    return self:getX(), self:getY()
+end
+
+function GameObject:setPosition(x, y)
+    self:setX(x)
+    self:setY(y)
+end
+
+function GameObject:getRotation()
+    return self._visual.rotation
+end
+
+function GameObject:setRotation(value)
+    if self:getVisual() then
+        self._visual.rotation = value
+    end
+end
+
+function GameObject:rotate(value)
+    if self:getVisual() then
+        self._visual:rotate(value)
+    end
+end
+
+function GameObject:setAnchor(x, y)
+    if self:getVisual() then
+        self._visual.anchorX, self._visual.anchorY = x, y
+    end
+end
+
+-- МЕТОДЫ ДЛЯ РАБОТЫ С КОМОПОНЕНТАМИ ОБЪЕКТА
 
 function GameObject:setComponent(name, component, params)
     -- Удаляем существующий компонент, если такой есть
@@ -67,6 +145,8 @@ function GameObject:hasComponent(name)
     return self._components[name]
 end
 
+-- ПРОЧЕЕ
+
 function GameObject:getFrames()
     return self._totalFrames or 0
 end
@@ -80,6 +160,12 @@ function GameObject:destroy()
     end
 
     self._components = nil
+
+    if self._visual then
+        self._visual:removeSelf()
+        self._visual = nil
+    end
+
     self._destroyed = true
 end
 

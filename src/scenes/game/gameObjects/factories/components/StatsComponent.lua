@@ -7,7 +7,6 @@ function Component:initialize(params)
     for stat, value in pairs(params) do
         self["_" .. stat] = value
     end 
-
 end
 
 function Component:set(name, value)

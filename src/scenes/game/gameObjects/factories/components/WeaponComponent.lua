@@ -2,21 +2,21 @@ local class = require("manada.libs.middleclass")
 
 local Component = class("WeaponComponent")
 
-Component.requires = { "display" }
+Component.requires = { }
 
 function Component:initialize(gameObject, params)
-    self._gameObject = gameObject
-    self._visual = gameObject:getDisplayObject()
+    self._owner = gameObject
 
-    self._weapon = display.newRect(self._visual.parent, self._visual.x, self._visual.y, 145, 25)
-    self._weapon.anchorX, self._weapon.anchorY = 0, 0
-    self._visual:addEventListener("attack", self)
+    self._weapon = manada.GameObject:new({ visual = display.newRect(gameObject:getParent(), gameObject:getX(), gameObject:getY(), 145, 25) })
+    self._weapon:setAnchor(0, 0)
+
+    gameObject:getVisual():addEventListener("attack", self)
 end
 
 function Component:update()
     -- Оружие всегда находится с владельцем
-    self._weapon.x, self._weapon.y = self._visual.x, self._visual.y
-    self._weapon.rotation = self._visual.rotation
+    self._weapon:setPosition(self._owner:getPosition())
+    self._weapon:setRotation(self._owner:getRotation())
 end
 
 function Component:attack()
@@ -25,8 +25,11 @@ function Component:attack()
 end
 
 function Component:destroy()
-    self._gameObject:getDisplayObject():removeEventListener("attack", self)
-    self._gameObject = nil
+    self._owner:getVisual():removeEventListener("attack", self)
+    self._owner = nil
+
+    self._weapon:destroy()
+    self._weapon = nil
 end
 
 return Component

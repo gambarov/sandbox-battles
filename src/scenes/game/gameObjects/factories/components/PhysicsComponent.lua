@@ -4,7 +4,7 @@ local Component = class( "Component" )
 
 local physics = require( "physics" )
 
-Component.requires = { "display" }
+Component.requires = { }
 
 function Component:initialize( gameObject, params )
 
@@ -12,8 +12,8 @@ function Component:initialize( gameObject, params )
     self._bodyType = params.bodyType or "dynamic"
     self._params = params.params or { density = 1.0, friction = 0.0, bounce = 0.2 }
 
-    physics.addBody(self._gameObject:getDisplayObject(), self._bodyType, self._params)
-    self._gameObject:getDisplayObject().isFixedRotation = true
+    physics.addBody(self._gameObject:getVisual(), self._bodyType, self._params)
+    self._gameObject:getVisual().isFixedRotation = true
     -- self._gameObject:getDisplayObject().isSleepingAllowed = false
 end
 
@@ -22,8 +22,8 @@ end
 
 function Component:destroy()
 
-    if self._gameObject:hasComponent("display") then
-        physics.removeBody(self._gameObject:getDisplayObject())
+    if self._gameObject:getVisual() then
+        physics.removeBody(self._gameObject:getVisual())
     end
     
     self._gameObjectt = nil

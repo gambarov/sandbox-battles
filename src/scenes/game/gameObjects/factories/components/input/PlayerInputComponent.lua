@@ -4,13 +4,13 @@ local Component = class( "PlayerJoyControlComponent" )
 
 local controller = require( "src.libs.controller.virtual_controller_factory" ).newController()
 
-Component.requires = { "display" }
+Component.requires = { }
 
-function Component:initialize( containerObject, params )
+function Component:initialize( gameObject, params )
 
     params = params or {}
 
-    self._containerObject = containerObject
+    self._gameObject = gameObject
     
 	local joyRadius = ((display.pixelHeight * 0.1) + (display.pixelWidth * 0.1)) / 2
 
@@ -25,8 +25,8 @@ function Component:initialize( containerObject, params )
 		rangeY = 200,
 		touchHandler = {
             onTouch = function ( self, x, y )
-                if containerObject:hasComponent("display") and containerObject:getDisplayObject().bodyType then
-                    containerObject:getDisplayObject():setLinearVelocity(x, y)
+                if gameObject:getVisual() and gameObject:getVisual().bodyType then
+                    gameObject:getVisual():setLinearVelocity(x, y)
                 end
             end
 		}
@@ -48,7 +48,7 @@ function Component:destroy()
 
     self._moveJoy = nil
     self._displayGroup = nil
-    self._containerObject = nil
+    self._gameObject = nil
 end
 
 return Component
