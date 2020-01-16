@@ -1,7 +1,7 @@
 --
 -- created with TexturePacker - https://www.codeandweb.com/texturepacker
 --
--- $TexturePacker:SmartUpdate:30c6b19729309357edf9724b81ca3db7:30339df94299260e8db28a3391c99308:2c2592776de1da59d67367b56b39db2d$
+-- $TexturePacker:SmartUpdate:723fc37e83b27456478df5364245f904:abe26c8bde2469934900b025ed64be97:2c2592776de1da59d67367b56b39db2d$
 --
 -- local sheetInfo = require("mysheet")
 -- local myImageSheet = graphics.newImageSheet( "mysheet.png", sheetInfo:getSheet() )
@@ -24,24 +24,56 @@ SheetInfo.sheet =
         },
         {
             -- GroundTile1A
-            x=259,
-            y=1,
+            x=1,
+            y=259,
+            width=256,
+            height=256,
+
+        },
+        {
+            -- GroundTile1C
+            x=1,
+            y=517,
+            width=256,
+            height=256,
+
+        },
+        {
+            -- GroundTile1D
+            x=1,
+            y=775,
             width=256,
             height=256,
 
         },
         {
             -- GroundTile2A
-            x=517,
-            y=1,
+            x=1,
+            y=1033,
             width=256,
             height=256,
 
         },
+        {
+            -- GroundTile2C
+            x=1,
+            y=1291,
+            width=256,
+            height=256,
+
+        },
+        {
+            -- Soldier
+            x=1,
+            y=1549,
+            width=200,
+            height=162,
+
+        },
     },
 
-    sheetContentWidth = 774,
-    sheetContentHeight = 258
+    sheetContentWidth = 258,
+    sheetContentHeight = 1712
 }
 
 SheetInfo.frameIndex =
@@ -49,7 +81,11 @@ SheetInfo.frameIndex =
 
     ["BlockBox1"] = 1,
     ["GroundTile1A"] = 2,
-    ["GroundTile2A"] = 3,
+    ["GroundTile1C"] = 3,
+    ["GroundTile1D"] = 4,
+    ["GroundTile2A"] = 5,
+    ["GroundTile2C"] = 6,
+    ["Soldier"] = 7,
 }
 
 function SheetInfo:getSheet()

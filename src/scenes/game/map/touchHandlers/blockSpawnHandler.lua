@@ -21,7 +21,7 @@ function Handler:handle(event)
         local x, y = map:toCellPos(event.x, event.y)
         
         -- Если клетка не занята, то спавним блок и занимаем клетку
-        if cell and cell.type and cell.type == "open" then
+        if cell and cell.type and cell.type == "free" then
             map:setCell(i, j, { type = "barrier" })
             manada:addGameObject(self._spawnFactory, 
             { 

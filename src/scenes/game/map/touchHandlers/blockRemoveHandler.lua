@@ -36,7 +36,7 @@ function Handler:handle(event)
 
         if cell and cell.type and cell.type == "barrier" then
             if destroyBlockIn(x, y) then
-                map:setCell(i, j, { type = "open" })
+                map:setCell(i, j, { type = "free" })
             end
         end
 

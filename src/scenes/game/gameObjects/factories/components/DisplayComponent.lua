@@ -4,10 +4,10 @@ local Component = class( "DisplayComponent" )
 
 Component.requires = {}
 
-function Component:initialize( containerObject, params )
+function Component:initialize( gameObject, params )
 
     params = params or {}
-    self._containerObject = containerObject
+    self._gameObject = gameObject
 
     for k, v in pairs( params ) do
         -- Кастомные св-ва
@@ -19,11 +19,11 @@ function Component:initialize( containerObject, params )
         end
     end
 
-    containerObject.getDisplayObject = function()
+    gameObject.getDisplayObject = function()
         return self._displayObject
     end
 
-    containerObject.intersectsWith = function(self, gameObject)
+    gameObject.intersectsWith = function(self, gameObject)
 
         if not gameObject or not gameObject["getDisplayObject"] then
             return false
@@ -47,8 +47,8 @@ function Component:update()
 end
 
 function Component:destroy()
-    self._containerObject.getDisplayObject = nil
-    self._containerObject = nil
+    self._gameObject.getDisplayObject = nil
+    self._gameObject = nil
 
     display.remove(self._displayObject)
     self._displayObject = nil;

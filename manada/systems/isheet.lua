@@ -10,8 +10,8 @@ function ISheet:initialize( params )
 end
 
 function ISheet:add( name )
-    local sheetInfo = require(self.SheetsInfoPath .. name .. ".info") 
-    local sheetImage = graphics.newImageSheet(self.SheetsImagePath .. name .. "/image.png", sheetInfo:getSheet())
+    local sheetInfo = require(self.SheetsInfoPath .. name .. "." .. name) 
+    local sheetImage = graphics.newImageSheet(self.SheetsImagePath .. name .. "/" .. name .. ".png", sheetInfo:getSheet())
     self._isheets[name] = { info = sheetInfo, image = sheetImage }
 end
 
