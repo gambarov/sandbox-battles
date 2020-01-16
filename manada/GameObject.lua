@@ -9,6 +9,9 @@ function GameObject:initialize(params)
     self._visual = params.visual
 
     for k, v in pairs(params) do 
+        -- TODO: Св-ва GameObject
+        self["_" .. k] = v
+
         -- Св-ва DisplayObject
         if self._visual and self._visual[k] then
             self._visual[k] = v
@@ -34,7 +37,9 @@ end
 -- МЕТОДЫ DISPLAY OBJECT
 
 function GameObject:getVisual(prop)
-    return self._visual
+    if self._visual then
+        return self._visual
+    end
 end
 
 function GameObject:getParent()
@@ -46,24 +51,32 @@ end
 function GameObject:getX()
     if self:getVisual() then
         return self._visual.x
+    else
+        return self._x
     end
 end
 
 function GameObject:getY()
     if self:getVisual() then
         return self._visual.y
+    else
+        return self._y
     end
 end
 
 function GameObject:setX(value)
     if self:getVisual() then
         self._visual.x = value
+    else
+        self._x = value
     end
 end
 
 function GameObject:setY(value)
     if self:getVisual() then
         self._visual.y = value
+    else
+        self._y = value
     end
 end
 
@@ -77,19 +90,23 @@ function GameObject:setPosition(x, y)
 end
 
 function GameObject:getRotation()
-    return self._visual.rotation
+    if self:getVisual() then
+        return self._visual.rotation
+    else
+        return self._rotation
+    end
 end
 
 function GameObject:setRotation(value)
     if self:getVisual() then
         self._visual.rotation = value
+    else
+        self._rotation = value
     end
 end
 
 function GameObject:rotate(value)
-    if self:getVisual() then
-        self._visual:rotate(value)
-    end
+    self:setRotation(self:getRotation() + value)
 end
 
 function GameObject:setAnchor(x, y)
@@ -98,7 +115,7 @@ function GameObject:setAnchor(x, y)
     end
 end
 
--- МЕТОДЫ ДЛЯ РАБОТЫ С КОМОПОНЕНТАМИ ОБЪЕКТА
+-- МЕТОДЫ ДЛЯ РАБОТЫ С КОМПОНЕНТАМИ ОБЪЕКТА
 
 function GameObject:setComponent(name, component, params)
     -- Удаляем существующий компонент, если такой есть

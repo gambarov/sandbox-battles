@@ -7,12 +7,12 @@ local barrierFactory = require("src.scenes.game.gameObjects.factories.BarrierFac
 local uiGroup = display.newGroup()
 
 local xBtn = 0.1 * display.pixelHeight
-local yBtn = 0.9 * display.pixelWidth
+local yBtn = 0.85 * display.pixelWidth
 local widthBtn = 0.15 * display.pixelHeight
 local heightBtn = 0.1 * display.pixelWidth
 local sizeBtn = (widthBtn + heightBtn) / 2
 print(sizeBtn)
-local offsetBtn = 15
+local offsetBtn = 25
 
 local function addButton(displayGroup, text, x, y, handler)
     -- Create the widget
@@ -42,13 +42,13 @@ addButton(uiGroup, "Spawn characters", xBtn, yBtn, function (event)
     end
 end)
 
-addButton(uiGroup, "Spawn block", xBtn+ widthBtn + offsetBtn, yBtn, function (event)
+addButton(uiGroup, "Spawn block", xBtn + sizeBtn + offsetBtn, yBtn, function (event)
     if event.phase == "ended" then
         manada:getActiveMap():setTouchHandler("BlockSpawnHandler", { factory = barrierFactory })
     end
 end)
 
-addButton(uiGroup, "Remove block", xBtn + (widthBtn * 2) + (offsetBtn * 2), yBtn, function (event)
+addButton(uiGroup, "Remove block", xBtn + (sizeBtn * 2) + (offsetBtn * 2), yBtn, function (event)
     if event.phase == "ended" then
         manada:getActiveMap():setTouchHandler("BlockRemoveHandler")
     end

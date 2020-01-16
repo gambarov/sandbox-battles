@@ -43,7 +43,7 @@ function Core:initialize( params )
  
     if self.Debug then
         visualMonitor:new()
-        physics.setDrawMode("hybrid")
+        -- physics.setDrawMode("hybrid")
     end
 
     self._gameObjects = {}
