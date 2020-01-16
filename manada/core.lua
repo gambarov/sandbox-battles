@@ -7,6 +7,7 @@ local Core = class( "Core" )
 
 -- Сторонние библиотеки для работы
 local visualMonitor = require("manada.libs.visualMonitor")
+local physics = require("physics")
 
 local remove = table.remove
 
@@ -42,6 +43,7 @@ function Core:initialize( params )
  
     if self.Debug then
         visualMonitor:new()
+        physics.setDrawMode("hybrid")
     end
 
     self._gameObjects = {}

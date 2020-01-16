@@ -28,6 +28,8 @@ end
 -- Activate multitouch
 system.activate( "multitouch" )
 
+display.setDefault("magTextureFilter", "nearest")
+display.setDefault("minTextureFilter", "nearest")
 display.setStatusBar( display.HiddenStatusBar ) 
 
 -- Первый запуск приложения 
