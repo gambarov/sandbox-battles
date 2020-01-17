@@ -1,5 +1,9 @@
 local Plugin = {}
 
+local max  = math.max
+local min  = math.min
+local sqrt = math.sqrt
+
 local function calculateDelta( previousTouches, event )
 
 	local id, touch = next( previousTouches )
@@ -19,11 +23,6 @@ function Plugin:new(instance)
         error( "ERROR: " .. "Expected display object" )
     end
 	
-	prevX = instance.x
-	prevY = instance.y
-	
-	isMulti = false
-
     function instance:touch(event)
         
 		local result = true
@@ -58,7 +57,7 @@ function Plugin:new(instance)
                 end
                 -- Initialize the distance between two touches
                 if ( dx and dy ) then
-                    local d = math.sqrt( dx*dx + dy*dy )
+                    local d = sqrt( dx*dx + dy*dy )
                     if ( d > 0 ) then
                         self.distance = d
                         self.xScaleOriginal = self.xScale
@@ -92,12 +91,15 @@ function Plugin:new(instance)
                     end
 
                     if ( dx and dy ) then
-                        local newDistance = math.sqrt( dx*dx + dy*dy )
+                        local newDistance = sqrt( dx*dx + dy*dy )
                         local scale = newDistance / self.distance
                         --print( "newDistance(" ..newDistance .. ") / distance(" .. self.distance .. ") = scale("..  scale ..")" )
                         if ( scale > 0 ) then
                             self.xScale = self.xScaleOriginal * scale
                             self.yScale = self.yScaleOriginal * scale
+
+                            self.xScale, self.yScale = max(self.xScale, 0.25), max(self.yScale, 0.25)
+                            self.xScale, self.yScale = min(self.xScale, 2), min(self.yScale, 2)
                         end
                     end
                 end

@@ -15,7 +15,7 @@ function Component:update(dt)
     local visual = self._gameObject:getVisual()
 
     if visual and visual.bodyType then
-        self._gameObject:rotate(1 * dt)
+        -- self._gameObject:rotate(1 * dt)
     end
 end
 

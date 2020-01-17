@@ -11,7 +11,6 @@ local yBtn = 0.85 * display.pixelWidth
 local widthBtn = 0.15 * display.pixelHeight
 local heightBtn = 0.1 * display.pixelWidth
 local sizeBtn = (widthBtn + heightBtn) / 2
-print(sizeBtn)
 local offsetBtn = 25
 
 local function addButton(displayGroup, text, x, y, handler)
@@ -50,7 +49,14 @@ end)
 
 addButton(uiGroup, "Remove block", xBtn + (sizeBtn * 2) + (offsetBtn * 2), yBtn, function (event)
     if event.phase == "ended" then
-        manada:getActiveMap():setTouchHandler("BlockRemoveHandler")
+        -- manada:getActiveMap():setTouchHandler("BlockRemoveHandler")
+        local gameObjs = manada:getGameObjects()
+
+        for i = 1, #gameObjs, 1 do
+            if gameObjs[i]:hasComponent("weapon") then
+                gameObjs[i]:getVisual():dispatchEvent({ name = "attack" })
+            end
+        end
     end
 end)
 
