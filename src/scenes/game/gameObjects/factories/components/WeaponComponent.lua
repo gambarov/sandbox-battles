@@ -2,6 +2,8 @@ local class = require("manada.libs.middleclass")
 
 local Component = class("WeaponComponent")
 
+local bulletFactory = require("src.scenes.game.gameObjects.factories.BulletFactory")
+
 Component.requires = { }
 
 function Component:initialize(gameObject, params)
@@ -10,7 +12,7 @@ function Component:initialize(gameObject, params)
     self._weapon = manada.GameObject:new({ visual = display.newRect(gameObject:getParent(), gameObject:getX(), gameObject:getY(), 145, 25) })
     self._weapon:setAnchor(0, 0)
 
-    gameObject:getVisual():addEventListener("attack", self)
+    gameObject:getVisual():addEventListener("attack", self) 
 end
 
 function Component:update()
@@ -21,7 +23,7 @@ end
 
 function Component:attack()
     -- Спавн сняряда
-    print("Game Object attacked!")
+    manada:addGameObject(bulletFactory, { owner = self._owner, x = self._owner:getX(), y = self._owner:getY() })
 end
 
 function Component:destroy()
