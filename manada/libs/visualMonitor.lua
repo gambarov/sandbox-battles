@@ -50,7 +50,7 @@ local function update( event )
 		minFPS = min(currentFPS, minFPS)
 		maxFPS = math.max(currentFPS, maxFPS)
 
-		M.group.text.text = "Delta Time: " .. tostring( manada.math:round(manada.time:delta(), 2) ) .. " " .. 
+		M.group.text.text = "Delta Time: " .. tostring( min( display.fps, int( 1000 / ( curTime - prevTime ) ) ) ) .. " " .. 
 	"FPS: ".. tostring( currentFPS .. " (" .. minFPS .. "-" .. maxFPS .. ")" ) .. " " ..
     " Texture Memory: ".. tostring( int( system.getInfo( "textureMemoryUsed" ) * 0.001 ) ) .. "kb " ..
     " System Memory: ".. tostring( int( collectgarbage( "count" ) ) ) .. "kb " ..
