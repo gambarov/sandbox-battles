@@ -29,10 +29,10 @@ function Handler:handle(event)
     local map = manada:getActiveMap()
 
     if event.phase == "ended" then
-        local i, j = ceil(event.y / map:getCellSize()), ceil(event.x / map:getCellSize())
+        local i, j = ceil(event.ySpawn / map:getCellSize()), ceil(event.x / map:getCellSize())
         local cell = map:getCell(i, j)
         -- Преобразуем коорднаты точки касания в точные коорднаты клетки, которую коснулись
-        local x, y = map:toCellPos(event.x, event.y)
+        local x, y = map:toCellPos(event.xSpawn, event.ySpawn)
 
         if cell and cell.type and cell.type == "barrier" then
             if destroyBlockIn(x, y) then

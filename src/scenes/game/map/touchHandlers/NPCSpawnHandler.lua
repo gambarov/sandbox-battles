@@ -13,12 +13,12 @@ function Handler:handle(event)
     if event.phase == "ended" then
 
         local map = manada:getActiveMap()
-        local i, j = ceil(event.y / map:getCellSize()), ceil(event.x / map:getCellSize())
+        local i, j = ceil(event.ySpawn / map:getCellSize()), ceil(event.xSpawn / map:getCellSize())
         local cell = map:getCell(i, j)
         
         if cell and cell.type and cell.type == "free" then
             local size = manada:getActiveMap():getCellSize()
-            return manada:addGameObject(self._spawnFactory, { parent = manada:getActiveMap():getDisplayGroup(), x = event.x, y = event.y, width = size, height = size })
+            return manada:addGameObject(self._spawnFactory, { parent = manada:getActiveMap():getDisplayGroup(), x = event.xSpawn, y = event.ySpawn, width = size, height = size })
         end
     end
 end

@@ -33,8 +33,8 @@ function Map:setTouchHandler(name, params)
         local x, y = self._parent:contentToLocal(event.x, event.y)
     
         -- Спавн объекта при отпускании пальца
-        if event.x == event.xStart and event.y == event.yStart and x > 0 and y > 0 and x < self._parent.width and y < self._parent.height then
-            event.x, event.y = x, y
+        if event.phase == "ended" and event.x == event.xStart and event.y == event.yStart and x > 0 and y > 0 and x < self._parent.width and y < self._parent.height then
+            event.xSpawn, event.ySpawn = x, y
             return handler:handle(event) 
         end
     end

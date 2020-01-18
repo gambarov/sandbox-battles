@@ -47,8 +47,11 @@ function Plugin:new(instance)
                 previousTouches = {}
                 self.previousTouches = previousTouches
                 self.numPreviousTouches = 0
+
                 self.markX = self.x
                 self.markY = self.y
+                -- self.markX = event.x
+                -- self.markY = event.y
 
             elseif not self.distance then
                 local dx, dy
@@ -79,6 +82,15 @@ function Plugin:new(instance)
             if ( "moved" == phase ) then
 
                 if numTotalTouches == 1 then
+                    
+                    -- local anchorXOffset = (event.x - self.markX) / display.pixelHeight / max(1, self.xScale)
+                    -- local anchorYOffset = (event.y - self.markY) / display.pixelWidth / max(1, self.yScale)
+
+                    -- self.markX = event.x
+                    -- self.markY = event.y
+
+                    -- self.anchorX, self.anchorY = self.anchorX - anchorXOffset, self.anchorY - anchorYOffset
+
                     self.x = event.x - event.xStart + self.markX
                     self.y = event.y - event.yStart + self.markY
                 end
