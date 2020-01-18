@@ -58,7 +58,7 @@ function Core:enterFrame(event)
 
     for i = #self._gameObjects, 1, -1 do
 
-        if self._gameObjects[i] and self._gameObjects[i]["destroyed"] then
+        if self._gameObjects[i] and self._gameObjects[i]["update"] and self._gameObjects[i]["destroyed"] then
 
             if self._gameObjects[i]:destroyed() then
                 local object = remove(self._gameObjects, i)
@@ -67,6 +67,8 @@ function Core:enterFrame(event)
             else
                 self._gameObjects[i]:update(self.time:delta())
             end
+        else
+            remove(self._gameObjects, i)
         end
     end
 end

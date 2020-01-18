@@ -18,20 +18,23 @@ function GameObject:initialize(params)
         end
     end
 
+    if self._visual then
+        self._visual.gameObject = self
+    end
+
     self._totalFrames = 0
     self._components = {} 
 end
 
 function GameObject:update(dt)
     
-    self._totalFrames = (self._totalFrames or 0) + 1
+    self._totalFrames = ((self._totalFrames or 0) + 1)
 
     if self._components then
         for name, _ in pairs( self._components ) do
             self._components[name]:update(dt)
         end
     end
-
 end
 
 -- МЕТОДЫ DISPLAY OBJECT
@@ -163,6 +166,14 @@ function GameObject:hasComponent(name)
 end
 
 -- ПРОЧЕЕ
+
+function GameObject:getName()
+    if self._name then
+        return self._name
+    end
+
+    return "GameObject"
+end
 
 function GameObject:getFrames()
     return self._totalFrames or 0
