@@ -48,7 +48,10 @@ function Debug:message(text)
         return
     end
 
-    local group = self:__createTextBox(display.newGroup(), text, display.pixelHeight * 0.125, self._fontSize * 1.25 * self._messageCount, len(text) * (self._fontSize / 2),  self._fontSize * 1.25)
+    local width  = len(text) * (self._fontSize / 1.75)
+    local height = self._fontSize * 1.25 * manada.utils:count(manada.utils:splite(text, "\n"))
+
+    local group = self:__createTextBox(display.newGroup(), text, display.pixelHeight * 0.125, height * self._messageCount, width, height)
     group.isMessage = true
 
     self._group:insert(group)
@@ -68,7 +71,7 @@ function Debug:message(text)
                 for i = 1, self._group.numChildren do
                     local group = self._group[i]
                     if group.isMessage then
-                        group:translate(0, -self._fontSize * 1.25)
+                        group:translate(0, -group.height)
                     end
                 end
             end })
