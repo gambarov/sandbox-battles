@@ -14,7 +14,7 @@ function Factory:create(params)
     local barrier = display.newImage(params.parent, sheet.image, sheet.info:getFrameIndex("BlockBox1"), params.x, params.y)
     barrier.width, barrier.height = params.width, params.height
 
-    local gameObject = manada.GameObject:new({ visual = barrier })
+    local gameObject = manada.GameObject:new({ visual = barrier, name = "barrier" })
     gameObject:setComponent("physics", PhysicsComponent, { bodyType = "static" })
 
     sheet = nil

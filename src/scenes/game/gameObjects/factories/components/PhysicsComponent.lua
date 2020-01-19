@@ -12,9 +12,10 @@ function Component:initialize( gameObject, params )
     self._bodyType = params.bodyType or "dynamic"
     self._params = params.params or { density = 1.0, friction = 0.0, bounce = 0.2 }
 
-    physics.addBody(self._gameObject:getVisual(), self._bodyType, self._params)
-    self._gameObject:getVisual().isFixedRotation = true
-    -- self._gameObject:getDisplayObject().isSleepingAllowed = false
+    if gameObject:getVisual() then
+        physics.addBody(gameObject:getVisual(), self._bodyType, self._params)
+        gameObject:getVisual().isFixedRotation = true
+    end
 end
 
 function Component:update(dt)
@@ -22,11 +23,11 @@ end
 
 function Component:destroy()
 
-    if self._gameObject:getVisual() then
+    if self._gameObject and self._gameObject:getVisual() then
         physics.removeBody(self._gameObject:getVisual())
     end
     
-    self._gameObjectt = nil
+    self._gameObject = nil
 end
 
 return Component

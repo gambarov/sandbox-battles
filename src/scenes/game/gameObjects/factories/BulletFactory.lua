@@ -8,23 +8,37 @@ function Factory:initialize()
 end
 
 function Factory:create(params)
-    local visual = display.newCircle(params.owner:getParent(), params.x, params.y, 10)
-
-    local bullet = manada.GameObject:new({ visual = visual })
-    bullet:setComponent("physics", PhysicsComponent, { bodyType = "dynamic", params = { density = 0.1, friction = 0.0, bounce = 0.2 } })
+    -- Создаем объект пули
+    local bullet = manada.GameObject:new(
+    { 
+        visual = display.newRect(params.owner:getParent(), params.x, params.y, 15, 10),
+        name = "bullet"
+    })
+    bullet:setComponent("physics", PhysicsComponent, { bodyType = "dynamic", params = { density = 0 } })
 
     bullet:getVisual().isBullet = true
     bullet:getVisual().isSensor = true
     bullet:setRotation(params.owner:getRotation())
     
     local vector = manada.math:vectorFromAngle(params.owner:getRotation())
-    local speed = 2000
+    local speed = 1000
 
-    local dt = manada.time:delta()
-    local xForce = vector.x * speed * dt
-    local yForce = vector.y * speed * dt
+    local xForce = vector.x * speed
+    local yForce = vector.y * speed
 
-    bullet:getVisual():applyForce(xForce, yForce, bullet:getX(), bullet:getY())
+    bullet:getVisual():addEventListener("collision", 
+    function(event)    
+        -- body
+        local object = event.other.gameObject
+
+        if object and object:getName() == "barrier" then
+            -- Удаляние объекта при столновении с препятсвием
+            bullet:destroy()
+            bullet = nil
+        end
+    end)
+
+    bullet:getVisual():applyForce(xForce, yForce, params.owner:getPosition())
     return bullet
 end
 
