@@ -11,9 +11,8 @@ local function destroyBlockIn(x, y)
     for i = 1, #gameObjects, 1 do
 
         local object = gameObjects[i]
-        local visual = object:getDisplayObject()
 
-        if visual.x == x and visual.y == y then
+        if object:getX() == x and object:getY() == y then
             object:destroy()
             object = nil
             visual = nil
@@ -29,7 +28,7 @@ function Handler:handle(event)
     local map = manada:getActiveMap()
 
     if event.phase == "ended" then
-        local i, j = ceil(event.ySpawn / map:getCellSize()), ceil(event.x / map:getCellSize())
+        local i, j = ceil(event.ySpawn / map:getCellSize()), ceil(event.xSpawn / map:getCellSize())
         local cell = map:getCell(i, j)
         -- Преобразуем коорднаты точки касания в точные коорднаты клетки, которую коснулись
         local x, y = map:toCellPos(event.xSpawn, event.ySpawn)
