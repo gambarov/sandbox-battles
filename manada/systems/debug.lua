@@ -3,10 +3,8 @@ local class = require("manada.libs.middleclass")
 local Debug = class("Debug")
 
 local floor, min, len = math.floor, math.min, string.len
-
+ 
 function Debug:initialize(params)
-
-    self._enabled = params.enabled or false
     self._fontSize = params.fontSize or 32
 
     self._updateFreq = params.updateFrequence or (display.fps / 10) -- Частота обновления данных
@@ -15,10 +13,6 @@ function Debug:initialize(params)
 
     self._group = display.newGroup()
     self._messageCount = 0
-
-    if self._enabled then
-        self:enable()
-    end
 end
 
 function Debug:update(event)
@@ -34,8 +28,8 @@ function Debug:update(event)
         self._updateCurr = 0
         local currentFPS = min(display.fps, floor(1000 / (curTime - self._prevTime)))
 
-        if self._group.monitor then
-            self._group.monitor.text.text = 
+        if self._monitor then
+            self._monitor.text.text = 
             "FPS: " .. tostring(currentFPS) .. "\n" ..
             "Texture: " .. tostring( floor( system.getInfo( "textureMemoryUsed" ) * 0.0001 ) * 0.01 ) .. "mb " .. "\n" ..
             "System: " .. tostring( floor( collectgarbage( "count" ) * 0.1 ) * 0.01 ) .. "mb " .. "\n" ..
@@ -54,28 +48,23 @@ function Debug:message(text)
         return
     end
 
-    local group = display.newGroup()
+    local group = self:__createTextBox(display.newGroup(), text, display.pixelHeight * 0.125, self._fontSize * 1.25 * self._messageCount, len(text) * (self._fontSize / 2),  self._fontSize * 1.25)
     group.isMessage = true
-
-    local background = display.newRect(group, display.pixelHeight * 0.125, self._fontSize * 1.25 * self._messageCount, len(text) * (self._fontSize / 2),  self._fontSize * 1.25)
-    background.anchorX = 0
-	background.anchorY = 0
-	background:setFillColor( 0 )
-    background.alpha = 0.65
-
-    local msgText = display.newText(group, text, background.x + background.width / 2, background.y + background.height / 2, native.systemFont, self._fontSize)
-    msgText:setFillColor( 1 )
 
     self._group:insert(group)
     self._messageCount = self._messageCount + 1
 
+    -- Удаление сообщения через секунду
     timer.performWithDelay(1000, function ()
+        -- Сначало постепенно изчезает, затем удаляется
         transition.to(group, { alpha = 0, time = 300, onComplete = 
             function() 
+                -- Очищение памяти
                 display.remove(group)
                 group = nil
                 self._messageCount = self._messageCount - 1
 
+                -- Сдвигаем все сообщения наверх
                 for i = 1, self._group.numChildren do
                     local group = self._group[i]
                     if group.isMessage then
@@ -87,41 +76,45 @@ function Debug:message(text)
 end
 
 function Debug:enable()
-    self._enabled = true
-    self:__addMonitor()
+    if not self._enabled then
+        self._enabled = true
+        self._monitor = self:__createTextBox(display.newGroup(), "", 0, 0, display.pixelHeight * 0.125,  display.pixelWidth * 0.15)
+        self._group:insert(self._monitor)
+    end
 end
 
 function Debug:disable()
     self._enabled = false
-    self:__removeMonitor()
+    self._monitor = nil
+    
+    for i = self._group.numChildren, 1, -1 do
+        self._group[i]:removeSelf()
+        self._group[i] = nil
+    end
 end
 
-function Debug:__addMonitor()
-    local background = display.newRect(self._group, 0, 0, display.pixelHeight * 0.125,  display.pixelWidth * 0.15)
+function Debug:__createTextBox(displayGroup, text, x, y, width, height)
+    local background = display.newRect(displayGroup, x, y, width, height)
     background.anchorX = 0
 	background.anchorY = 0
 	background:setFillColor( 0 )
     background.alpha = 0.65
+
     local text = display.newText(
     {
-        parent = self._group, 
-        text = "", 
-        x = background.width / 2, 
-        y = background.height / 2, 
+        parent = displayGroup, 
+        text = text, 
+        x = x + background.width / 2, 
+        y = y + background.height / 2, 
         font = native.systemFont, 
         fontSize = self._fontSize, 
         align = "center" 
     })
     text:setFillColor( 1 )
-    self._group.monitor = { text = text }
-end
-
-function Debug:__removeMonitor()
-    for i = self._group.numChildren, 1, -1 do
-        self._group[i]:removeSelf()
-        self._group[i] = nil
-    end
-    self._group.monitor = nil
+    
+    displayGroup.background = background
+    displayGroup.text = text
+    return displayGroup
 end
 
 return Debug
