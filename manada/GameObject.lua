@@ -118,6 +118,14 @@ function GameObject:setAnchor(x, y)
     end
 end
 
+function GameObject:dispatchEvent(name, params)
+    if self:getVisual() then
+        params = params or {}
+        params.name = name
+        self._visual:dispatchEvent(params)
+    end
+end
+
 -- МЕТОДЫ ДЛЯ РАБОТЫ С КОМПОНЕНТАМИ ОБЪЕКТА
 
 function GameObject:setComponent(name, component, params)
@@ -180,7 +188,13 @@ function GameObject:getFrames()
 end
 
 function GameObject:destroy()
-    -- Удаляем все компоненты объекта
+    -- Удаление объекта Display Object
+    if self._visual then
+        self._visual:removeSelf()
+        self._visual = nil
+    end
+
+    -- Удаление всех компонентов объекта
     if self._components then
         for name, _ in pairs(self._components) do
             self:removeComponent(name)
@@ -188,13 +202,6 @@ function GameObject:destroy()
     end
 
     self._components = nil
-
-    if self._visual then
-        self._visual:removeSelf()
-        self._visual = nil
-    end
-
-    self._destroyed = true
 end
 
 function GameObject:destroyed()

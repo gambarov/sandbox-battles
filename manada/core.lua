@@ -5,14 +5,9 @@ local class = require( "manada.libs.middleclass" )
 -- Объявление класса
 local Core = class( "Core" )
 
--- Сторонние библиотеки для работы
-local visualMonitor = require("manada.libs.visualMonitor")
-local physics = require("physics")
-
 local remove = table.remove
 
 Core.plugins = {}
-Core.Debug = true
 
 function Core:initialize( params )
 
@@ -38,14 +33,10 @@ function Core:initialize( params )
     loadSystem( "camera"   )
     loadSystem( "data"     )
     loadSystem( "math"     )
+    loadSystem( "debug"    )
 
     self.Map = require( "manada.Map" )
     self.GameObject = require( "manada.GameObject" )
- 
-    if self.Debug then
-        visualMonitor:new()
-        -- physics.setDrawMode("hybrid")
-    end
 
     self._gameObjects = {}
     Runtime:addEventListener("enterFrame", self)
@@ -54,6 +45,7 @@ end
 function Core:enterFrame(event)
 
     self.time:update(event)
+    self.debug:update(event)
     self.camera:update(self.time:delta())
 
     for i = #self._gameObjects, 1, -1 do
