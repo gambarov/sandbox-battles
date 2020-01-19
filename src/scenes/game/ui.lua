@@ -41,153 +41,96 @@ addButton(uiGroup, "REMOVE", xBtn, yBtn, function (event)
     end
 end)
 
-local ox, oy = math.abs(display.screenOriginX), math.abs(display.screenOriginY)
-	-- Set color variables depending on theme
-	local tableViewColors = {
-		rowColor = { default = { 48/255 }, over = { 72/255 } },
-		lineColor = { 36/255 },
-		catColor = { default = { 80/255, 80/255, 80/255, 0.9 }, over = { 80/255, 80/255, 80/255, 0.9 } },
-		defaultLabelColor = { 1, 1, 1, 0.6 },
-		catLabelColor = { 1 }
-	}
-	
-	-- Forward reference for the tableView
-	local tableView
-	
-	-- Text to show which item we selected
-	local itemSelected = display.newText( "User selected row ", 0, 0, native.systemFont, 16 )
-	itemSelected:setFillColor( unpack(tableViewColors.catLabelColor) )
-	itemSelected.x = display.contentWidth+itemSelected.contentWidth
-	itemSelected.y = display.contentCenterY
-	uiGroup:insert( itemSelected )
-	
-	-- Function to return to the tableView
-	local function goBack( event )
-		transition.to( tableView, { x=display.pixelHeight - (display.pixelHeight * 0.25 / 2), time=600, transition=easing.outQuint } )
-		transition.to( itemSelected, { x=display.contentWidth+itemSelected.contentWidth, time=600, transition=easing.outQuint } )
-		transition.to( event.target, { x=display.contentWidth+event.target.contentWidth, time=480, transition=easing.outQuint } )
-	end
-	
-	-- Back button
-	local backButton = widget.newButton {
-		width = 128,
-		height = 32,
-		label = "back",
-		onRelease = goBack
-	}
-	backButton.x = display.contentWidth+backButton.contentWidth
-	backButton.y = itemSelected.y+itemSelected.contentHeight+16
-	uiGroup:insert( backButton )
-	
-	-- Listen for tableView events
-	local function tableViewListener( event )
-		local phase = event.phase
-		--print( "Event.phase is:", event.phase )
-	end
+-- Set color variables depending on theme
+local tableViewColors = {
+	rowColor = { default = { 48/255 }, over = { 72/255 } },
+	lineColor = { 36/255 },
+	catColor = { default = { 80/255, 80/255, 80/255, 0.9 }, over = { 80/255, 80/255, 80/255, 0.9 } },
+	defaultLabelColor = { 1, 1, 1, 0.6 },
+	catLabelColor = { 1 }
+}
 
-	-- Handle row rendering
-	local function onRowRender( event )
-		local phase = event.phase
-		local row = event.row
-        
-		local groupContentHeight = row.contentHeight
-		
-        -- local rowTitle = display.newText( row, "Row " .. row.index, 0, 0, nil, 14 )
-        local sheet    = manada.isheet:get("gameObjects")
-        local rowTitle = display.newImage(row, sheet.image, sheet.info:getFrameIndex(row.params.name), display.pixelHeight * 0.25 / 2, 128)
-        rowTitle:scale(0.85, 0.85)
+-- Forward reference for the tableView
+local tableView
 
-		if ( row.isCategory ) then
-			rowTitle:setFillColor( unpack(row.params.catLabelColor) )
-			-- rowTitle.text = rowTitle.text.." (category)"
-		else
-			rowTitle:setFillColor( unpack(row.params.defaultLabelColor) )
-		end
-	end
+-- Listen for tableView events
+local function tableViewListener( event )
+	local phase = event.phase
+	-- print( "Event.phase is:", event.phase )
+end
+
+-- Handle row rendering
+local function onRowRender( event )
+
+	local row = event.row
+	local groupContentHeight = row.contentHeight
 	
-	-- Handle row updates
-	local function onRowUpdate( event )
-		local phase = event.phase
-		local row = event.row
-		--print( row.index, ": is now onscreen" )
+	-- local rowTitle = display.newText( row, "Row " .. row.index, 0, 0, nil, 14 )
+	local sheet    = manada.isheet:get("gameObjects")
+	local rowTitle = display.newImage(row, sheet.image, sheet.info:getFrameIndex(row.params.name), display.pixelHeight * 0.25 / 2, 128)
+	rowTitle:scale(0.85, 0.85)
+
+	if ( row.isCategory ) then
+		rowTitle:setFillColor( unpack(row.params.catLabelColor) )
+		-- rowTitle.text = rowTitle.text.." (category)"
+	else
+		rowTitle:setFillColor( unpack(row.params.defaultLabelColor) )
 	end
+end
+
+local function onRowUpdate( event )
+	local phase = event.phase
+	local row = event.row
+	print( row.index, ": is now onscreen" )
+end
+
+local function onRowTouch( event )
+	local phase = event.phase
+	local row = event.target
 	
-	-- Handle touches on the row
-    local function onRowTouch( event )
-		local phase = event.phase
-        local row = event.target
-        if ( "release" == phase ) then
-			manada:getActiveMap():setTouchHandler(row.params.handler.name, { factory = row.params.handler.factory })
-		end
+	if (phase == "release") then
+		manada:getActiveMap():setTouchHandler(row.params.handler.name, { factory = row.params.handler.factory })
 	end
-	
-	-- Create a tableView
-	tableView = widget.newTableView
-	{
-		-- top = 32-ox,
-		-- left = -ox,
-		top = 0,
-		left = display.pixelHeight - (display.pixelHeight * 0.25),
-		width = display.pixelHeight * 0.25, 
-		height = display.pixelWidth,
+end
 
-		hideBackground = true,
-		listener = tableViewListener,
-		onRowRender = onRowRender,
-		onRowUpdate = onRowUpdate,
-		onRowTouch = onRowTouch,
-	}
-	uiGroup:insert( tableView )
+tableView = widget.newTableView
+{
+	top = 0,
+	left = display.pixelHeight - (display.pixelHeight * 0.25),
+	width = display.pixelHeight * 0.25, 
+	height = display.pixelWidth,
+	rowTouchDelay = 5,
 
-    tableView:insertRow
-    {
-        isCategory = false,
-        rowHeight = 256,
-        rowColor = {
-            default = tableViewColors.rowColor.default,
-            over = tableViewColors.rowColor.over
-        },
-        lineColor = tableViewColors.lineColor,
-        params = { name = "Soldier", handler = { name = "NPCSpawnHandler", factory = gameObjectFactory }, defaultLabelColor=tableViewColors.defaultLabelColor, catLabelColor=tableViewColors.catLabelColor }
-    }
-    tableView:insertRow
-    {
-        isCategory = false,
-        rowHeight = 256,
-        rowColor = {
-            default = tableViewColors.rowColor.default,
-            over = tableViewColors.rowColor.over
-        },
-        lineColor = tableViewColors.lineColor,
-        params = { name = "BlockBox1", handler = { name = "BlockSpawnHandler", factory = barrierFactory }, defaultLabelColor=tableViewColors.defaultLabelColor, catLabelColor=tableViewColors.catLabelColor }
-    }
+	hideBackground = false,
+	backgroundColor = { 0.22, 0.22, 0.22 },
+	listener = tableViewListener,
+	onRowRender = onRowRender,
+	onRowUpdate = onRowUpdate,
+	onRowTouch = onRowTouch,
+}
+uiGroup:insert( tableView )
 
-	-- -- Create 75 rows
-	-- for i = 1,75 do
-	-- 	local isCategory = false
-	-- 	local rowHeight = 256
-	-- 	local rowColor = { 
-	-- 		default = tableViewColors.rowColor.default,
-	-- 		over = tableViewColors.rowColor.over,
-	-- 	}
-	-- 	-- Make some rows categories
-	-- 	if i == 20 or i == 40 or i == 60 then
-	-- 		isCategory = true
-	-- 		rowHeight = 32
-	-- 		rowColor = {
-	-- 			default = tableViewColors.catColor.default,
-	-- 			over = tableViewColors.catColor.over
-	-- 		}
-	-- 	end
-	-- 	-- Insert the row into the tableView
-	-- 	tableView:insertRow
-	-- 	{
-	-- 		isCategory = isCategory,
-	-- 		rowHeight = rowHeight,
-	-- 		rowColor = rowColor,
-	-- 		lineColor = tableViewColors.lineColor,
-	-- 		params = { defaultLabelColor=tableViewColors.defaultLabelColor, catLabelColor=tableViewColors.catLabelColor }
-	-- 	}
-	-- end
+tableView:insertRow
+{
+	isCategory = false,
+	rowHeight = 256,
+	rowColor = {
+		default = tableViewColors.rowColor.default,
+		over = tableViewColors.rowColor.over
+	},
+	lineColor = tableViewColors.lineColor,
+	params = { name = "Soldier", handler = { name = "NPCSpawnHandler", factory = gameObjectFactory }, defaultLabelColor=tableViewColors.defaultLabelColor, catLabelColor=tableViewColors.catLabelColor }
+}
+tableView:insertRow
+{
+	isCategory = false,
+	rowHeight = 256,
+	rowColor = {
+		default = tableViewColors.rowColor.default,
+		over = tableViewColors.rowColor.over
+	},
+	lineColor = tableViewColors.lineColor,
+	params = { name = "BlockBox1", handler = { name = "BlockSpawnHandler", factory = barrierFactory }, defaultLabelColor=tableViewColors.defaultLabelColor, catLabelColor=tableViewColors.catLabelColor }
+}
 
 return uiGroup
