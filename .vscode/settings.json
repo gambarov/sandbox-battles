@@ -12,7 +12,8 @@
         "timer",
         "native",
         "transition",
-        "graphics"
+        "graphics",
+        "unpack"
     ],
     "lua.targetVersion": "5.3"
 }

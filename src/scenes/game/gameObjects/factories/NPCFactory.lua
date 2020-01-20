@@ -18,7 +18,6 @@ function Factory:create(params)
     gameObject:setComponent("physics", PhysicsComponent, { bodyType = "dynamic", params = { shape = shape, density = 1.0, friction = 0.0, bounce = 0.2 } })
     gameObject:setComponent("input", AIComponent)
     gameObject:setComponent("weapon", WeaponComponent)
-
     return gameObject
 end
 

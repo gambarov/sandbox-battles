@@ -40,7 +40,7 @@ function scene:create( event )
 	manada.isheet:add("gameObjects")
 
 	manada:setActiveMap(manada.Map:new({ generator = "simple", parent = mainGroup, width = 10, height = 15, cellSize = 256 }))
-	-- mainGroup:scale(0.5, 0.5)
+
 	uiGroup = require("src.scenes.game.ui")
 
 	-- Перемещаем игровую группу в центр экрана

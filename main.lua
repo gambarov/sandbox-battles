@@ -1,4 +1,5 @@
 require( "manada.Core" ):initialize( )
+manada.debug:enable()
 
 local json = require( "json" )
 local composer = require("composer")

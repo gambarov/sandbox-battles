@@ -12,6 +12,8 @@ function Debug:initialize(params)
     self._prevTime = 0                                              
 
     self._group = display.newGroup()
+
+    self._messageDelay = params.messageDelay or 1500
     self._messageCount = 0
 end
 
@@ -51,14 +53,14 @@ function Debug:message(text)
     local width  = len(text) * (self._fontSize / 1.75)
     local height = self._fontSize * 1.25 * manada.utils:count(manada.utils:splite(text, "\n"))
 
-    local group = self:__createTextBox(display.newGroup(), text, display.pixelHeight * 0.125, height * self._messageCount, width, height)
+    local group = self:__createTextBox(display.newGroup(), text, display.pixelHeight * 0.15, height * self._messageCount, width, height)
     group.isMessage = true
 
     self._group:insert(group)
     self._messageCount = self._messageCount + 1
 
     -- Удаление сообщения через секунду
-    timer.performWithDelay(1000, function ()
+    timer.performWithDelay(self._messageDelay, function ()
         -- Сначало постепенно изчезает, затем удаляется
         transition.to(group, { alpha = 0, time = 300, onComplete = 
             function() 
@@ -81,7 +83,7 @@ end
 function Debug:enable()
     if not self._enabled then
         self._enabled = true
-        self._monitor = self:__createTextBox(display.newGroup(), "", 0, 0, display.pixelHeight * 0.125,  display.pixelWidth * 0.15)
+        self._monitor = self:__createTextBox(display.newGroup(), "", 0, 0, display.pixelHeight * 0.15,  display.pixelWidth * 0.15)
         self._group:insert(self._monitor)
     end
 end

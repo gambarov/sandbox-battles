@@ -33,12 +33,11 @@ function Factory:create(params)
 
         if object and object:getName() == "barrier" then
             -- Удаляние объекта при столновении с препятсвием
-            bullet:destroy()
-            bullet = nil
+            timer.performWithDelay(10, function() bullet:destroy() bullet = nil end)
         end
     end)
 
-    bullet:getVisual():applyForce(xForce, yForce, params.owner:getPosition())
+    bullet:getVisual():applyForce(xForce, yForce, bullet:getPosition())
     return bullet
 end
 
