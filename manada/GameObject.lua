@@ -154,6 +154,18 @@ function GameObject:dispatchEvent(name, params)
     end
 end
 
+function GameObject:addEventListener(name, handler)
+    if self:getVisual() then
+        self._visual:addEventListener(name, handler)
+    end
+end
+
+function GameObject:removeEventListener(name, handler)
+    if self:getVisual() then
+        self._visual:removeEventListener(name, handler)
+    end
+end
+
 -- МЕТОДЫ ДЛЯ РАБОТЫ С КОМПОНЕНТАМИ ОБЪЕКТА
 
 function GameObject:setComponent(name, component, params)

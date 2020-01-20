@@ -26,7 +26,7 @@ function Factory:create(params)
     local xForce = vector.x * speed
     local yForce = vector.y * speed
 
-    bullet:getVisual():addEventListener("collision", 
+    bullet:addEventListener("collision", 
     function(event)    
         -- body
         local object = event.other.gameObject

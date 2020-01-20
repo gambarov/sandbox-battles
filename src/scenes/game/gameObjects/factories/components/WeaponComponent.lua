@@ -12,7 +12,7 @@ function Component:initialize(gameObject, params)
     self._weapon = manada.GameObject:new({ visual = display.newRect(gameObject:getParent(), gameObject:getX(), gameObject:getY(), 145, 25) })
     self._weapon:setAnchor(0, 0)
 
-    gameObject:getVisual():addEventListener("attack", self) 
+    gameObject:addEventListener("attack", self) 
 end
 
 function Component:update()
@@ -27,7 +27,7 @@ function Component:attack()
 end
 
 function Component:destroy()
-    self._owner:getVisual():removeEventListener("attack", self)
+    self._owner:removeEventListener("attack", self)
     self._owner = nil
 
     self._weapon:destroy()
