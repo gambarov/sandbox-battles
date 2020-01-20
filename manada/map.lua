@@ -34,12 +34,12 @@ function Map:setTouchHandler(name, params)
     
         -- Спавн объекта при отпускании пальца
         if event.phase == "ended" and event.x == event.xStart and event.y == event.yStart and x > 0 and y > 0 and x < self._parent.width and y < self._parent.height then
-            event.xSpawn, event.ySpawn = x, y
-            return handler:handle(event) 
+            return handler:handle({ x = x, y = y }) 
         end
     end
 
     self._parent:addEventListener("touch", self._touchHandler)
+    manada.debug:message("MapTouchHandler changed to " .. name)
 end
 
 function Map:getCells()
@@ -74,6 +74,11 @@ function Map:getCellSize()
 end
 
 function Map:toCellPos(x, y)
+
+    if not x or not y then
+        return false
+    end 
+
     local mx, my = x / self._cellSize, y / self._cellSize
     mx, my = ceil(mx), ceil(my)
     x, y = (mx * self._cellSize) - (self._cellSize / 2), (my * self._cellSize) - (self._cellSize / 2)

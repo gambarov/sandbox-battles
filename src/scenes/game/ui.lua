@@ -37,7 +37,7 @@ end
 
 addButton(uiGroup, "REMOVE", xBtn, yBtn, function (event)
     if event.phase == "ended" then
-        manada:getActiveMap():setTouchHandler("BlockRemoveHandler")
+        manada:getActiveMap():setTouchHandler("ObjectRemoveHandler")
     end
 end)
 

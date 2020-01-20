@@ -92,6 +92,34 @@ function GameObject:setPosition(x, y)
     self:setY(y)
 end
 
+function GameObject:getWidth()
+    if self:getVisual() then
+        return self._visual.width
+    end
+end
+
+function GameObject:getHeight()
+    if self:getVisual() then
+        return self._visual.height
+    end
+end
+
+function GameObject:setWidth(value)
+    if self:getVisual() then
+        self._visual.width = value
+    else
+        self._width = value
+    end
+end
+
+function GameObject:setHeight(value)
+    if self:getVisual() then
+        self._visual.height = value
+    else
+        self._height = value
+    end
+end
+
 function GameObject:getRotation()
     if self:getVisual() then
         return self._visual.rotation
@@ -175,6 +203,16 @@ end
 
 -- ПРОЧЕЕ
 
+function GameObject:contains(point)
+
+    if not point or not point.x or not point.y or self:destroyed() then
+        return false
+    end
+
+    return (point.x >= self:getX() - self:getWidth()  / 2 and point.x <= self:getX() + self:getWidth()  / 2) and
+           (point.y >= self:getY() - self:getHeight() / 2 and point.y <= self:getY() + self:getHeight() / 2)
+end
+
 function GameObject:getName()
     if self._name then
         return self._name
@@ -188,12 +226,6 @@ function GameObject:getFrames()
 end
 
 function GameObject:destroy()
-    -- Удаление объекта Display Object
-    if self._visual then
-        self._visual:removeSelf()
-        self._visual = nil
-    end
-
     -- Удаление всех компонентов объекта
     if self._components then
         for name, _ in pairs(self._components) do
@@ -202,6 +234,14 @@ function GameObject:destroy()
     end
 
     self._components = nil
+
+    -- Удаление объекта Display Object
+    if self._visual then
+        self._visual:removeSelf()
+        self._visual = nil
+    end
+
+    self._destroyed = true
 end
 
 function GameObject:destroyed()
