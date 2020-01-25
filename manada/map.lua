@@ -42,6 +42,14 @@ function Map:setTouchHandler(name, params)
     manada.debug:message("MapTouchHandler changed to " .. name)
 end
 
+function Map:removeTouchHandler()
+    if self._touchHandler then
+        self._parent:removeEventListener("touch", self._touchHandler)
+    end
+
+    self._touchHandler = nil
+end
+
 function Map:getCells()
     return self._cells
 end
