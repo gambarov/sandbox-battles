@@ -11,33 +11,39 @@ function Factory:create(params)
     -- Создаем объект пули
     local bullet = manada.GameObject:new(
     { 
-        visual = display.newRect(params.owner:getParent(), params.x, params.y, 15, 10),
+        visual = display.newRect(params.owner:getParent(), params.x, params.y, 12.5, 12.5),
         name = "bullet"
     })
-    bullet:setComponent("physics", PhysicsComponent, { bodyType = "dynamic", params = { density = 0 } })
+    bullet:setComponent("physics", PhysicsComponent, { bodyType = "dynamic", params = { density = 0.1 } })
 
     bullet:getVisual().isBullet = true
     bullet:getVisual().isSensor = true
-    bullet:setRotation(params.owner:getRotation())
+    bullet:getVisual():setFillColor(1, 1, 0)
     
     local vector = manada.math:vectorFromAngle(params.owner:getRotation())
-    local speed = 1000
+    local shift = { x = (25 * vector.y), y = (25 * vector.x) }
 
-    local xForce = vector.x * speed
-    local yForce = vector.y * speed
+    -- Сдвиг пули к оружию
+    bullet:setPosition(bullet:getX() - shift.x, bullet:getY() + shift.y)
+    -- Еще один сдвиг поближе к дулу оружия
+    bullet:setPosition(bullet:getX() + (vector.x * params.owner:getWidth() / 1.5), bullet:getY() + (vector.y * params.owner:getWidth() / 1.5))
+    bullet:setRotation(params.owner:getRotation())
 
-    bullet:addEventListener("collision", 
-    function(event)    
+    local speed = 2000
+    bullet:getVisual():applyForce(vector.x * speed, vector.y * speed, bullet:getPosition())
+
+    local function onCollision(event)    
         -- body
         local object = event.other.gameObject
 
         if object and object:getName() == "barrier" then
-            -- Удаляние объекта при столновении с препятсвием
-            timer.performWithDelay(10, function() bullet:destroy() bullet = nil end)
+            -- Удаление объекта при столновении с препятсвием
+            bullet:removeEventListener("collision", onCollision)
+            bullet:destroy()
+            bullet = nil
         end
-    end)
-
-    bullet:getVisual():applyForce(xForce, yForce, bullet:getPosition())
+    end
+    bullet:addEventListener("collision", onCollision)
     return bullet
 end
 

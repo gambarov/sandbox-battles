@@ -9,21 +9,22 @@ Component.requires = { }
 function Component:initialize(gameObject, params)
     self._owner = gameObject
 
-    self._weapon = manada.GameObject:new({ visual = display.newRect(gameObject:getParent(), gameObject:getX(), gameObject:getY(), 145, 25) })
-    self._weapon:setAnchor(0, 0)
+    local sheet = manada.isheet:get("gameObjects")
 
+    self._weapon = manada.GameObject:new({ visual = display.newImage(gameObject:getParent(), sheet.image, sheet.info:getFrameIndex("AK47"), self._owner:getPosition()) })
+    self._weapon:setAnchor(0.275, 0)
     gameObject:addEventListener("attack", self) 
 end
 
 function Component:update()
     -- Оружие всегда находится с владельцем
     self._weapon:setPosition(self._owner:getPosition())
-    self._weapon:setRotation(self._owner:getRotation())
+    self._weapon:setRotation(self._owner:getRotation() - 2)
 end
 
 function Component:attack()
     -- Спавн сняряда
-    manada:addGameObject(bulletFactory, { owner = self._owner, x = self._owner:getX(), y = self._owner:getY() })
+    manada:addGameObject(bulletFactory, { owner = self._weapon, x = self._owner:getX(), y = self._owner:getY() })
 end
 
 function Component:destroy()
