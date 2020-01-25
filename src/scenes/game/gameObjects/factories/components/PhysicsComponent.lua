@@ -22,7 +22,11 @@ function Component:update(dt)
 end
 
 function Component:destroy()
-    physics.removeBody(self._gameObject:getVisual())
+
+    if self._gameObject:getState() ~= "destroying" then
+        physics.removeBody(self._gameObject:getVisual())
+    end
+
     self._gameObject = nil
 end
 

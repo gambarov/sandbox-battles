@@ -23,6 +23,7 @@ function GameObject:initialize(params)
     end
 
     self._totalFrames = 0
+    self._state = "alive"
     self._components = {} 
 end
 
@@ -140,6 +141,12 @@ function GameObject:rotate(value)
     self:setRotation(self:getRotation() + value)
 end
 
+function GameObject:getAnchor()
+    if self:getVisual() then
+        return self._visual.anchorX, self._visual.anchorY
+    end
+end
+
 function GameObject:setAnchor(x, y)
     if self:getVisual() then
         self._visual.anchorX, self._visual.anchorY = x, y
@@ -217,7 +224,7 @@ end
 
 function GameObject:contains(point)
 
-    if not point or not point.x or not point.y or self:destroyed() then
+    if not point or not point.x or not point.y or self:getState() ~= "alive" then
         return false
     end
 
@@ -237,8 +244,14 @@ function GameObject:getFrames()
     return self._totalFrames or 0
 end
 
+function GameObject:getState()
+    return self._state
+end
+
 function GameObject:destroy()
     -- Удаление всех компонентов объекта
+    self._state = "destroying"
+
     if self._components then
         for name, _ in pairs(self._components) do
             self:removeComponent(name)
@@ -253,11 +266,7 @@ function GameObject:destroy()
         self._visual = nil
     end
 
-    self._destroyed = true
-end
-
-function GameObject:destroyed()
-    return self._destroyed
+    self._state = "destroyed"
 end
 
 return GameObject

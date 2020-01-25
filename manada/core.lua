@@ -52,9 +52,9 @@ function Core:enterFrame(event)
 
         local gameObject = self._gameObjects[i] 
 
-        if gameObject and gameObject["update"] and gameObject["destroyed"] then
+        if gameObject and gameObject["update"] and gameObject["getState"] then
 
-            if gameObject:destroyed() then
+            if gameObject:getState() == "destroyed" then
                 remove(self._gameObjects, i)
             else
                 gameObject:update(self.time:delta())
@@ -87,6 +87,19 @@ end
 
 function Core:getGameObjects()
     return self._gameObjects
+end
+
+function Core:getGameObjectsByName(name)
+
+    local gameObjects = {}
+
+    for i = 1, #self._gameObjects, 1 do
+        if self._gameObjects[i]:getName() == name then
+            gameObjects[#gameObjects+1] = self._gameObjects[i]
+        end
+    end
+
+    return gameObjects
 end
 
 return 
