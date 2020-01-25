@@ -1,4 +1,5 @@
 require( "manada.Core" ):initialize( )
+
 manada.debug:enable()
 
 local json = require( "json" )
@@ -39,5 +40,7 @@ if manada.data:empty() then
     manada.data:set("settings", defaultData.settings)
     manada.data:set("gameObjects", defaultData.gameObjects)
 end
+
+manada.isheet:add("gameObjects")
 
 composer:gotoScene("src.scenes.game")

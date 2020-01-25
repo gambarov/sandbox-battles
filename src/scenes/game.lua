@@ -30,18 +30,14 @@ function scene:create( event )
 	masterGroup = display.newGroup()
 	bgGroup 	= display.newGroup()
 	mainGroup 	= display.newGroup()
-	uiGroup 	= display.newGroup()
+	uiGroup 	= require("src.scenes.game.ui")
 
 	scene.view:insert(masterGroup)
 	masterGroup:insert(bgGroup)
 	masterGroup:insert(mainGroup)
 	masterGroup:insert(uiGroup)
 
-	manada.isheet:add("gameObjects")
-
 	manada:setActiveMap(manada.Map:new({ generator = "simple", parent = mainGroup, width = 10, height = 15, cellSize = 256 }))
-
-	uiGroup = require("src.scenes.game.ui")
 
 	-- Перемещаем игровую группу в центр экрана
 	mainGroup.x, mainGroup.y = math.floor(0.5 * display.pixelHeight), math.floor(0.5 * display.pixelWidth)
@@ -49,14 +45,7 @@ function scene:create( event )
 	mainGroup.anchorChildren = true
 	mainGroup.anchorX = 0.5
 	mainGroup.anchorY = 0.5
-
-	local bg = display.newRect(bgGroup, display.pixelHeight / 2, display.pixelWidth / 2, display.pixelHeight, display.pixelWidth)
-	bg:setFillColor({ 1, 1, 1 })
-	bg:addEventListener("touch", function (event)
-		if mainGroup["touch"] then
-			return mainGroup:touch(event)
-		end
-	end)
+	mainGroup:scale(0.5, 0.5)
 end
 
 
@@ -73,7 +62,8 @@ function scene:show( event )
 	elseif ( phase == "did" ) then
 		-- Code here runs when the scene is entirely on screen
 		physics.start()
-		mainGroup = manada.plugin:new(mainGroup, "pinchZoomDrag")
+
+		mainGroup = manada.plugin:new(mainGroup, "pinchZoomDrag", { bgGroup = bgGroup, bgColor = { 0.2, 0.2, 0.2 } })
 	end
 end
 

@@ -12,20 +12,22 @@ function Plugin:new( instance )
 
             display.getCurrentStage():setFocus(instance)
             self.isFocus = true
-            self.markX = self.x
-            self.markY = self.y
+            self._dragMarkX = self.x
+            self._dragMarkY = self.y
 
         elseif self.isFocus then
 
             if event.phase == "moved" then
 
-                self.x = event.x - event.xStart + self.markX
-                self.y = event.y - event.yStart + self.markY
+                self.x = event.x - event.xStart + self._dragMarkX
+                self.y = event.y - event.yStart + self._dragMarkY
 
             elseif event.phase == "ended" or event.phase == "cancelled" then
 
                 display.getCurrentStage():setFocus( instance, nil )
                 self.isFocus = false
+                self._dragMarkX = nil
+                self._dragMarkY = nil
 
             end
         end

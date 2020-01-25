@@ -17,12 +17,24 @@ local function calculateDelta( previousTouches, event )
 	return dx, dy
 end
 
-function Plugin:new(instance)
+function Plugin:new(instance, params)
 
     if not instance then
         error( "ERROR: " .. "Expected display object" )
     end
-	
+    
+    params = params or {}
+
+    if params.bgGroup then
+        local bg = display.newRect(params.bgGroup, display.pixelHeight / 2, display.pixelWidth / 2, display.pixelHeight, display.pixelWidth)
+        bg:setFillColor(unpack(params.bgColor or { 0, 0, 0 }))
+        bg:addEventListener("touch", function (event)
+            if instance["touch"] then
+                return instance:touch(event)
+            end
+        end)
+    end
+    
     function instance:touch(event)
         
 		local result = true
