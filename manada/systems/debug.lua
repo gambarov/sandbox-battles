@@ -2,10 +2,10 @@ local class = require("manada.libs.middleclass")
 
 local Debug = class("Debug")
 
-local floor, min, len = math.floor, math.min, string.len
+local floor, min, max, len = math.floor, math.min, math.max, string.len
  
 function Debug:initialize(params)
-    self._fontSize = params.fontSize or 32
+    self._fontSize = display.pixelHeight * 0.015
 
     self._updateFreq = params.updateFrequence or (display.fps / 10) -- Частота обновления данных
     self._updateCurr = 0                                            -- Вспомогательный счетчик
@@ -35,7 +35,8 @@ function Debug:update(event)
             "FPS: " .. tostring(currentFPS) .. "\n" ..
             "Texture: " .. tostring( floor( system.getInfo( "textureMemoryUsed" ) * 0.0001 ) * 0.01 ) .. "mb " .. "\n" ..
             "System: " .. tostring( floor( collectgarbage( "count" ) * 0.1 ) * 0.01 ) .. "mb " .. "\n" ..
-            "Objects: " .. tostring( floor( manada.utils:deepNumChildren( display.getCurrentStage() ) ) )
+            "StageObjects: " .. tostring( floor( manada.utils:deepNumChildren( display.getCurrentStage() ) ) ) ..  "\n" .. 
+            "GameObjects: " .. tostring(#manada:getGameObjects())
         end
     end
 
@@ -83,7 +84,7 @@ end
 function Debug:enable()
     if not self._enabled then
         self._enabled = true
-        self._monitor = self:__createTextBox(display.newGroup(), "", 0, 0, display.pixelHeight * 0.15,  display.pixelWidth * 0.15)
+        self._monitor = self:__createTextBox(display.newGroup(), "", 0, 0, display.pixelHeight * 0.15,  display.pixelWidth * 0.2)
         self._group:insert(self._monitor)
     end
 end
@@ -105,20 +106,22 @@ function Debug:__createTextBox(displayGroup, text, x, y, width, height)
 	background:setFillColor( 0 )
     background.alpha = 0.65
 
-    local text = display.newText(
+    local label = display.newText(
     {
         parent = displayGroup, 
         text = text, 
-        x = x + background.width / 2, 
-        y = y + background.height / 2, 
+        x = x + width / 2, 
+        y = y + height / 1.65,
+        width = width,
+        height = height, 
         font = native.systemFont, 
         fontSize = self._fontSize, 
         align = "center" 
     })
-    text:setFillColor( 1 )
+    label:setFillColor( 1 )
     
     displayGroup.background = background
-    displayGroup.text = text
+    displayGroup.text = label
     return displayGroup
 end
 
