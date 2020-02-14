@@ -1,31 +1,64 @@
-local gameObjectFactory = require("src.scenes.game.gameObjects.factories.NPCFactory"):new()
-local barrierFactory = require("src.scenes.game.gameObjects.factories.BarrierFactory"):new()
-
 local mainGroup = display.newGroup()
-local tableGroup = display.newGroup()
 
-local gameObjectTable = require("src.scenes.game.widgets.gameObjectTableView")
-local button = require("src.scenes.game.widgets.button")
+local table = require("src.scenes.game.widgets.ManadaTableView")
+local button = require("src.scenes.game.widgets.ManadaButton")
 
-local mainTable = gameObjectTable:new({ displayGroup = mainGroup })
-mainTable:insertRow("Soldier", "NPCSpawnHandler", gameObjectFactory)
-mainTable:insertRow("BlockBox1", "BlockSpawnHandler", barrierFactory)
+local charactersSheet = manada.isheet:get("characters")
+local uiSheet = manada.isheet:get("ui")
 
-local removeBtn = button:new(
+local charactersTable = table:new({ displayGroup = mainGroup, left = display.pixelHeight - (display.pixelHeight * 0.095 * 2), top = 0 })
+charactersTable:hide(false)
+
+for name, index in pairs(charactersSheet.info.frameIndex) do
+	-- local background = display.newImage(uiSheet.image, uiSheet.info:getFrameIndex("SquareButton"))
+	local background = display.newRect(100, 100, 0, 0)
+	local icon = display.newImage(charactersSheet.image, index)
+	local onTouchHandler = function()
+		local factory = 
+		{
+			instance = manada:getFactory("NPCFactory"),
+			params = manada:getGameData("characters")[name]
+		}
+		factory.params.name = name
+		manada:getActiveMap():setTouchHandler("NPCSpawnHandler", { factory = factory })
+	end
+
+	charactersTable:insertRow({ icon = icon, background = background }, onTouchHandler)
+end
+
+local menuTable = table:new({ displayGroup = mainGroup, left = display.pixelHeight - display.pixelHeight * 0.095, top = 0 })
+local menuItems = 
+{ 
 	{ 
-		displayGroup = mainGroup,
-		text = "REMOVE", 
-		x = 0.055 * display.pixelHeight, 
-		y = 0.9 * display.pixelWidth, 
-		width = 0.085 * display.pixelHeight, 
-		height = 0.085 * display.pixelHeight, 
-		handler = 
-		function (event)
-			if event.phase == "ended" then
-				mainTable:selectRow(false)
-				manada:getActiveMap():setTouchHandler("ObjectRemoveHandler")
-			end
+		name = "Sandbox",  
+		handler = function() 
+			charactersTable:show(true) 
+		end
+	}, 
+
+	{ 
+		name = "Remove", 
+		handler = function() 
+			charactersTable:selectRow(false) 								-- Сбрасываем текущий выбор
+			charactersTable:hide(true) 										-- Прячем 
+			manada:getActiveMap():setTouchHandler("ObjectRemoveHandler") 
+		end
+	}, 
+
+	{ 
+		name = "Exit", 
+		handler = function() 
 		end 
-	})
-	
+	},
+}
+
+for i = 1, #menuItems, 1 do
+	menuTable:insertRow(
+		{ 
+			icon = display.newText(menuItems[i].name, 0, 0, native.systemFont, display.pixelHeight * 0.095 / 3.5), 
+			background = display.newRect(100, 100, 0, 0) 
+		}, 
+		menuItems[i].handler)
+end
+
 return mainGroup
