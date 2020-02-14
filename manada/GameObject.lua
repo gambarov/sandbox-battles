@@ -33,7 +33,11 @@ function GameObject:update(dt)
 
     if self._components then
         for name, _ in pairs( self._components ) do
-            self._components[name]:update(dt)
+            local component = self._components[name]
+
+            if component["update"] then
+                component:update(dt)
+            end
         end
     end
 end
@@ -181,9 +185,11 @@ function GameObject:setComponent(name, component, params)
         self:removeComponent(name)
     end
 
+    local requires = component.requires or {}
+
     -- Проверка зависимостей
-    for i = 1, #component.requires, 1 do
-        local requireSystem = component.requires[i]
+    for i = 1, #requires, 1 do
+        local requireSystem = requires[i]
         assert(self:hasComponent(requireSystem), "Component \"" .. name .. "\" required \"" .. requireSystem .. "\" component")
     end
 

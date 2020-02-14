@@ -5,10 +5,6 @@ local physics = require( "physics" )
 
 local scene = composer.newScene()
 
--- -----------------------------------------------------------------------------------
--- Code outside of the scene event functions below will only be executed ONCE unless
--- the scene is removed entirely (not recycled) via "composer.removeScene()"
--- -----------------------------------------------------------------------------------
 
 physics.start()
 physics.setGravity(0, 0)
@@ -18,11 +14,7 @@ local bgGroup		-- Группа отображения заднего фона
 local mainGroup		-- Группа отображения карты, игровых объектов и т.д. 
 local uiGroup		-- Группа отображения пользовательского интерфейса
 
--- -----------------------------------------------------------------------------------
--- Scene event functions
--- -----------------------------------------------------------------------------------
 
--- create()
 function scene:create( event )
 
 	physics.pause()
@@ -49,7 +41,6 @@ function scene:create( event )
 end
 
 
--- show()
 function scene:show( event )
 
 	local sceneGroup = self.view
@@ -63,12 +54,20 @@ function scene:show( event )
 		-- Code here runs when the scene is entirely on screen
 		physics.start()
 
-		mainGroup = manada.plugin:new(mainGroup, "pinchZoomDrag", { bgGroup = bgGroup, bgColor = { 0.2, 0.2, 0.2 } })
+		mainGroup = manada.plugin:new(mainGroup, "pinchZoomDrag", 
+		{ 
+			background = 
+			{
+				parent = bgGroup,
+				isheetName = "gameObjects",
+				isheetIndexFrame = "Terrain1",
+				fillColor = { 45/255, 45/255, 55/255, 0.75 }
+			}
+		})
 	end
 end
 
 
--- hide()
 function scene:hide( event )
 
 	local sceneGroup = self.view
@@ -84,7 +83,6 @@ function scene:hide( event )
 end
 
 
--- destroy()
 function scene:destroy( event )
 
 	local sceneGroup = self.view
@@ -93,13 +91,9 @@ function scene:destroy( event )
 end
 
 
--- -----------------------------------------------------------------------------------
--- Scene event function listeners
--- -----------------------------------------------------------------------------------
 scene:addEventListener( "create", scene )
 scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
--- -----------------------------------------------------------------------------------
 
 return scene

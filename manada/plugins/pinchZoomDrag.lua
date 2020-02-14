@@ -25,9 +25,16 @@ function Plugin:new(instance, params)
     
     params = params or {}
 
-    if params.bgGroup then
-        local bg = display.newRect(params.bgGroup, display.pixelHeight / 2, display.pixelWidth / 2, display.pixelHeight, display.pixelWidth)
-        bg:setFillColor(unpack(params.bgColor or { 0, 0, 0 }))
+    if params.background then
+        
+        local sheet = manada.isheet:get(params.background.isheetName)
+        local bg = display.newImage(params.background.parent, sheet.image, sheet.info:getFrameIndex(params.background.isheetIndexFrame), display.pixelHeight / 2, display.pixelWidth / 2)
+        bg.width, bg.height =  display.pixelHeight, display.pixelWidth
+
+        if params.background.fillColor then
+            bg:setFillColor(unpack(params.background.fillColor))
+        end
+        
         bg:addEventListener("touch", function (event)
             if instance["touch"] then
                 return instance:touch(event)

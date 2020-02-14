@@ -5,7 +5,7 @@ local Handler = class("NPCSpawnHandler")
 local ceil = math.ceil
 
 function Handler:initialize(params)
-    self._spawnFactory = params.factory
+    self._factory = params.factory
 end
 
 function Handler:handle(touch)
@@ -16,16 +16,11 @@ function Handler:handle(touch)
         
     if cell and cell.type and cell.type == "free" then
 
-        local size = manada:getActiveMap():getCellSize()
+        self._factory.params.x = touch.x
+        self._factory.params.y = touch.y
+        self._factory.params.parent = manada:getActiveMap():getDisplayGroup()
 
-        return manada:addGameObject(self._spawnFactory, 
-        { 
-            parent = manada:getActiveMap():getDisplayGroup(), 
-            x = touch.x, 
-            y = touch.y, 
-            width = size, 
-            height = size 
-        })
+        return manada:addGameObject(self._factory.instance, self._factory.params)
     end
 end
 

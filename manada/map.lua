@@ -24,12 +24,10 @@ function Map:setTouchHandler(name, params)
     -- Обработчик нажатия по полю
     local handler = require(Map.TouchHandlersDir .. name):new(params)
     -- Удаляем предыдущий обработчик
-    if self._touchHandler then
-        self._parent:removeEventListener("touch", self._touchHandler)
-    end
+    self:removeTouchHandler()
 
     self._touchHandler = function(event) 
-
+        -- Из глобальных координат в локальные
         local x, y = self._parent:contentToLocal(event.x, event.y)
     
         -- Спавн объекта при отпускании пальца
@@ -46,7 +44,6 @@ function Map:removeTouchHandler()
     if self._touchHandler then
         self._parent:removeEventListener("touch", self._touchHandler)
     end
-
     self._touchHandler = nil
 end
 

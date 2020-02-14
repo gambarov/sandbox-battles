@@ -1,0 +1,31 @@
+{
+    // Игровые персонажи
+    "characters":
+    [
+        {
+            "name":"SoldierA",  // Имя 
+            "health":100        // Здоровье
+        }
+    ],
+    
+    // Оружие
+    "weapons":
+    [
+        {
+            "name":"MachineGun",    // Имя
+            "rate":25,              // Темп стрельбы
+            "bullet":"simple"       // Пуля
+        }
+    ],
+
+    // Пули
+    "bullet":
+    [
+        {
+            "name":"simple",    // Имя
+            "damage":15,        // Урон
+            "scatter":10,       // Разброс
+            "speed":2000        // Скорость
+        }
+    ]
+}

@@ -59,7 +59,7 @@ function Data:get(name)
     return self._contents[name]
 end
 
-function Data:empty()
+function Data:isEmpty()
     return manada.utils:count(self._contents) == 0
 end
 

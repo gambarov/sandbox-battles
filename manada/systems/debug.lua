@@ -2,8 +2,8 @@ local class = require("manada.libs.middleclass")
 
 local Debug = class("Debug")
 
-local floor, min, max, len = math.floor, math.min, math.max, string.len
- 
+local floor, min, len = math.floor, math.min, string.len
+
 function Debug:initialize(params)
     self._fontSize = display.pixelHeight * 0.015
 
@@ -97,7 +97,7 @@ function Debug:disable()
         self._group[i]:removeSelf()
         self._group[i] = nil
     end
-end
+end 
 
 function Debug:__createTextBox(displayGroup, text, x, y, width, height)
     local background = display.newRect(displayGroup, x, y, width, height)
@@ -111,9 +111,7 @@ function Debug:__createTextBox(displayGroup, text, x, y, width, height)
         parent = displayGroup, 
         text = text, 
         x = x + width / 2, 
-        y = y + height / 1.65,
-        width = width,
-        height = height, 
+        y = y + height / 2,
         font = native.systemFont, 
         fontSize = self._fontSize, 
         align = "center" 

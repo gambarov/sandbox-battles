@@ -2,7 +2,7 @@ local class = require( "manada.libs.middleclass" )
 
 local Component = class( "AIControlComponent" )
 
-Component.requires = { }
+Component.requires = { "physics" }
 
 function Component:initialize( gameObject, params )
 
@@ -16,6 +16,9 @@ function Component:initialize( gameObject, params )
 end
 
 function Component:update(dt)
+    local vector = manada.math:vectorFromAngle(self._gameObject:getRotation())
+    self._gameObject:rotate(manada.random:range(-10, 10) / manada.random:range(1, 10))
+    self._gameObject:getVisual():setLinearVelocity(vector.x * 35, vector.y * 35)
 end
 
 function Component:destroy()

@@ -2,8 +2,6 @@ local class = require("manada.libs.middleclass")
 
 local Factory = class("BulletFactory")
 
-local PhysicsComponent  = require("src.scenes.game.gameObjects.factories.components.PhysicsComponent")
-
 function Factory:initialize()
 end
 
@@ -14,7 +12,7 @@ function Factory:create(params)
         visual = display.newRect(params.owner:getParent(), params.x, params.y, 12.5, 12.5),
         name = "bullet"
     })
-    bullet:setComponent("physics", PhysicsComponent, { bodyType = "dynamic", params = { density = 0.1 } })
+    bullet:setComponent("physics", manada:getComponent("PhysicsComponent"), { bodyType = "dynamic", params = { density = 0.1 } })
 
     bullet:getVisual().isBullet = true
     bullet:getVisual().isSensor = true
