@@ -7,18 +7,19 @@ local bulletFactory = require("src.scenes.game.gameObjects.factories.BulletFacto
 Component.requires = { }
 
 function Component:initialize(gameObject, params)
-    -- Лист с изображениями оружий
-    local sheet = manada.isheet:get("gameObjects")
-    -- Получаем необходимое
-    local visual = display.newImage(gameObject:getParent(), sheet.image, sheet.info:getFrameIndex("AK47"))
-    visual.xScale, visual.yScale = gameObject:getVisual().xScale, gameObject:getVisual().yScale
-    -- Игровой объект оружия
+
+    for k, v in pairs(params) do
+        self["_" .. k] = v
+    end
+
+    local sheet = manada.isheet:get("weapons")
+    local visual = display.newImage(gameObject:getParent(), sheet.image, sheet.info:getFrameIndex(self._name))
+
     self._weapon = manada.GameObject:new({ visual = visual, gameObject:getPosition() })
-    self._weapon:setAnchor(0.275, 0)
-    -- Событие атаки владельца
-    gameObject:addEventListener("attack", self) 
-    -- Запоминаем владельца
-    self._owner = gameObject
+    self._weapon:setAnchor(0.125, 0)
+    
+    gameObject:addEventListener("attack", self) -- Событие атаки владельца
+    self._owner = gameObject                    -- Запоминаем владельца
 end
 
 function Component:update()

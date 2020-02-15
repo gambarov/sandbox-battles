@@ -10,6 +10,7 @@ display.setStatusBar( display.HiddenStatusBar )
 manada.isheet:add("gameObjects")
 -- manada.isheet:add("ui")
 manada.isheet:add("characters")
+manada.isheet:add("weapons")
 -- manada.isheet:add("weapons")
 
 -- Первый запуск приложения 

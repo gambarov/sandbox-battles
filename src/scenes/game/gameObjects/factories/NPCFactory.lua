@@ -12,7 +12,6 @@ function Factory:create(params)
 
     npc:setComponent("physics", manada:getComponent("PhysicsComponent"), params.physics)
     npc:setComponent("input",   manada:getComponent("AIComponent"))
-    npc:setComponent("weapon",  manada:getComponent("WeaponComponent"))
     npc:setComponent("stats",   manada:getComponent("StatsComponent"), params.stats or {})
     return npc
 end

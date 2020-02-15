@@ -66,10 +66,12 @@ function Widget:initialize(params)
 end
 
 function Widget:show(animated)
+    self._tableView.alpha = 1
     self._state = "showed"
 
     if animated then
-        transition.to(self._tableView, { x = self._left + tableWidth / 2, time = 300 })
+        transition.cancel(self._transition)
+        self._transition = transition.to(self._tableView, { x = self._left + tableWidth / 2, time = 200 })
     else
         self._tableView.x = self._left + tableWidth / 2
     end
@@ -79,8 +81,10 @@ function Widget:hide(animated)
     self._state = "hided"
 
     if animated then
-        transition.to(self._tableView, { x = self._left + tableWidth * 2, time = 300 })
+        transition.cancel(self._transition)
+        self._transition = transition.to(self._tableView, { x = self._left + tableWidth * 2, time = 200, onComplete = function() self._tableView.alpha = 0 end })
     else
+        self._tableView.alpha = 0
         self._tableView.x = self._left + tableWidth * 2
     end
 end

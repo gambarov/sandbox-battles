@@ -39,6 +39,16 @@ data.weapons =
     {
         rate = 25,
         bullet = ""
+    },
+    ["SMG"] = 
+    {
+        rate = 35,
+        bullet = ""
+    },
+    ["Shotgun"] = 
+    {
+        rate = 75,
+        bullet = ""
     }
 }
 

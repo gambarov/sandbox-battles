@@ -22,6 +22,7 @@ function Core:initialize( params )
     end
 
     -- Загрузка всех систем
+    loadSystem( "debug"    )
     loadSystem( "utils"    )
     loadSystem( "file"     )
     loadSystem( "sound"    )
@@ -33,7 +34,6 @@ function Core:initialize( params )
     loadSystem( "camera"   )
     loadSystem( "data"     )
     loadSystem( "math"     )
-    loadSystem( "debug"    )
 
     self.Map = require( "manada.Map" )
     self.GameObject = require( "manada.GameObject" )

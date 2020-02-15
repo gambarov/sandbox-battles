@@ -4,7 +4,22 @@ local table = require("src.scenes.game.widgets.ManadaTableView")
 local button = require("src.scenes.game.widgets.ManadaButton")
 
 local charactersSheet = manada.isheet:get("characters")
+local weaponsSheet = manada.isheet:get("weapons")
 local uiSheet = manada.isheet:get("ui")
+
+local weaponsTable = table:new({ displayGroup = mainGroup, left = display.pixelHeight - (display.pixelHeight * 0.095 * 3), top = 0 })
+weaponsTable:hide(false)
+
+for name, index in pairs(weaponsSheet.info.frameIndex) do
+	-- local background = display.newImage(uiSheet.image, uiSheet.info:getFrameIndex("SquareButton"))
+	local background = display.newRect(100, 100, 0, 0)
+	local icon = display.newImage(weaponsSheet.image, index)
+	local onTouchHandler = function()
+		
+	end
+
+	weaponsTable:insertRow({ icon = icon, background = background }, onTouchHandler)
+end
 
 local charactersTable = table:new({ displayGroup = mainGroup, left = display.pixelHeight - (display.pixelHeight * 0.095 * 2), top = 0 })
 charactersTable:hide(false)
@@ -21,6 +36,7 @@ for name, index in pairs(charactersSheet.info.frameIndex) do
 		}
 		factory.params.name = name
 		manada:getActiveMap():setTouchHandler("NPCSpawnHandler", { factory = factory })
+		weaponsTable:show(true)
 	end
 
 	charactersTable:insertRow({ icon = icon, background = background }, onTouchHandler)
@@ -39,9 +55,13 @@ local menuItems =
 	{ 
 		name = "Remove", 
 		handler = function() 
-			charactersTable:selectRow(false) 								-- Сбрасываем текущий выбор
-			charactersTable:hide(true) 										-- Прячем 
-			manada:getActiveMap():setTouchHandler("ObjectRemoveHandler") 
+			weaponsTable:hide(true)
+			weaponsTable:selectRow(false)
+			timer.performWithDelay(200, function()
+				charactersTable:selectRow(false) 								-- Сбрасываем текущий выбор
+				charactersTable:hide(true) 										-- Прячем 
+				manada:getActiveMap():setTouchHandler("ObjectRemoveHandler") 
+			end)
 		end
 	}, 
 
