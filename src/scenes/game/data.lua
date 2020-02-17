@@ -18,16 +18,19 @@ data.characters =
 {
     ["SoldierTeamPurple"] = 
     {
+        name = "SoldierTeamPurple",
         stats = soldierStats,
         physics = soldierPhysics
     },
     ["SoldierTeamBlue"] = 
     {
+        name = "SoldierTeamBlue",
         stats = soldierStats,
         physics = soldierPhysics
     },
     ["SoldierTeamGreen"] =
     {
+        name = "SoldierTeamGreen",
         stats = soldierStats,
         physics = soldierPhysics
     }
@@ -37,16 +40,19 @@ data.weapons =
 {
     ["MachineGun"] = 
     {
+        name = "MachineGun",
         rate = 25,
         bullet = ""
     },
     ["SMG"] = 
     {
+        name = "SMG",
         rate = 35,
         bullet = ""
     },
     ["Shotgun"] = 
     {
+        name = "Shotgun",
         rate = 75,
         bullet = ""
     }

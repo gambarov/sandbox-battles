@@ -7,6 +7,8 @@ local charactersSheet = manada.isheet:get("characters")
 local weaponsSheet = manada.isheet:get("weapons")
 local uiSheet = manada.isheet:get("ui")
 
+local currentCharacterFactory
+
 local weaponsTable = table:new({ displayGroup = mainGroup, left = display.pixelHeight - (display.pixelHeight * 0.095 * 3), top = 0 })
 weaponsTable:hide(false)
 
@@ -15,7 +17,9 @@ for name, index in pairs(weaponsSheet.info.frameIndex) do
 	local background = display.newRect(100, 100, 0, 0)
 	local icon = display.newImage(weaponsSheet.image, index)
 	local onTouchHandler = function()
-		
+		currentCharacterFactory.params.weapon = manada:getGameData("weapons")[name] 
+		manada:getActiveMap():setTouchHandler("NPCSpawnHandler", { factory = currentCharacterFactory })
+		manada.debug:message("Selected weapon \"" .. name .. "\"")
 	end
 
 	weaponsTable:insertRow({ icon = icon, background = background }, onTouchHandler)
@@ -29,14 +33,13 @@ for name, index in pairs(charactersSheet.info.frameIndex) do
 	local background = display.newRect(100, 100, 0, 0)
 	local icon = display.newImage(charactersSheet.image, index)
 	local onTouchHandler = function()
-		local factory = 
+		currentCharacterFactory =
 		{
 			instance = manada:getFactory("NPCFactory"),
 			params = manada:getGameData("characters")[name]
 		}
-		factory.params.name = name
-		manada:getActiveMap():setTouchHandler("NPCSpawnHandler", { factory = factory })
 		weaponsTable:show(true)
+		manada.debug:message("Selected character \"" .. name .. "\"")
 	end
 
 	charactersTable:insertRow({ icon = icon, background = background }, onTouchHandler)
