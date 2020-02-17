@@ -73,12 +73,9 @@ function Core:getActiveMap()
     return self._activeMap
 end
 
-function Core:addGameObject(factory, params)
-    -- Попытка создать объект
-    local object = factory:create(params)
-
-    if object then
-        self._gameObjects[#self._gameObjects + 1] = object
+function Core:addGameObject(gameObject)
+    if gameObject then
+        self._gameObjects[#self._gameObjects + 1] = gameObject
         return true
     end
 

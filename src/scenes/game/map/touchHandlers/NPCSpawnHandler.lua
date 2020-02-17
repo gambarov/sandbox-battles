@@ -20,7 +20,7 @@ function Handler:handle(touch)
         self._factory.params.y = touch.y
         self._factory.params.parent = manada:getActiveMap():getDisplayGroup()
 
-        return manada:addGameObject(self._factory.instance, self._factory.params)
+        return manada:addGameObject(self._factory.instance:create(self._factory.params))
     end
 end
 
