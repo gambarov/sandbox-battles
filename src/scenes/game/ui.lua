@@ -1,57 +1,58 @@
 local mainGroup = display.newGroup()
 
 local table = require("src.scenes.game.widgets.ManadaTableView")
-local button = require("src.scenes.game.widgets.ManadaButton")
 
 local charactersSheet = manada.isheet:get("characters")
 local weaponsSheet = manada.isheet:get("weapons")
 local uiSheet = manada.isheet:get("ui")
 
-local currentCharacterFactory
+local currentCharacterFactory = {}
 
 local weaponsTable = table:new({ displayGroup = mainGroup, left = display.pixelHeight - (display.pixelHeight * 0.095 * 3), top = 0 })
 weaponsTable:hide(false)
 
 for name, index in pairs(weaponsSheet.info.frameIndex) do
-	-- local background = display.newImage(uiSheet.image, uiSheet.info:getFrameIndex("SquareButton"))
-	local background = display.newRect(100, 100, 0, 0)
-	local icon = display.newImage(weaponsSheet.image, index)
-	local onTouchHandler = function()
-		currentCharacterFactory.params.weapon = manada:getGameData("weapons")[name] 
-		manada:getActiveMap():setTouchHandler("NPCSpawnHandler", { factory = currentCharacterFactory })
-		manada.debug:message("Selected weapon \"" .. name .. "\"")
-	end
-
-	weaponsTable:insertRow({ icon = icon, background = background }, onTouchHandler)
+	weaponsTable:insertRow(
+		{ 
+			icon = display.newImage(weaponsSheet.image, index), 
+			background =  display.newImage(uiSheet.image, uiSheet.info:getFrameIndex("SquareButtonBG")) 
+		}, 
+		function()
+			currentCharacterFactory.params.weapon = manada:getGameData("weapons")[name] 
+			manada:getActiveMap():setTouchHandler("NPCSpawnHandler", { factory = currentCharacterFactory })
+		end)
 end
+
 
 local charactersTable = table:new({ displayGroup = mainGroup, left = display.pixelHeight - (display.pixelHeight * 0.095 * 2), top = 0 })
 charactersTable:hide(false)
 
 for name, index in pairs(charactersSheet.info.frameIndex) do
-	-- local background = display.newImage(uiSheet.image, uiSheet.info:getFrameIndex("SquareButton"))
-	local background = display.newRect(100, 100, 0, 0)
-	local icon = display.newImage(charactersSheet.image, index)
-	local onTouchHandler = function()
-		currentCharacterFactory =
-		{
-			instance = manada:getFactory("NPCFactory"),
-			params = manada:getGameData("characters")[name]
-		}
-		weaponsTable:show(true)
-		manada.debug:message("Selected character \"" .. name .. "\"")
-	end
-
-	charactersTable:insertRow({ icon = icon, background = background }, onTouchHandler)
+	charactersTable:insertRow(
+		{ 
+			icon = display.newImage(charactersSheet.image, index), 
+			background = display.newImage(uiSheet.image, uiSheet.info:getFrameIndex("SquareButtonBG")) 
+		}, 
+		function()
+			currentCharacterFactory.instance = manada:getFactory("NPCFactory")
+			currentCharacterFactory.params = manada:getGameData("characters")[name]
+			manada:getActiveMap():removeTouchHandler()
+			-- При выборе персонажа, показываем меню с выбором оружия
+			weaponsTable:show(true)
+			-- Сбрасываем прошлый выбор, если имеется
+			weaponsTable:selectRow(false)
+		end)
 end
 
+
 local menuTable = table:new({ displayGroup = mainGroup, left = display.pixelHeight - display.pixelHeight * 0.095, top = 0 })
+
 local menuItems = 
 { 
 	{ 
 		name = "Sandbox",  
 		handler = function() 
-			charactersTable:show(true) 
+			charactersTable:show(true)
 		end
 	}, 
 
@@ -78,8 +79,8 @@ local menuItems =
 for i = 1, #menuItems, 1 do
 	menuTable:insertRow(
 		{ 
-			icon = display.newText(menuItems[i].name, 0, 0, native.systemFont, display.pixelHeight * 0.095 / 3.5), 
-			background = display.newRect(100, 100, 0, 0) 
+			icon = display.newText(menuItems[i].name, 0, 0, native.systemFont, display.pixelHeight * 0.095 / 3.8), 
+			background = display.newImage(uiSheet.image, uiSheet.info:getFrameIndex("SquareButtonBG")) 
 		}, 
 		menuItems[i].handler)
 end

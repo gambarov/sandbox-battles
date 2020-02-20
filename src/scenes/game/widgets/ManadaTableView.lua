@@ -6,7 +6,7 @@ local Widget = class("GameObjectTableView")
 
 local colors = {
     rowColor = { default = { 0, 0, 0, 0 }, over = { 0, 0, 0, 0 } },
-    rowBackground = { default = { 100/255, 100/255, 135/255, 1 }, selected = { 220/255, 200/255, 110/255, 0.5 } }
+    rowBackground = { default = { 255/255, 255/255, 255/255, 1 }, selected = { 220/255, 200/255, 110/255, 0.5 } }
 }
 
 local tableWidth = display.pixelHeight * 0.095
@@ -50,41 +50,44 @@ function Widget:initialize(params)
         rowTouchDelay = 5,
         noLines = true,
         hideBackground = false,
-        backgroundColor = { 45 / 255, 45 / 255, 45 / 255, 1 },
+        backgroundColor = { 0.22, 0.22, 0.22, 0.95 },
         onRowRender = onRowRender,
         onRowTouch = onRowTouch,
     }
 
-    self._state = "showed"
+    self._state = "shown"
 
     self._left = params.left
     self._top  = params.top
 
-    self._group = params.displayGroup
+    self._group = display.newGroup()
     self._group:insert(self._tableView)
+
     self:show(false)
 end
 
 function Widget:show(animated)
-    self._tableView.alpha = 1
-    self._state = "showed"
+
+    self._state = "shown"
+    self._tableView.isVisible = true
 
     if animated then
         transition.cancel(self._transition)
-        self._transition = transition.to(self._tableView, { x = self._left + tableWidth / 2, time = 200 })
+        self._transition = transition.to(self._tableView, { x = self._left + tableWidth / 2, time = 50 })
     else
         self._tableView.x = self._left + tableWidth / 2
     end
 end
 
 function Widget:hide(animated)
+    
     self._state = "hided"
 
     if animated then
         transition.cancel(self._transition)
-        self._transition = transition.to(self._tableView, { x = self._left + tableWidth * 2, time = 200, onComplete = function() self._tableView.alpha = 0 end })
+        self._transition = transition.to(self._tableView, { x = self._left + tableWidth * 2, time = 50, onComplete = function() self._tableView.isVisible = false end })
     else
-        self._tableView.alpha = 0
+        self._tableView.isVisible = false
         self._tableView.x = self._left + tableWidth * 2
     end
 end
@@ -107,22 +110,25 @@ function Widget:insertRow(visual, onTouchHandler)
 end
 
 function Widget:selectRow(row)
-
+    -- Если таблица закрыта, то выбор невозможен
     if self._state == "hided" then
         return
     end
 
     -- Подсветка выбранной строки
     for i = 1, self._tableView:getNumRows() do
-        local tableRow = self._tableView:getRowAtIndex(i)
+        local visual = self._tableView:getRowAtIndex(i).params.visual
         -- Подсвечиваем выбранную
         if row and i == row.index then
             -- Задаем новый обработчик касания по карте
-            tableRow.params.visual.background:setFillColor(unpack(colors.rowBackground.selected))
-            return row.params.onTouchHandler()
+            visual.background:setFillColor(unpack(colors.rowBackground.selected))
+            
+            if row.params then
+                row.params.onTouchHandler()
+            end
         -- Сбрасываем у всех остальных
         else
-            tableRow.params.visual.background:setFillColor(unpack(colors.rowBackground.default))
+            visual.background:setFillColor(unpack(colors.rowBackground.default))
         end;
     end
 end
