@@ -21,13 +21,13 @@ function Handler:handle(touch)
     -- Если клетка не занята, то спавним блок и занимаем клетку
     if cell and cell.type and cell.type == "free" then
         map:setCell(i, j, { type = "barrier" })
-        manada:addGameObject(self._spawnFactory, 
+        manada:addGameObject(self._spawnFactory:create( 
         { 
             parent = map:getDisplayGroup(), 
             x = x, y = y, 
             width = map:getCellSize(), 
             height = map:getCellSize() 
-        })
+        }))
     end
 
     return true

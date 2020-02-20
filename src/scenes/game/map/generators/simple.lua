@@ -15,8 +15,6 @@ function Generator:go(params)
 
     local sheet = manada.isheet:get("gameObjects")
 
-    local barrierFactory = require("src.scenes.game.gameObjects.factories.BarrierFactory"):new()
-
     for i = 1, params.width do
 
         cells[i] = {}
@@ -32,7 +30,7 @@ function Generator:go(params)
             -- Спавн стен вокруг карты
             if isEdge(i, j, params.width, params.height) then
                 cells[i][j].type = "wall"
-                manada:addGameObject(barrierFactory, { parent = params.parent, x = x, y = y, width = params.cellSize, height = params.cellSize })
+                manada:addGameObject(manada:getFactory("BarrierFactory"):create({ parent = params.parent, x = x, y = y, width = params.cellSize, height = params.cellSize }))
             end
         end
     end
