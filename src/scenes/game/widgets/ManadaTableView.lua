@@ -4,8 +4,9 @@ local widget = require("widget")
 
 local Widget = class("GameObjectTableView")
 
-local colors = {
-    rowColor = { default = { 0, 0, 0, 0 }, over = { 0, 0, 0, 0 } },
+local colors = 
+{
+    rowColor =      { default = { 0, 0, 0, 0 }, over = { 0, 0, 0, 0 } },
     rowBackground = { default = { 255/255, 255/255, 255/255, 1 }, selected = { 220/255, 200/255, 110/255, 0.5 } }
 }
 
@@ -36,8 +37,9 @@ function Widget:initialize(params)
 
     local function onRowTouch( event )
         -- Выбор строки, по которой нажал юзер
-        if (event.phase == "release") then
-            self:selectRow(event.target)
+        if (event.phase == "release" and self._state ~= "hided") then
+            self:highlightRow(event.target.index)    -- Подсветка выбора
+            event.target.params.onTouchHandler()     -- Обработчик нажатия данной строки
         end
     end
 
@@ -109,28 +111,21 @@ function Widget:insertRow(visual, onTouchHandler)
 	}
 end
 
-function Widget:selectRow(row)
-    -- Если таблица закрыта, то выбор невозможен
-    if self._state == "hided" then
-        return
-    end
-
-    -- Подсветка выбранной строки
+function Widget:highlightRow(index)
     for i = 1, self._tableView:getNumRows() do
+        
         local visual = self._tableView:getRowAtIndex(i).params.visual
-        -- Подсвечиваем выбранную
-        if row and i == row.index then
-            -- Задаем новый обработчик касания по карте
+        
+        if index and i == index then
             visual.background:setFillColor(unpack(colors.rowBackground.selected))
-            
-            if row.params then
-                row.params.onTouchHandler()
-            end
-        -- Сбрасываем у всех остальных
         else
             visual.background:setFillColor(unpack(colors.rowBackground.default))
         end;
     end
+end
+
+function Widget:resetHighlight()
+    self:highlightRow(false)
 end
 
 return Widget

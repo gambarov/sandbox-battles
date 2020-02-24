@@ -40,7 +40,7 @@ for name, index in pairs(charactersSheet.info.frameIndex) do
 			-- При выборе персонажа, показываем меню с выбором оружия
 			weaponsTable:show(true)
 			-- Сбрасываем прошлый выбор, если имеется
-			weaponsTable:selectRow(false)
+			weaponsTable:resetHighlight()
 		end)
 end
 
@@ -59,10 +59,12 @@ local menuItems =
 	{ 
 		name = "Remove", 
 		handler = function() 
+			
 			weaponsTable:hide(true)
-			weaponsTable:selectRow(false)
-			timer.performWithDelay(200, function()
-				charactersTable:selectRow(false) 								-- Сбрасываем текущий выбор
+			weaponsTable:resetHighlight()
+
+			timer.performWithDelay(100, function()
+				charactersTable:resetHighlight()								-- Сбрасываем текущий выбор
 				charactersTable:hide(true) 										-- Прячем 
 				manada:getActiveMap():setTouchHandler("ObjectRemoveHandler") 
 			end)
@@ -72,6 +74,7 @@ local menuItems =
 	{ 
 		name = "Exit", 
 		handler = function() 
+			manada:getActiveMap():removeTouchHandler()
 		end 
 	},
 }
