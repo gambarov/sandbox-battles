@@ -94,7 +94,7 @@ function Widget:hide(animated)
     end
 end
 
-function Widget:insertRow(visual, onTouchHandler)
+function Widget:insertRow(name, visual, onTouchHandler)
 	self._tableView:insertRow
 	{
 		isCategory = false,
@@ -105,6 +105,7 @@ function Widget:insertRow(visual, onTouchHandler)
 		},
 		params = 
 		{ 
+            name = name,
             visual = visual,
             onTouchHandler = onTouchHandler   
 		}
@@ -114,9 +115,10 @@ end
 function Widget:highlightRow(index)
     for i = 1, self._tableView:getNumRows() do
         
-        local visual = self._tableView:getRowAtIndex(i).params.visual
-        
-        if index and i == index then
+        local row = self._tableView:getRowAtIndex(i).params
+        local visual = row.visual
+
+        if index and (i == index or index == row.name)  then
             visual.background:setFillColor(unpack(colors.rowBackground.selected))
         else
             visual.background:setFillColor(unpack(colors.rowBackground.default))

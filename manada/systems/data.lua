@@ -63,7 +63,7 @@ function Data:isEmpty()
     return manada.utils:count(self._contents) == 0
 end
 
-function Data:system( event )
+function Data:system(event)
     -- Если произошло закрытие приложения, сохраняем данные
 	if event.type == "applicationExit" or event.type == "applicationSuspend" then
 		self:save()

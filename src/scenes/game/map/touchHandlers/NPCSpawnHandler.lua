@@ -2,10 +2,11 @@ local class = require("manada.libs.middleclass")
 
 local Handler = class("NPCSpawnHandler")
 
+local factory = manada:getFactory("NPCFactory")
+
 local ceil = math.ceil
 
 function Handler:initialize(params)
-    self._factory = params.factory
 end
 
 function Handler:handle(touch)
@@ -15,12 +16,13 @@ function Handler:handle(touch)
     local cell = map:getCell(i, j)
         
     if cell and cell.type and cell.type == "free" then
-
-        self._factory.params.x = touch.x
-        self._factory.params.y = touch.y
-        self._factory.params.parent = manada:getActiveMap():getDisplayGroup()
-
-        return manada:addGameObject(self._factory.instance:create(self._factory.params))
+        -- Получаем данные о нпс, родителе и месте спавна
+        local params = manada:getGameData("characters")[manada.data:get("npcToSpawn")]
+        params.weapon = manada:getGameData("weapons")[manada.data:get("weaponToSpawn")]
+        params.parent = map:getDisplayGroup()
+        params.x = touch.x
+        params.y = touch.y
+        return manada:addGameObject(factory:create(params))
     end
 end
 

@@ -103,5 +103,6 @@ return
 {
     initialize = function ( self, params )
         manada = Core:new( params )
+        manada.data:load()
     end
 }
