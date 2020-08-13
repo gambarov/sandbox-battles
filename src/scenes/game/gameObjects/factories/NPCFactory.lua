@@ -10,7 +10,7 @@ function Factory:create(params)
     -- Создаем объект
     local npc = manada.GameObject:new({ visual = visual, name = params.name or "NPCGameObject" })
 
-    npc:setComponent("physics", manada:getComponent("PhysicsComponent"), params.physics)
+    npc:setComponent("physics", manada:getComponent("NpcPhysicsComponent"), params.physics)
     npc:setComponent("input",   manada:getComponent("AIComponent"))
     npc:setComponent("stats",   manada:getComponent("StatsComponent"), params.stats or {})
     npc:setComponent("weapon",  manada:getComponent("WeaponComponent"), params.weapon)
