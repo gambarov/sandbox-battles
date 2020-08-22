@@ -10,7 +10,7 @@ local soldierPhysics =
     bodyType = "dynamic",
     params =
     {
-        shape = { -62,-81, 36,-69, 93,-18, 95,36, 22,32, -40,80, -88,29, -100,-43 }
+        shape = { -76,-29, -45,-60, 28,-52, 70,-15, 74,26, 17,24, -31,61, -67,23, }
     }
 }
 
@@ -20,19 +20,22 @@ data.characters =
     {
         name = "SoldierTeamPurple",
         stats = soldierStats,
-        physics = soldierPhysics
+        physics = soldierPhysics,
+        allies = { "SoldierTeamPurple" }
     },
     ["SoldierTeamBlue"] = 
     {
         name = "SoldierTeamBlue",
         stats = soldierStats,
-        physics = soldierPhysics
+        physics = soldierPhysics,
+        allies = { "SoldierTeamBlue" }
     },
     ["SoldierTeamGreen"] =
     {
         name = "SoldierTeamGreen",
         stats = soldierStats,
-        physics = soldierPhysics
+        physics = soldierPhysics,
+        allies = { "SoldierTeamGreen" }
     }
 }
 
@@ -41,27 +44,39 @@ data.weapons =
     ["MachineGun"] = 
     {
         name = "MachineGun",
-        rate = 25,
-        bullet = ""
+        rate = 100,
+        spread = 5,
+        count = 1,
+        bullet = "Simple"
     },
     ["SMG"] = 
     {
         name = "SMG",
-        rate = 35,
-        bullet = ""
+        rate = 175,
+        spread = 3,
+        count = 1,
+        bullet = "Simple"
     },
     ["Shotgun"] = 
     {
         name = "Shotgun",
-        rate = 75,
-        bullet = ""
+        rate = 500,
+        spread = 10,
+        count = 3,
+        bullet = "Simple"
     }
 }
 
 data.bullets = 
 {
+    ["Simple"] = 
     {
-
+        name = "Simple",
+        w = 40,
+        h = 8,
+        color = { 0.85, 0.55, 0.35 },
+        speed = 500,
+        damage = 20
     }
 }
 

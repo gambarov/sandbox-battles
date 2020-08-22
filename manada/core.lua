@@ -15,6 +15,7 @@ function Core:initialize( params )
     params.systems = params.systems or {}
 
     self._systems = {}
+    self._gameObjects = {}
 
 	local loadSystem = function( name )
 		self[ name ] = require( "manada.systems." .. name ):new( params.systems[ name ] or {} )
@@ -38,7 +39,6 @@ function Core:initialize( params )
     self.Map = require( "manada.Map" )
     self.GameObject = require( "manada.GameObject" )
 
-    self._gameObjects = {}
     Runtime:addEventListener("enterFrame", self)
 end
 
@@ -48,13 +48,16 @@ function Core:enterFrame(event)
     self.debug:update(event)
     self.camera:update(self.time:delta())
 
+    if self:isPaused() then
+        return
+    end
+
     for i = #self._gameObjects, 1, -1 do
 
         local gameObject = self._gameObjects[i] 
 
-        if gameObject and gameObject["update"] and gameObject["getState"] then
-
-            if gameObject:getState() == "destroyed" then
+        if gameObject and gameObject["update"] then
+            if gameObject:isDestroyed() then
                 remove(self._gameObjects, i)
             else
                 gameObject:update(self.time:delta())
@@ -63,6 +66,44 @@ function Core:enterFrame(event)
             remove(self._gameObjects, i)
         end
     end
+end
+
+function Core:pause()
+    self._isPaused = true
+
+    if physics then physics.pause() end
+
+    local function pauseSystem(system)
+        for i = 1, #system do
+            local component = system[i]
+
+            if component["pause"] then
+                component:pause()
+            end
+        end
+    end
+
+    pauseSystem(self._gameObjects)
+    pauseSystem(self._systems)
+end
+
+function Core:resume()
+    self._isPaused = false
+
+    if physics then physics.start() end
+
+    local function resumeSystem(system)
+        for i = 1, #system do
+            local component = system[i]
+
+            if component["resume"] then
+                component:resume()
+            end
+        end
+    end
+
+    resumeSystem(self._gameObjects)
+    resumeSystem(self._systems)
 end
 
 function Core:setActiveMap(map)
@@ -74,12 +115,28 @@ function Core:getActiveMap()
 end
 
 function Core:addGameObject(gameObject)
-    if gameObject then
-        self._gameObjects[#self._gameObjects + 1] = gameObject
-        return true
+    -- Попытка добавить не объект GameObject
+    if not gameObject or not gameObject["getVisual"] then
+        print("WARNING: manada.Core:addGameObject(): " .. "Attempt to add non-GameObject object to GameObject array (" .. type(gameObject) .. ")") 
+        return false
     end
 
-    return false
+    self._gameObjects[#self._gameObjects + 1] = gameObject
+    return true
+end
+
+function Core:addGameObjects(gameObjects)
+    -- Попытка добавить не таблицу
+    if not type(gameObjects) == "table" then
+        print("WARNING: manada.Core:addGameObjects(): " .. "Attempt to add non-GameObject objects to GameObject array (" .. type(gameObjects) .. ")")
+        return false
+    end
+
+    for i = 1, #gameObjects do
+        self:addGameObject(gameObjects[i])
+    end
+
+    return true
 end
 
 function Core:getGameObjects()
@@ -87,7 +144,6 @@ function Core:getGameObjects()
 end
 
 function Core:getGameObjectsByName(name)
-
     local gameObjects = {}
 
     for i = 1, #self._gameObjects, 1 do
@@ -97,6 +153,32 @@ function Core:getGameObjectsByName(name)
     end
 
     return gameObjects
+end
+
+function Core:getGameObjectsByType(type)
+    local gameObjects = {}
+
+    for i = 1, #self._gameObjects, 1 do
+        if self._gameObjects[i]:getType() == type then
+            gameObjects[#gameObjects+1] = self._gameObjects[i]
+        end
+    end
+
+    return gameObjects
+end
+
+function Core:getGameObjectByID(id)
+    for i = 1, #self._gameObjects do
+        if self._gameObjects[i]:getID() == id then
+            return self._gameObjects[i]
+        end
+    end
+
+    return false
+end
+
+function Core:isPaused()
+    return self._isPaused
 end
 
 return 

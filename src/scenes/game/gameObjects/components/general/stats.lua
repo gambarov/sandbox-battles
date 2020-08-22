@@ -19,6 +19,14 @@ function Component:get(name, statType)
     return self["_" .. statType .. "_" .. name]
 end
 
+function Component:increase(name, value)
+    self:set(name, self:get(name, "current") + value)
+end
+
+function Component:decrease(name, value)
+    self:increase(name, -value) 
+end
+
 function Component:restore(name)
     if self["_current_" .. name] and self["_original_" .. name] then
         self["_current_" .. name] = self["_original_" .. name]

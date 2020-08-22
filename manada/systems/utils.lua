@@ -2,6 +2,8 @@ local class = require("manada.libs.middleclass")
 
 local Utils = class("Utils")
 
+local uudid = require("manada.libs.uuid4")
+
 function Utils:splite(str, delimeter)
     delimeter = delimeter or "%s"
     local t = {}
@@ -45,6 +47,28 @@ function Utils:deepNumChildren(group)
 		return count
 	end
 	return countChildren( group )
+end
+
+function Utils:printTable(table, stringPrefix)
+    if not stringPrefix then
+       stringPrefix = "### "
+    end
+    if type( table ) == "table" then
+       for key, value in pairs(table) do
+          if type( value ) == "table" then
+             print( stringPrefix .. tostring( key ) )
+             print( stringPrefix .. "{" )
+             self:printTable( value, stringPrefix .. "   " )
+             print( stringPrefix .. "}" )
+          else
+             print( stringPrefix .. tostring( key ) .. ": " .. tostring( value ) )
+          end
+       end
+    end
+end
+
+function Utils:generateUUID()
+	return uudid:getUUID()
 end
 
 return Utils

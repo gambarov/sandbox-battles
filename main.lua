@@ -1,8 +1,8 @@
-require( "manada.Core" ):initialize( )
+require("manada.Core"):initialize()
 manada.debug:enable()
 -- Activate multitouch
-system.activate( "multitouch" )
- 
+system.activate("multitouch")
+-- require("physics").setDrawMode("hybrid")
 display.setDefault("magTextureFilter", "nearest")
 display.setDefault("minTextureFilter", "nearest")
 display.setStatusBar( display.HiddenStatusBar ) 
@@ -19,18 +19,19 @@ if manada.data:isEmpty() then
     manada.data:set("gameObjects", defaultData.gameObjects)
 end
 
+-- Кастомные глобальные ф-ции
 manada.getFactory = function(self, name)
     local path = "src.scenes.game.gameObjects.factories."
     return require(path .. name)
 end
 
-manada.getComponent = function(self, name)
-    local path = "src.scenes.game.gameObjects.components."
+manada.getComponent = function(self, type, name)
+    local path = "src.scenes.game.gameObjects.components." .. type .. "."
     return require(path .. name)
 end
 
-manada.getMapTouchHandler = function(self, name)
-    local path = "src.scenes.game.map.touchHandlers"
+manada.getMapTouchHandler = function(self, type, name)
+    local path = "src.scenes.game.map.touchHandlers." .. type .. "."
     return require(path .. name)
 end
 

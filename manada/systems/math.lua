@@ -29,12 +29,11 @@ function Math:angleBetweenVectors(vector1, vector2)
 end
 
 function Math:normaliseAngle(angle)
-
     while angle <= -180 do
 		angle = angle + 360
 	end
 
-    while angle > 180 do
+	while angle > 180 do
 		angle = angle - 360
 	end
 

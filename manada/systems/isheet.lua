@@ -10,10 +10,11 @@ function ISheet:initialize(params)
 end
 
 function ISheet:add(name)
+    -- Данные об атласе и его изображение
     local sheetInfo = require(self.SheetsInfoPath .. name) 
     local sheetImage = graphics.newImageSheet(self.SheetsImagePath .. name .. ".png", sheetInfo:getSheet())
+    -- Сохраняем в массиве атласов
     self._isheets[name] = { info = sheetInfo, image = sheetImage }
-    manada.debug:message("Sheet \"" .. name .. "\" has been added")
 end
 
 function ISheet:remove(name)

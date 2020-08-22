@@ -1,12 +1,12 @@
-local class = require( "manada.libs.middleclass" )
+local class = require("manada.libs.middleclass")
 
-local Component = class( "Component" )
+local Component = class("Component")
 
-local physics = require( "physics" )
+local physics = require("physics")
 
 Component.requires = { }
 
-function Component:initialize( gameObject, params )
+function Component:initialize(gameObject, params)
 
     self._gameObject = gameObject
     self._bodyType = params.bodyType or "dynamic"
@@ -22,11 +22,7 @@ function Component:update(dt)
 end
 
 function Component:destroy()
-
-    if self._gameObject:getState() ~= "destroying" then
-        physics.removeBody(self._gameObject:getVisual())
-    end
-
+    physics.removeBody(self._gameObject:getVisual())
     self._gameObject = nil
 end
 

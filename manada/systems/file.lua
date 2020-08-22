@@ -1,10 +1,10 @@
-local class = require( "manada.libs.middleclass" )
+local class = require("manada.libs.middleclass")
 
-local File = class ( "File" )
+local File = class ("File")
 
 local io = require("io")
 
-function File:initialize( params )
+function File:initialize(params)
 end
 
 function File:read(filename, baseDir)
@@ -51,7 +51,6 @@ function File:getExtensionFromPath(path)
     local ext = temp[#temp]
 
     return ext
-
 end
 
 return File

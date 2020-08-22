@@ -2,7 +2,7 @@ local class = require("manada.libs.middleclass")
 
 local Handler = class("NPCSpawnHandler")
 
-local factory = manada:getFactory("NPCFactory")
+local factory = manada:getFactory("npc")
 
 local ceil = math.ceil
 
@@ -22,7 +22,7 @@ function Handler:handle(touch)
         params.parent = map:getDisplayGroup()
         params.x = touch.x
         params.y = touch.y
-        return manada:addGameObject(factory:create(params))
+        return factory:create(params)
     end
 end
 

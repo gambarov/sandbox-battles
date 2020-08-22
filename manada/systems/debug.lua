@@ -13,7 +13,7 @@ function Debug:initialize(params)
 
     self._group = display.newGroup()
 
-    self._messageDelay = params.messageDelay or 1500
+    self._messageDelay = params.messageDelay or 3500
     self._messageCount = 0
 end
 
@@ -63,10 +63,10 @@ function Debug:message(text)
     -- Удаление сообщения через секунду
     timer.performWithDelay(self._messageDelay, function ()
         -- Сначало постепенно изчезает, затем удаляется
-        transition.to(group, { alpha = 0, time = 300, onComplete = 
+        transition.to(group, { alpha = 0, time = 200, onComplete = 
             function() 
                 -- Очищение памяти
-                display.remove(group)
+                group:removeSelf()
                 group = nil
                 self._messageCount = self._messageCount - 1
 

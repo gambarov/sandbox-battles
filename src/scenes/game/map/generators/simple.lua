@@ -30,7 +30,7 @@ function Generator:go(params)
             -- Спавн стен вокруг карты
             if isEdge(i, j, params.width, params.height) then
                 cells[i][j].type = "wall"
-                manada:addGameObject(manada:getFactory("BarrierFactory"):create({ parent = params.parent, x = x, y = y, width = params.cellSize, height = params.cellSize }))
+                manada:getFactory("barrier"):create({ parent = params.parent, x = x, y = y, width = params.cellSize, height = params.cellSize })
             end
         end
     end

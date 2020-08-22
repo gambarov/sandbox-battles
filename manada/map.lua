@@ -20,24 +20,23 @@ function Map:initialize( params )
     self._cells = generator:go(params)
 end
 
-function Map:setTouchHandler(name, params)
-    -- Обработчик нажатия по полю
-    local handler = require(Map.TouchHandlersDir .. name):new(params)
+function Map:setTouchHandler(type, name, params)
     -- Удаляем предыдущий обработчик
     self:removeTouchHandler()
+    -- Обработчик нажатия по полю
+    local handler = manada:getMapTouchHandler(type, name):new(params)
 
     self._touchHandler = function(event) 
         -- Из глобальных координат в локальные
         local x, y = self._parent:contentToLocal(event.x, event.y)
     
-        -- Спавн объекта при отпускании пальца
+        -- Обработчик нажатия по карте
         if event.phase == "ended" and event.x == event.xStart and event.y == event.yStart and x > 0 and y > 0 and x < self._parent.width and y < self._parent.height then
             return handler:handle({ x = x, y = y }) 
         end
     end
 
     self._parent:addEventListener("touch", self._touchHandler)
-    manada.debug:message("MapTouchHandler changed to " .. name)
 end
 
 function Map:removeTouchHandler()

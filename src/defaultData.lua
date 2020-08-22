@@ -6,9 +6,4 @@ data.settings =
     soundOn = true
 }
 
-data.gameObjects = 
-{
-    { name = "human", health = 100, damage = 15 }
-}
-
 return data

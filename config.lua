@@ -7,9 +7,6 @@ application =
 {
 	content =
 	{
-		-- width = display.pixelWidth,
-		-- height = display.pixelHeight,
-		-- scale = "letterbox",
 		fps = 60
 
 		--[[

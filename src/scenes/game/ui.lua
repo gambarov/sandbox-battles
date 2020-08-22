@@ -43,7 +43,7 @@ for name, index in pairs(charactersSheet.info.frameIndex) do
 				weaponsTable:highlightRow(manada.data:get("weaponToSpawn"))
 			end
 			-- Текущий обработчик нажатий по карте - спавн нпс
-			manada:getActiveMap():setTouchHandler("NPCSpawnHandler")
+			manada:getActiveMap():setTouchHandler("spawn", "npc")
 			-- После выбора нпс, показываем меню с выбором оружия
 			weaponsTable:show(true)
 		end)
@@ -57,6 +57,7 @@ local menuItems =
 	{ 
 		name = "Sandbox",  
 		handler = function() 
+			manada:resume()
 			charactersTable:show(true)
 		end
 	}, 
@@ -71,15 +72,15 @@ local menuItems =
 			timer.performWithDelay(100, function()
 				charactersTable:resetHighlight()								-- Сбрасываем текущий выбор
 				charactersTable:hide(true) 										-- Прячем 
-				manada:getActiveMap():setTouchHandler("ObjectRemoveHandler") 
+				manada:getActiveMap():setTouchHandler("object", "remove") 
 			end)
 		end
 	}, 
 
 	{ 
-		name = "Exit", 
-		handler = function() 
-			manada:getActiveMap():removeTouchHandler()
+		name = "Pause", 
+		handler = function()
+			manada:pause() 
 		end 
 	},
 }

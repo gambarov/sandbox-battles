@@ -1,6 +1,6 @@
 local class = require("manada.libs.middleclass")
 
-local Handler = class("CharacterSpawnHandler")
+local Handler = class("BarrierSpawnHandler")
 
 local ceil = math.ceil
 
@@ -21,13 +21,13 @@ function Handler:handle(touch)
     -- Если клетка не занята, то спавним блок и занимаем клетку
     if cell and cell.type and cell.type == "free" then
         map:setCell(i, j, { type = "barrier" })
-        manada:addGameObject(self._spawnFactory:create( 
+        self._spawnFactory:create( 
         { 
             parent = map:getDisplayGroup(), 
             x = x, y = y, 
             width = map:getCellSize(), 
             height = map:getCellSize() 
-        }))
+        })
     end
 
     return true

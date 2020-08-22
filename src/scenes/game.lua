@@ -1,10 +1,7 @@
-
-local composer = require( "composer" )
-local physics = require( "physics" )
-
+local composer = require("composer")
+physics = require("physics")
 
 local scene = composer.newScene()
-
 
 physics.start()
 physics.setGravity(0, 0)
@@ -13,7 +10,6 @@ local masterGroup	-- Главная группа отображения
 local bgGroup		-- Группа отображения заднего фона
 local mainGroup		-- Группа отображения карты, игровых объектов и т.д. 
 local uiGroup		-- Группа отображения пользовательского интерфейса
-
 
 function scene:create( event )
 
@@ -87,6 +83,8 @@ function scene:destroy( event )
 
 	local sceneGroup = self.view
 	-- Code here runs prior to the removal of scene's view
+	physics.stop()
+	physics = nil
 
 end
 
