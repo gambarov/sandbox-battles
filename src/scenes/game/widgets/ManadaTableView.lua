@@ -39,7 +39,7 @@ function Widget:initialize(params)
         -- Выбор строки, по которой нажал юзер
         if (event.phase == "release" and self._state ~= "hided") then
             self:highlightRow(event.target.index)    -- Подсветка выбора
-            event.target.params.onTouchHandler()     -- Обработчик нажатия данной строки
+            event.target.params.onTouchHandler(event.target)     -- Обработчик нажатия данной строки
         end
     end
 

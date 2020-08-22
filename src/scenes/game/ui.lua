@@ -57,7 +57,6 @@ local menuItems =
 	{ 
 		name = "Sandbox",  
 		handler = function() 
-			manada:resume()
 			charactersTable:show(true)
 		end
 	}, 
@@ -79,8 +78,16 @@ local menuItems =
 
 	{ 
 		name = "Pause", 
-		handler = function()
-			manada:pause() 
+		handler = function(row)
+			
+			if manada:isPaused() then
+				row.params.visual.icon.text = "Pause"
+			else
+				row.params.visual.icon.text = "Resume"
+			end 
+
+			manada:togglePause()
+			menuTable:highlightRow(false)
 		end 
 	},
 }

@@ -177,6 +177,14 @@ function Core:getGameObjectByID(id)
     return false
 end
 
+function Core:togglePause()
+    if self:isPaused() then
+        self:resume()
+    else
+        self:pause()
+    end
+end
+
 function Core:isPaused()
     return self._isPaused
 end
