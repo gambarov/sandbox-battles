@@ -3,6 +3,11 @@ local class = require("manada.libs.middleclass")
 local Factory = class("NPCFactory")
 
 function Factory:create(params)
+    -- Ограничение по кол-ву созданий НПС
+    if #manada:getGameObjectsByType("npc") >= 10 then
+        return false
+    end
+
     -- Спрайт-лист с нпс
     local sheet = manada.isheet:get("characters")
     -- Получаем нужный спрайт
