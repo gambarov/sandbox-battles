@@ -2,7 +2,8 @@ local data = {}
 
 local soldierStats = 
 {
-    health = 100
+    health = 100,
+    moveSpeed = 200
 }
 
 local soldierPhysics = 
@@ -44,38 +45,41 @@ data.weapons =
     ["MachineGun"] = 
     {
         name = "MachineGun",
+        range = 1750,
         rate = 100,
         spread = 5,
         count = 1,
-        bullet = "Simple"
+        bullet = "Bullet"
     },
     ["SMG"] = 
     {
         name = "SMG",
+        range = 2250,
         rate = 175,
         spread = 3,
         count = 1,
-        bullet = "Simple"
+        bullet = "Bullet"
     },
     ["Shotgun"] = 
     {
         name = "Shotgun",
+        range = 1000,
         rate = 500,
-        spread = 10,
-        count = 3,
-        bullet = "Simple"
+        spread = 12,
+        count = 4,
+        bullet = "Bullet"
     }
 }
 
 data.bullets = 
 {
-    ["Simple"] = 
+    ["Bullet"] = 
     {
-        name = "Simple",
-        w = 40,
-        h = 8,
-        color = { 0.85, 0.55, 0.35 },
-        speed = 500,
+        name = "Bullet",
+        w = 35,
+        h = 6,
+        color = { 1, 0.7, 0.15 },
+        speed = 5000,
         damage = 20
     }
 }

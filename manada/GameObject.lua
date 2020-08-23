@@ -89,7 +89,7 @@ function GameObject:setY(value)
 end
 
 function GameObject:getPosition()
-    return self:getX(), self:getY()
+    return { x = self:getX(), y = self:getY() }
 end
 
 function GameObject:setPosition(x, y)
@@ -218,7 +218,7 @@ function GameObject:setComponent(name, component, params)
     params = params or {}
     self._components[name] = component:new(self, params)
 
-    if manada:isPaused() and self._components[name]["pause"] then
+    if self:isPaused() and self._components[name]["pause"] then
         self._components[name]:pause()
     end
 end

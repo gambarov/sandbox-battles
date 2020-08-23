@@ -2,69 +2,73 @@ local class = require("manada.libs.middleclass")
 
 local Component = class("Component")
 
-local physics = require("physics")
-
 Component.requires = { "stats" }
 
 function Component:initialize(gameObject, params)
  
-    self._gameObject = gameObject
-    self._bodyType = params.bodyType or "dynamic"
-    self._params = params.params or { density = 1.0, friction = 0.0, bounce = 0.2 }
+    self.gameObject = gameObject
+    self.params = params.params or { density = 1.0, friction = 0.0, bounce = 0.2 }
 
-    self._currentRotation = gameObject:getRotation() + 90   -- Угол, на который нужно повернуть объект
-    self._turnRate = 3                                      -- Скорость вращения
+    self.currentRotation = gameObject:getRotation() + 90   -- Угол, на который нужно повернуть объект
+    self.turnRate = 3                                      -- Скорость вращения
+    self.speedRate = 1
 
-    if gameObject:getVisual() then
-        physics.addBody(gameObject:getVisual(), self._bodyType, self._params)
-        gameObject:getVisual().isFixedRotation = true
-    end
-
+    physics.addBody(gameObject:getVisual(), params.bodyType or "dynamic", self.params)
+    
+    gameObject:getVisual().isFixedRotation = true
     gameObject:addEventListener("updatePhysics", self)
+    gameObject:addEventListener("collision", self)
+end
+
+function Component:collision(event)
+    local object = event.other.gameObject
+
+    if object and object:getType() ~= "bullet" then
+        local rotation = manada.math:angleBetweenVectors({ x = self.gameObject:getX(), y = self.gameObject:getY() }, { x = object:getX(), y = object:getY() })
+        self:updatePhysics({ currentRotation = rotation + manada.random:range(90, 180) })
+    end
 end
 
 function Component:update(dt)
-    self:_updateRotation()
-    --self:_updateMovement()
+    self:updateRotation()
+    self:updateMovement()
 
-    if self._gameObject:getComponent("stats"):get("health") <= 0 then
-        self._gameObject:destroy()
+    if self.gameObject:getComponent("stats"):get("health") <= 0 then
+        self.gameObject:destroy()
     end
 end
 
-function Component:updatePhysics(event)
-    self._currentRotation = event.currentRotation or self._currentRotation
-    self._turnRate = event.turnRate or self._turnRate
+function Component:updatePhysics(params)
+    for k, v in pairs(params) do
+        if self[k] then
+            self[k] = v
+        end
+    end
 end
 
-function Component:_updateRotation()
-
-    local object = self._gameObject
-    local vector = manada.math:vectorFromAngle(self._currentRotation)
+function Component:updateRotation()
+    local object = self.gameObject
+    local vector = manada.math:vectorFromAngle(self.currentRotation)
     local angle = manada.math:limitedAngleBetweenVectors(
-        { 
-            x = object:getX(), 
-            y = object:getY() 
-        }, 
-        { 
-            x = object:getX() - vector.x, 
-            y = object:getY() - vector.y 
-        }, 
-        object:getRotation(), self._turnRate * manada.time:delta())
+        { x = object:getX(), y = object:getY() }, 
+        { x = object:getX() - vector.x, y = object:getY() - vector.y }, 
+        object:getRotation(), 
+        self.turnRate * manada.time:delta())
 
     object:setRotation(angle)
 end
 
-function Component:_updateMovement()
-    local object = self._gameObject
-    local vector = manada.math:vectorFromAngle(object:getRotation())
-    object:getVisual():setLinearVelocity(vector.x * 100, vector.y * 100)
+function Component:updateMovement()
+    local vector = manada.math:vectorFromAngle(self.gameObject:getRotation())
+    local moveSpeed = self.gameObject:getComponent("stats"):get("moveSpeed", "original")
+    self.gameObject:getVisual():setLinearVelocity(vector.x * moveSpeed * self.speedRate, vector.y * moveSpeed * self.speedRate)
 end
 
 function Component:destroy()
-    self._gameObject:removeEventListener("updatePhysics", self)
-    physics.removeBody(self._gameObject:getVisual())
-    self._gameObject = nil
+    self.gameObject:removeEventListener("updatePhysics", self)
+    self.gameObject:removeEventListener("collision", self)
+    physics.removeBody(self.gameObject:getVisual())
+    self.gameObject = nil
 end
 
 return Component

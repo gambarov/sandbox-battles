@@ -33,7 +33,7 @@ function Factory:create(params)
         -- Сдвиг пули к оружию
         bullet:setPosition(bullet:getX() + (vector.x * params.weapon:getWidth()) - (vector.y * 10), bullet:getY() + (vector.y * params.weapon:getWidth() + (vector.x * 10)))
 
-        bullet:getVisual():applyForce(vector.x * bulletData.speed, vector.y * bulletData.speed, bullet:getPosition())
+        bullet:getVisual():setLinearVelocity(vector.x * bulletData.speed, vector.y * bulletData.speed)
 
         local function onCollision(event)    
             -- body

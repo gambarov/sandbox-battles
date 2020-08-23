@@ -4,7 +4,7 @@ local Factory = class("NPCFactory")
 
 function Factory:create(params)
     -- Ограничение по кол-ву созданий НПС
-    if #manada:getGameObjectsByType("npc") >= 10 then
+    if #manada:getGameObjectsByType("npc") >= 25 then
         return false
     end
 
