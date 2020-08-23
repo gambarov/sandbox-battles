@@ -18,6 +18,8 @@ function Component:initialize(gameObject, params)
     self.weapon = manada.GameObject:new({ visual = visual, name = self.name, type = "weapon", gameObject:getX(), gameObject:getY() })
     self.weapon:setAnchor(0, 0)
     
+    gameObject:getComponent("stats"):set("weapon", manada:getGameData("weapons")[self.name])
+
     gameObject:addEventListener("startAttack", self) -- События атаки владельца
     gameObject:addEventListener("stopAttack",  self)
 

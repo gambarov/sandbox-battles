@@ -21,14 +21,14 @@ function Component:update(dt)
         end
         
         local rotation = manada.math:angleBetweenVectors(self.gameObject:getPosition(), self.enemy:getPosition())
-        local range = manada:getGameData("weapons")[self.gameObject:getComponent("weapon"):getWeapon():getName()].range
+        local range = self.gameObject:getComponent("stats"):get("weapon").range
         local dist = manada.math:distanceBetween(self.gameObject:getPosition(), self.enemy:getPosition())
         local speedRate = 1
 
         if dist > range then
             speedRate = 1
         else
-            speedRate = -1
+            speedRate = -0.75
         end
 
         self.gameObject:dispatchEvent("updatePhysics", { currentRotation = rotation, turnRate = 8, speedRate = speedRate })

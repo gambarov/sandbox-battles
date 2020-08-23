@@ -45,6 +45,7 @@ data.weapons =
     ["MachineGun"] = 
     {
         name = "MachineGun",
+        weight = 100,
         range = 1750,
         rate = 100,
         spread = 5,
@@ -54,6 +55,7 @@ data.weapons =
     ["SMG"] = 
     {
         name = "SMG",
+        weight = 50,
         range = 2250,
         rate = 175,
         spread = 3,
@@ -63,6 +65,7 @@ data.weapons =
     ["Shotgun"] = 
     {
         name = "Shotgun",
+        weight = 75,
         range = 1000,
         rate = 500,
         spread = 12,
@@ -80,7 +83,7 @@ data.bullets =
         h = 6,
         color = { 1, 0.7, 0.15 },
         speed = 5000,
-        damage = 20
+        damage = 15
     }
 }
 
