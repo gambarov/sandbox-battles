@@ -203,16 +203,8 @@ function GameObject:setComponent(name, component, params)
     end
 
     -- Удаляем существующий компонент, если такой есть
-    if self:hasComponent(name) then
+    if self:getComponent(name) then
         self:removeComponent(name)
-    end
-
-    local requires = component.requires or {}
-
-    -- Проверка зависимостей
-    for i = 1, #requires, 1 do
-        local requireSystem = requires[i]
-        assert(self:hasComponent(requireSystem), "Component \"" .. name .. "\" required a \"" .. requireSystem .. "\" component")
     end
 
     params = params or {}
@@ -223,30 +215,20 @@ function GameObject:setComponent(name, component, params)
     end
 end
 
+function GameObject:getComponent(name)
+    if self._components then
+        return self._components[name]
+    end
+end
+
 function GameObject:removeComponent(name)
     -- Уничтожаем существующий компонент
-    if self:hasComponent(name) then
+    if self:getComponent(name) then
         self._components[name]:destroy()
         self._components[name] = nil
         return true
     end
-
     return false
-end
-
-function GameObject:getComponent(name)
-    assert(self._components, "Сan’t get the \"" .. name .. "\" component because no component has been added yet")
-    local component = self:hasComponent(name)
-    assert(component, "Can't get the \"" .. name .. "\" component because it doesn't exist")
-    return component
-end
-
-function GameObject:hasComponent(name)
-    if not self._components then
-        return false
-    end
-
-    return self._components[name]
 end
 
 -- ПРОЧЕЕ

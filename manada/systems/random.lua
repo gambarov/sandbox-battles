@@ -24,4 +24,21 @@ function Random:seed(value)
     randomseed(value or ostime())
 end
 
+function Random:fromTable(table)
+
+	local count = manada.utils:countTable(table)
+	local index = self:range(1, count)
+
+	local i = 1
+	for k, v in pairs(table) do
+		if i == index then
+			return v, k
+		end
+		i = i + 1
+	end
+
+	return nil
+
+end
+
 return Random

@@ -35,6 +35,7 @@ function Core:initialize( params )
     loadSystem( "camera"   )
     loadSystem( "data"     )
     loadSystem( "math"     )
+    loadSystem( "timer"    )
 
     self.Map = require( "manada.Map" )
     self.GameObject = require( "manada.GameObject" )

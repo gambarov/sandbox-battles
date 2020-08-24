@@ -9,7 +9,7 @@ local rad   = math.rad
 local floor = math.floor
 local max   = math.max
 local min   = math.min
-local deg = math.deg
+local deg   = math.deg
 local atan2 = math.atan2
 
 function Math:distanceBetween(vector1, vector2)
@@ -19,7 +19,17 @@ end
 
 function Math:vectorFromAngle(angle)
     return { x = cos( rad( angle ) ), y = sin( rad( angle ) ) }
-    -- return { x = cos( rad( angle - 90 ) ), y = sin( rad( angle - 90 ) ) }
+end
+
+function Math:limitedAngleBetweenVectors(vector1, vector2, current, turnRate)
+
+	local target = self:angleBetweenVectors(vector1, vector2)
+	local delta = floor(target - current)
+
+	delta = self:normaliseAngle(delta)
+	delta = self:clamp(delta, -turnRate, turnRate)
+
+	return current + delta
 end
 
 function Math:angleBetweenVectors(vector1, vector2)
@@ -40,15 +50,12 @@ function Math:normaliseAngle(angle)
     return angle
 end
 
-function Math:limitedAngleBetweenVectors(vector1, vector2, current, turnRate)
-
-	local target = self:angleBetweenVectors(vector1, vector2)
-	local delta = floor(target - current)
-
-	delta = self:normaliseAngle(delta)
-	delta = self:clamp(delta, -turnRate, turnRate)
-
-	return current + delta
+function Math:normalise(value, min, max)
+	local result = ( value - min ) / ( max - min )
+	if result > 1 then
+		result = 1
+	end
+	return result
 end
 
 function Math:round(number, idp)

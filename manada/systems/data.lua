@@ -60,7 +60,7 @@ function Data:get(name)
 end
 
 function Data:isEmpty()
-    return manada.utils:count(self._contents) == 0
+    return manada.utils:countTable(self._contents) == 0
 end
 
 function Data:system(event)
