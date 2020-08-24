@@ -4,8 +4,6 @@ local Component = class( "PlayerJoyControlComponent" )
 
 local controller = require( "src.libs.controller.virtual_controller_factory" ).newController()
 
-Component.requires = { }
-
 function Component:initialize( gameObject, params )
 
     params = params or {}

@@ -2,8 +2,6 @@ local class = require("manada.libs.middleclass")
 
 local Component = class("WeaponComponent")
 
-Component.requires = { }
-
 function Component:initialize(gameObject, params)
 
     for k, v in pairs(params) do
@@ -20,8 +18,7 @@ function Component:initialize(gameObject, params)
     
     gameObject:getComponent("stats"):set("weapon", manada:getGameData("weapons")[self.name])
 
-    gameObject:addEventListener("startAttack", self) -- События атаки владельца
-    gameObject:addEventListener("stopAttack",  self)
+    gameObject:addEventListener("updateWeapon", self) -- События атаки владельца
 
     self:update()
 end
@@ -31,26 +28,26 @@ function Component:update()
     self.weapon:setRotation(self.owner:getRotation())
 end
 
-function Component:startAttack(params)
-    -- Если объект уже атакует
-    if self.timer then return end
+function Component:updateWeapon(params)
 
+    local timerName = "fireWeapon" .. self.owner:getID()
     local weaponData = manada:getGameData("weapons")[self.name]
 
-    self.timer = timer.performWithDelay(weaponData.rate, function()
+    local function bulletCreate()
         manada:getFactory("bullet"):create({ npc = self.owner, weapon = self.weapon, x = self.owner:getX(), y = self.owner:getY() })
-    end, -1)
-end
-
-function Component:stopAttack()
-    if self.timer then
-        timer.cancel(self.timer)
-        self.timer = nil
     end
-end
 
-function Component:pause()
-    self:stopAttack()
+    if params.phase == "start" then
+        if not manada.timer:get(timerName) then
+            manada.timer:performWithDelay(weaponData.rate, bulletCreate, -1, timerName)
+        end
+    elseif params.phase == "pause" then
+        manada.timer:pause(timerName)
+    elseif params.phase == "resume" then
+        manada.timer:resume(timerName)
+    elseif params.phase == "stop" then
+        manada.timer:cancel(timerName)
+    end
 end
 
 function Component:getOwner()
@@ -62,9 +59,11 @@ function Component:getWeapon()
 end
 
 function Component:destroy()
-    self:stopAttack()
-    self.owner:removeEventListener("startAttack", self)
-    self.owner:removeEventListener("stopAttack", self)
+    if self.owner:getComponent("stats") then
+        self.owner:getComponent("stats"):remove("weapon")
+    end
+    self:updateWeapon({ phase = "stop" })
+    self.owner:removeEventListener("updateWeapon", self)
     self.owner = nil
 
     self.weapon:destroy()

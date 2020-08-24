@@ -2,8 +2,6 @@ local class = require("manada.libs.middleclass")
 
 local Component = class("AIControlComponent")
 
-Component.requires = {"physics"}
-
 function Component:initialize(gameObject, params)
 
     params = params or {}
@@ -15,7 +13,7 @@ function Component:update(dt)
     if self.enemy then
         -- Если противник уничтожен или не находится в зоне видимости
         if self.enemy:isDestroyed() or not self:isInSight(self.enemy) then
-            self.gameObject:dispatchEvent("stopAttack")
+            self.gameObject:dispatchEvent("updateWeapon", { phase = "stop" })
             self.enemy = nil
             return
         end
@@ -23,16 +21,20 @@ function Component:update(dt)
         local rotation = manada.math:angleBetweenVectors(self.gameObject:getPosition(), self.enemy:getPosition())
         local range = self.gameObject:getComponent("stats"):get("weapon").range
         local dist = manada.math:distanceBetween(self.gameObject:getPosition(), self.enemy:getPosition())
-        local speedRate = 1
-
+        local speedRate = 0
+        -- Расстояние до врага больше дальности оружия
         if dist > range then
             speedRate = 1
-        else
+        -- Противник приблизился слишком близко
+        elseif dist < (range / 2) then
             speedRate = -0.75
+        -- Расстояние до врага
+        else
+            speedRate = 0
         end
 
         self.gameObject:dispatchEvent("updatePhysics", { currentRotation = rotation, turnRate = 8, speedRate = speedRate })
-        self.gameObject:dispatchEvent("startAttack")
+        self.gameObject:dispatchEvent("updateWeapon", { phase = "start" })
 
     -- Свободное передвижение и поиск противника
     else

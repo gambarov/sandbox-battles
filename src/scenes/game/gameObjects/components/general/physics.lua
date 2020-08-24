@@ -2,10 +2,6 @@ local class = require("manada.libs.middleclass")
 
 local Component = class("Component")
 
-local physics = require("physics")
-
-Component.requires = { }
-
 function Component:initialize(gameObject, params)
 
     self._gameObject = gameObject

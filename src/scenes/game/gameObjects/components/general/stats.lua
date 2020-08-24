@@ -19,6 +19,13 @@ function Component:get(name, statType)
     return self["_" .. statType .. "_" .. name]
 end
 
+function Component:remove(name)
+    if self:get(name) then
+        self["_original_" .. name] = nil
+        self["_current_" .. name] = nil
+    end
+end
+
 function Component:increase(name, value)
     self:set(name, self:get(name, "current") + value)
 end
