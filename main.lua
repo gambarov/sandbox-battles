@@ -12,11 +12,15 @@ manada.isheet:add("ui")
 manada.isheet:add("characters")
 manada.isheet:add("weapons")
 
--- Первый запуск приложения 
-if manada.data:isEmpty() then
-    local defaultData = require("src.defaultData")
-    manada.data:set("settings", defaultData.settings)
-    manada.data:set("gameObjects", defaultData.gameObjects)
+local default = require("src.defaultData")
+
+print(type(default))
+
+-- Первый запуск приложения или добавление новой настройки
+for name, value in pairs(default) do
+    if manada.data:get(name) == nil then
+        manada.data:set(name, value)
+    end
 end
 
 -- Кастомные глобальные ф-ции

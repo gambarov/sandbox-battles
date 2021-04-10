@@ -24,8 +24,8 @@ function Utils:countTable(table)
     return count
 end
 
-function Utils:getByIndex(table, index)
-    local i = 0
+function Utils:byIndex(table, index)
+    local i = 1
     for k, v in pairs(table) do
         if index == i then
             return v

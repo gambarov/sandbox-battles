@@ -14,7 +14,8 @@ function Map:initialize( params )
     self._width = params.width
     self._height = params.height
     self._cellSize = params.cellSize
-    self._parent = params.parent
+    self._group = params.group
+    self._maxNPCCount = (params.width * params.height) / 2
 
     local generator = require(Map.GeneratorsDir .. params.generator)
     self._cells = generator:go(params)
@@ -28,22 +29,28 @@ function Map:setTouchHandler(type, name, params)
 
     self._touchHandler = function(event) 
         -- Из глобальных координат в локальные
-        local x, y = self._parent:contentToLocal(event.x, event.y)
-    
+        local x, y = self._group:contentToLocal(event.x, event.y)
+        local line, column = ceil(y / self:getCellSize()), ceil(x / self:getCellSize())
+        local cell = self:getCell(line, column)
+
         -- Обработчик нажатия по карте
-        if event.phase == "ended" and event.x == event.xStart and event.y == event.yStart and x > 0 and y > 0 and x < self._parent.width and y < self._parent.height then
-            return handler:handle({ x = x, y = y }) 
+        if event.phase == "ended" and event.x == event.xStart and event.y == event.yStart and x > 0 and y > 0 and x < self._group.width and y < self._group.height then
+            return handler:handle({ map = self, cell = cell, x = x, y = y, line = line, column = column }) 
         end
     end
 
-    self._parent:addEventListener("touch", self._touchHandler)
+    self._group:addEventListener("touch", self._touchHandler)
 end
 
 function Map:removeTouchHandler()
     if self._touchHandler then
-        self._parent:removeEventListener("touch", self._touchHandler)
+        self._group:removeEventListener("touch", self._touchHandler)
     end
     self._touchHandler = nil
+end
+
+function Map:getMaxNPCCount()
+    return self._maxNPCCount
 end
 
 function Map:getCells()
@@ -70,7 +77,7 @@ function Map:setCell(x, y, params)
 end
 
 function Map:getDisplayGroup()
-    return self._parent
+    return self._group
 end
 
 function Map:getCellSize()
@@ -87,6 +94,19 @@ function Map:toCellPos(x, y)
     mx, my = ceil(mx), ceil(my)
     x, y = (mx * self._cellSize) - (self._cellSize / 2), (my * self._cellSize) - (self._cellSize / 2)
     return x, y
+end
+
+function Map:destroy()
+    self:removeTouchHandler()
+
+    for i = 1, self._width do
+        for j = 1, self._height do
+            self._cells[i][j]:destroy()
+            self._cells[i][j] = nil
+        end
+    end
+
+    self._cells = nil
 end
 
 return Map

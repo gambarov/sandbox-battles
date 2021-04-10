@@ -9,7 +9,7 @@ function GameObject:initialize(params)
     self._visual = params.visual
 
     for k, v in pairs(params) do 
-        -- TODO: Св-ва GameObject
+        -- Св-ва GameObject
         self["_" .. k] = v
 
         -- Св-ва DisplayObject
@@ -19,16 +19,27 @@ function GameObject:initialize(params)
     end
 
     if self._visual then
-        self._visual.gameObject = self
+        -- Ссылка на себя в визуальном объекте (для событий физики и т.п.)
+        self._visual.gameObject = self      
+        -- Локальная группа игрового объекта (если требуется)
+        if self._localGroup then
+            self._localGroup:insert(self._visual)
+            self._parentGroup:insert(self._localGroup)
+        -- Не требуется
+        else
+            self._parentGroup:insert(self._visual)
+        end
     end
 
     self._id = manada.utils:generateUUID()  
     self._totalFrames = 0
     self._components = {} 
+
+    manada:addGameObject(self)
 end
 
 function GameObject:update(dt)
-    
+    -- Обновление счетчика кадров
     self._totalFrames = ((self._totalFrames or 0) + 1)
 
     if self._components then
@@ -50,9 +61,15 @@ function GameObject:getVisual()
     end
 end
 
-function GameObject:getParent()
+function GameObject:getParentGroup()
     if self:getVisual() then
-        return self._visual.parent
+        return self._parentGroup
+    end
+end
+
+function GameObject:getLocalGroup()
+    if self:getVisual() then
+        return self._localGroup
     end
 end
 
@@ -154,6 +171,18 @@ function GameObject:setAlpha(value)
         self._visual.alpha = value
     else
         self._alpha = value
+    end
+end
+
+function GameObject:hide()
+    if self:getVisual() then
+        self._visual.isVisible = false
+    end
+end
+
+function GameObject:show()
+    if self:getVisual() then
+        self._visual.isVisible = true
     end
 end
 
@@ -306,6 +335,13 @@ function GameObject:destroy()
     end
 
     self._components = nil
+
+    if self._localGroup then
+        self._localGroup:removeSelf()
+        self._localGroup = nil
+    end
+
+    self._parentGroup = nil
 
     -- Удаление объекта Display Object
     if self._visual then

@@ -2,17 +2,17 @@ local mainGroup = display.newGroup()
 
 local table = require("src.scenes.game.widgets.ManadaTableView")
 
-local charactersSheet = manada.isheet:get("characters")
-local weaponsSheet = manada.isheet:get("weapons")
+local npcSheet = manada.isheet:get("characters")
+local weaponSheet = manada.isheet:get("weapons")
 local uiSheet = manada.isheet:get("ui")
 
-local weaponsTable = table:new({ displayGroup = mainGroup, left = display.pixelHeight - (display.pixelHeight * 0.095 * 3), top = 0 })
-weaponsTable:hide(false)
+local weaponTable = table:new({ displayGroup = mainGroup, left = display.pixelHeight - (display.pixelHeight * 0.095 * 3), top = 0 })
+weaponTable:hide(false)
 
-for name, index in pairs(weaponsSheet.info.frameIndex) do
-	weaponsTable:insertRow(name,
+for name, index in pairs(weaponSheet.info.frameIndex) do
+	weaponTable:insertRow(name,
 		{ 
-			icon = display.newImage(weaponsSheet.image, index), 
+			icon = display.newImage(weaponSheet.image, index), 
 			background =  display.newImage(uiSheet.image, uiSheet.info:getFrameIndex("SquareButtonBG")) 
 		}, 
 		function()
@@ -22,13 +22,13 @@ for name, index in pairs(weaponsSheet.info.frameIndex) do
 end
 
 
-local charactersTable = table:new({ displayGroup = mainGroup, left = display.pixelHeight - (display.pixelHeight * 0.095 * 2), top = 0 })
-charactersTable:hide(false)
+local npcTable = table:new({ displayGroup = mainGroup, left = display.pixelHeight - (display.pixelHeight * 0.095 * 2), top = 0 })
+npcTable:hide(false)
 
-for name, index in pairs(charactersSheet.info.frameIndex) do
-	charactersTable:insertRow(name,
+for name, index in pairs(npcSheet.info.frameIndex) do
+	npcTable:insertRow(name,
 		{ 
-			icon = display.newImage(charactersSheet.image, index), 
+			icon = display.newImage(npcSheet.image, index), 
 			background = display.newImage(uiSheet.image, uiSheet.info:getFrameIndex("SquareButtonBG")) 
 		}, 
 		function()
@@ -37,15 +37,15 @@ for name, index in pairs(charactersSheet.info.frameIndex) do
 			-- Если оружие еще не было выбрано
 			if not manada.data:get("weaponToSpawn") then
 				manada.data:set("weaponToSpawn", "Shotgun")	-- Выбор оружия по-умолчанию
-				weaponsTable:highlightRow("Shotgun")		-- Подсвечиваем данную строку в таблице выбора оружия
-			else
+				weaponTable:highlightRow("Shotgun")			-- Подсвечиваем данную строку в таблице выбора оружия
 			-- Какое-то оружие уже выбрано, подсвечиваем выбор
-				weaponsTable:highlightRow(manada.data:get("weaponToSpawn"))
+			else
+				weaponTable:highlightRow(manada.data:get("weaponToSpawn"))
 			end
 			-- Текущий обработчик нажатий по карте - спавн нпс
-			manada:getActiveMap():setTouchHandler("spawn", "npc")
+			manada:getGameMap():setTouchHandler("spawn", "npc")
 			-- После выбора нпс, показываем меню с выбором оружия
-			weaponsTable:show(true)
+			weaponTable:show(true)
 		end)
 end
 
@@ -57,7 +57,10 @@ local menuItems =
 	{ 
 		name = "Sandbox",  
 		handler = function() 
-			charactersTable:show(true)
+			npcTable:show(true)
+			-- Текущий обработчик нажатий по карте - спавн нпс
+			manada.data:set("terrainToSpawn", "Barrier")
+			manada:getGameMap():setTouchHandler("spawn", "barrier")
 		end
 	}, 
 
@@ -65,13 +68,13 @@ local menuItems =
 		name = "Remove", 
 		handler = function() 
 			
-			weaponsTable:hide(true)
-			weaponsTable:resetHighlight()
+			weaponTable:hide(true)
+			weaponTable:resetHighlight()
 
 			timer.performWithDelay(100, function()
-				charactersTable:resetHighlight()								-- Сбрасываем текущий выбор
-				charactersTable:hide(true) 										-- Прячем 
-				manada:getActiveMap():setTouchHandler("object", "remove") 
+				npcTable:resetHighlight()								-- Сбрасываем текущий выбор
+				npcTable:hide(true) 										-- Прячем 
+				manada:getGameMap():setTouchHandler("object", "remove") 
 			end)
 		end
 	}, 

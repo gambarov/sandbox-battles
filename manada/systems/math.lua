@@ -38,6 +38,11 @@ function Math:angleBetweenVectors(vector1, vector2)
 	return angle
 end
 
+function Math:angleFromVector(vector)
+	local angle = deg(atan2(vector.y, vector.x)) + 90
+	return angle
+end
+
 function Math:normaliseAngle(angle)
     while angle <= -180 do
 		angle = angle + 360
@@ -48,6 +53,10 @@ function Math:normaliseAngle(angle)
 	end
 
     return angle
+end
+
+function Math:calculatePercentage(value, max)
+	return (value / max) * 100
 end
 
 function Math:normalise(value, min, max)

@@ -22,15 +22,23 @@ function Generator:go(params)
         for j = 1, params.height do
 
             local x, y = params.cellSize * j - params.cellSize / 2, params.cellSize * i - params.cellSize / 2
-            local rect = display.newImage(params.parent, sheet.image, sheet.info:getFrameIndex("GroundTile" .. manada.random:range(1, 2) .. "C"), x, y)
+            local rect = display.newImage(params.group, sheet.image, sheet.info:getFrameIndex("GroundTile" .. manada.random:range(1, 2) .. "C"), x, y)
             rect.width, rect.height = params.cellSize, params.cellSize
 
-            cells[i][j] = { object = rect, type = "free" }
+            cells[i][j] = { rect = rect, type = "free", destroy = function(self) if rect then rect:removeSelf() rect = nil end end }
 
             -- Спавн стен вокруг карты
             if isEdge(i, j, params.width, params.height) then
-                cells[i][j].type = "wall"
-                manada:getFactory("barrier"):create({ parent = params.parent, x = x, y = y, width = params.cellSize, height = params.cellSize })
+                local factoryParams = manada:getGameData("terrains")["Barrier"]
+                factoryParams.group = params.group
+                factoryParams.x = x factoryParams.y = y
+                factoryParams.width, factoryParams.height = params.cellSize, params.cellSize
+                local gameObject = manada:getFactory("barrier"):create(factoryParams)
+                cells[i][j] = { rect = rect, gameObject = gameObject, type = "wall", 
+                destroy = function(self) 
+                    if rect then rect:removeSelf() rect = nil end 
+                    if gameObject then gameObject:destroy() gameObject = nil end 
+                end }
             end
         end
     end

@@ -1,5 +1,3 @@
--- Created by @jusD3N
-
 local class = require( "manada.libs.middleclass" )
 
 -- Объявление класса
@@ -12,7 +10,7 @@ Core.plugins = {}
 function Core:initialize( params )
 
     params = params or {}
-    params.systems = params.systems or {}
+    params.systems = params.systems or {}   -- Параметры пользователя для систем
 
     self._systems = {}
     self._gameObjects = {}
@@ -49,18 +47,13 @@ function Core:enterFrame(event)
     self.debug:update(event)
     self.camera:update(self.time:delta())
 
-    if self:isPaused() then
-        return
-    end
-
     for i = #self._gameObjects, 1, -1 do
-
         local gameObject = self._gameObjects[i] 
 
         if gameObject and gameObject["update"] then
             if gameObject:isDestroyed() then
                 remove(self._gameObjects, i)
-            else
+            elseif not self:isPaused() then
                 gameObject:update(self.time:delta())
             end
         else
@@ -107,23 +100,26 @@ function Core:resume()
     resumeSystem(self._systems)
 end
 
-function Core:setActiveMap(map)
-    self._activeMap = map
+function Core:setGameMap(map)
+    if self._gameMap then
+        self._gameMap:destroy()
+    end
+    self._gameMap = map
 end
 
-function Core:getActiveMap()
-    return self._activeMap
+function Core:getGameMap()
+    return self._gameMap
 end
 
 function Core:addGameObject(gameObject)
     -- Попытка добавить не объект GameObject
     if not gameObject or not gameObject["getVisual"] then
-        print("WARNING: manada.Core:addGameObject(): " .. "Attempt to add non-GameObject object to GameObject array (" .. type(gameObject) .. ")") 
+        print("WARNING: manada.Core:addGameObject(): " .. "Attempt to add non-GameObject object (" .. type(gameObject) .. ")") 
         return false
     end
 
     self._gameObjects[#self._gameObjects + 1] = gameObject
-    return true
+    return gameObject
 end
 
 function Core:addGameObjects(gameObjects)
@@ -137,7 +133,7 @@ function Core:addGameObjects(gameObjects)
         self:addGameObject(gameObjects[i])
     end
 
-    return true
+    return gameObjects
 end
 
 function Core:getGameObjects()
@@ -176,6 +172,12 @@ function Core:getGameObjectByID(id)
     end
 
     return false
+end
+
+function Core:destroyAllGameObjects()
+    for i = 1, #self._gameObjects do
+        self._gameObjects[i]:destroy()
+    end
 end
 
 function Core:togglePause()

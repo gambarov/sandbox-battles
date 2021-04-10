@@ -25,7 +25,7 @@ function scene:create( event )
 	masterGroup:insert(mainGroup)
 	masterGroup:insert(uiGroup)
 
-	manada:setActiveMap(manada.Map:new({ generator = "simple", parent = mainGroup, width = 10, height = 15, cellSize = 256 }))
+	manada:setGameMap(manada.Map:new({ generator = "simple", group = mainGroup, width = 10, height = 15, cellSize = 256 }))
 
 	-- Перемещаем игровую группу в центр экрана
 	mainGroup.x, mainGroup.y = math.floor(0.5 * display.pixelHeight), math.floor(0.5 * display.pixelWidth)

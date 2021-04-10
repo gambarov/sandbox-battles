@@ -24,14 +24,16 @@ end
 
 function Handler:handle(touch)  
 
-    local map = manada:getActiveMap()
+    local map = touch.map
 
-    local i, j = ceil(touch.y / map:getCellSize()), ceil(touch.x / map:getCellSize())
-    local cell = map:getCell(i, j)
+    if map then
+        local i, j = ceil(touch.y / map:getCellSize()), ceil(touch.x / map:getCellSize())
+        local cell = map:getCell(i, j)
 
-    if cell and cell.type and cell.type ~= "wall" then
-        if destroyObjectIn(touch) then
-            map:setCell(i, j, { type = "free" })
+        if cell and cell.type and cell.type ~= "wall" then
+            if destroyObjectIn(touch) then
+                map:setCell(i, j, { type = "free" })
+            end
         end
     end
 

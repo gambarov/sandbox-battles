@@ -1,9 +1,11 @@
-local data = {}
-
-data.settings = 
+local data = 
 {
     soundVolume = 100,
-    soundOn = true
+    soundOn = true,
+
+    terrainToSpawn = "Barrier",
+    npcToSpawn = "SoldierTeamBlue",
+    weaponToSpawn = "Shotgun",
 }
 
 return data

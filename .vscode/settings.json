@@ -13,7 +13,8 @@
         "native",
         "transition",
         "graphics",
-        "unpack"
+        "unpack",
+        "easing"
     ],
     "lua.targetVersion": "5.3"
 }

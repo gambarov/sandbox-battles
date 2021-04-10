@@ -20,6 +20,10 @@ function Random:range(min, max)
     return random(min, max)
 end
 
+function Random:flip()
+	if self:range(0, 1) == 1 then return 1 else return -1 end
+end
+
 function Random:seed(value)
     randomseed(value or ostime())
 end

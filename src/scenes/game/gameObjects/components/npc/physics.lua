@@ -17,16 +17,6 @@ function Component:initialize(gameObject, params)
     
     gameObject:getVisual().isFixedRotation = true
     gameObject:addEventListener("updatePhysics", self)
-    gameObject:addEventListener("collision", self)
-end
-
-function Component:collision(event)
-    local object = event.other.gameObject
-
-    if object and object:getType() ~= "bullet" then
-        local rotation = manada.math:angleBetweenVectors({ x = self.gameObject:getX(), y = self.gameObject:getY() }, { x = object:getX(), y = object:getY() })
-        self:updatePhysics({ currentRotation = rotation + manada.random:range(90, 180) })
-    end
 end
 
 function Component:update(dt)
@@ -38,8 +28,18 @@ function Component:update(dt)
     end
 end
 
-function Component:updatePhysics(params)
-    for k, v in pairs(params) do
+function Component:updatePhysics(event)
+
+    local timerID = "updatePhysicsDelay" .. self.gameObject:getID()
+    -- Если задержка уже есть, выходим
+    if manada.timer:get(timerID) then 
+        return 
+    -- Добавление задержки для отклонения новых обновлений
+    elseif event.delay then
+        manada.timer:performWithDelay(event.delay, function() manada.timer:cancel(timerID) end, 1, timerID)
+    end
+    -- Обновление данных
+    for k, v in pairs(event) do
         if self[k] then
             self[k] = v
         end
@@ -60,18 +60,17 @@ end
 
 function Component:updateMovement()
     local vector = manada.math:vectorFromAngle(self.gameObject:getRotation())
-    local weaponWeight = self.stats:get("weapon").weight
+    local weaponWeight = (self.stats:get("weapon") or { weight = 0 }).weight
     local moveSpeed = self.stats:get("moveSpeed", "original") - weaponWeight
     self.gameObject:getVisual():setLinearVelocity(vector.x * moveSpeed * self.speedRate, vector.y * moveSpeed * self.speedRate)
 end
 
 function Component:destroy()
     self.gameObject:removeEventListener("updatePhysics", self)
-    self.gameObject:removeEventListener("collision", self)
     physics.removeBody(self.gameObject:getVisual())
-    self.params = nil
-    self.stats = nil
     self.gameObject = nil
+    self.stats = nil
+    self.params = nil
 end
 
 return Component
