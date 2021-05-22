@@ -24,7 +24,7 @@ function Component:initialize(gameObject, params)
     
     gameObject:getComponent("stats"):set("weapon", manada:getGameData("weapons")[self.name])
 
-    gameObject:addEventListener("updateWeapon", self)
+    gameObject:addEventListener("onWeaponUpdate", self)
 
     self:update()
 end

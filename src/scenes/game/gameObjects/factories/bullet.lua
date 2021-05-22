@@ -33,9 +33,11 @@ function Factory:create(params)
         local vector = manada.math:vectorFromAngle(bullet:getRotation())
 
         -- Сдвиг пули к оружию
-        bullet:setPosition(bullet:getX() + (vector.x * weapon.width) - (vector.y * 10), bullet:getY() + (vector.y * weapon.width + (vector.x * 10)))
+        bullet:setPosition(
+            bullet:getX() + (vector.x * weapon.width) - (vector.y * 10), 
+            bullet:getY() + (vector.y * weapon.width + (vector.x * 10)))
 
-        bullet:getVisual():setLinearVelocity(vector.x * bulletData.speed, vector.y * bulletData.speed)
+        bullet:getVisual():applyForce(vector.x * bulletData.speed * manada.time:delta(), vector.y * bulletData.speed * manada.time:delta())
 
         local function onCollision(event)    
             -- body
@@ -51,8 +53,7 @@ function Factory:create(params)
                     end
                 end
 
-                object:dispatchEvent("getDamage", { value = bulletData.damage })
-                object:getComponent("stats"):decrease("health", bulletData.damage)
+                object:dispatchEvent("onDamage", { value = bulletData.damage })
             end
 
             bullet:hide()

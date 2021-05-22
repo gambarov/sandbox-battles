@@ -1,11 +1,10 @@
 local class = require("manada.libs.middleclass")
-local game = require "src.scenes.game"
 
 local Component = class("HealthbarComponent")
 
 function Component:initialize(gameObject, params)
 
-    -- Default options for instance
+    -- Значения по-умолчанию
 	params = params or {}
 
 	local x, y = gameObject:getX(), gameObject:getY() - gameObject:getHeight()
@@ -45,17 +44,17 @@ function Component:initialize(gameObject, params)
     -- Объект должен рисоваться поверх всех других (нпс, стены и т.д.)
     group:toFront()
     -- Задаем событие
-    gameObject:addEventListener("getDamage", self)
+    gameObject:addEventListener("onDamage", self)
     
     self.group = group
     self.gameObject = gameObject
     self.stats = stats
 
-    self:getDamage({ value = 0 })
+    self:onDamage({ value = 0 })
     self:update()
 end
 
-function Component:getDamage(event)
+function Component:onDamage(event)
     local damagePercent = manada.math:calculatePercentage(event.value, self.stats:get("health", "original")) / 100
 
     self.group.healthText.text = self.stats:get("health", "current") .. "/" .. self.stats:get("health", "original")
@@ -71,7 +70,7 @@ end
 
 function Component:destroy()
     -- Отписываем от события
-    self.gameObject:removeEventListener("getDamage", self)
+    self.gameObject:removeEventListener("onDamage", self)
     self.gameObject = nil
     self.stats = nil
     -- Очищаем визуал и группу

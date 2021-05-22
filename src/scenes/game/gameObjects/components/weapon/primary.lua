@@ -18,7 +18,7 @@ function Component:initialize(gameObject, params)
     
     gameObject:getComponent("stats"):set("weapon", manada:getGameData("weapons")[self.name])
 
-    gameObject:addEventListener("updateWeapon", self)
+    gameObject:addEventListener("onWeaponUpdate", self)
 
     self:update()
 end
@@ -28,7 +28,7 @@ function Component:update()
     self.visual.rotation = self.owner:getRotation()
 end
 
-function Component:updateWeapon(event)
+function Component:onWeaponUpdate(event)
     -- Уникальный ID для таймера
     local timerID = "fireWeapon" .. self.owner:getID()
     local weaponData = manada:getGameData("weapons")[self.name]
@@ -38,6 +38,7 @@ function Component:updateWeapon(event)
     end
 
     if event.phase == "start" then
+        -- Запускаем таймер только один раз
         if not manada.timer:get(timerID) then
             manada.timer:performWithDelay(weaponData.rate, createBullet, -1, timerID)
         end
@@ -45,7 +46,7 @@ function Component:updateWeapon(event)
         manada.timer:pause(timerID)
     elseif event.phase == "resume" then
         manada.timer:resume(timerID)
-    elseif event.phase == "stop" then
+    elseif event.phase == "stop" or event.phase == "cancel" then
         manada.timer:cancel(timerID)
     end
 end
@@ -63,9 +64,9 @@ function Component:destroy()
         self.owner:getComponent("stats"):remove("weapon")
     end
 
-    self:updateWeapon({ phase = "stop" })
+    self:onWeaponUpdate({ phase = "stop" })
 
-    self.owner:removeEventListener("updateWeapon", self)
+    self.owner:removeEventListener("onWeaponUpdate", self)
     self.owner = nil
 
     self.visual:removeSelf()

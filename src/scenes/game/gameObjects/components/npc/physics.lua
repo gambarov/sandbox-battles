@@ -9,14 +9,19 @@ function Component:initialize(gameObject, params)
 
     self.currentRotation = gameObject:getRotation() + 90   -- Угол, на который нужно повернуть объект
     self.turnRate = 0                                      -- Скорость вращения
-    self.speedRate = 0
+    self.speedRate = 0                                     -- Скорость движения
 
     self.stats = gameObject:getComponent("stats")
 
     physics.addBody(gameObject:getVisual(), params.bodyType or "dynamic", self.params)
     
     gameObject:getVisual().isFixedRotation = true
-    gameObject:addEventListener("updatePhysics", self)
+    gameObject:addEventListener("onPhysicsUpdate", self)
+    gameObject:addEventListener("onDamage", self)
+end
+
+function Component:onDamage(event)
+    self.gameObject:getComponent("stats"):decrease("health", event.value)
 end
 
 function Component:update(dt)
@@ -28,9 +33,9 @@ function Component:update(dt)
     end
 end
 
-function Component:updatePhysics(event)
-
-    local timerID = "updatePhysicsDelay" .. self.gameObject:getID()
+function Component:onPhysicsUpdate(event)
+    -- Уникальное для объекта имя таймера
+    local timerID = "onPhysicsUpdateDelay" .. self.gameObject:getID()
     -- Если задержка уже есть, выходим
     if manada.timer:get(timerID) then 
         return 
@@ -66,7 +71,10 @@ function Component:updateMovement()
 end
 
 function Component:destroy()
-    self.gameObject:removeEventListener("updatePhysics", self)
+    -- Отписка от событий
+    self.gameObject:removeEventListener("onPhysicsUpdate", self)
+    self.gameObject:removeEventListener("onDamage", self)
+    -- Очищаем визуал от физики
     physics.removeBody(self.gameObject:getVisual())
     self.gameObject = nil
     self.stats = nil

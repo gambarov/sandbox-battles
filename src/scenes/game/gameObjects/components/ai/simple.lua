@@ -17,7 +17,7 @@ function Component:update(dt)
     if self.enemy then
         -- Если противник уничтожен или не находится в зоне видимости
         if self.enemy:isDestroyed() or not self:isInSight(self.enemy) then
-            self.gameObject:dispatchEvent("updateWeapon", { phase = "stop" })
+            self.gameObject:dispatchEvent("onWeaponUpdate", { phase = "stop" })
             self.enemy = nil
             return
         end
@@ -26,7 +26,7 @@ function Component:update(dt)
     -- Свободное передвижение и поиск противника
     else
         local rotation = self.gameObject:getRotation() + 90
-        self.gameObject:dispatchEvent("updatePhysics", { currentRotation =  rotation + manada.random:range(-10, 10), turnRate = 2, speedRate = 1 })
+        self.gameObject:dispatchEvent("onPhysicsUpdate", { currentRotation =  rotation + manada.random:range(-10, 10), turnRate = 2, speedRate = 1 })
         self:scanForEnemy()
     end
 end
@@ -73,12 +73,12 @@ function Component:collision(event)
                 end
             end
 
-            self.gameObject:dispatchEvent("updatePhysics", { delay = 150, currentRotation = final, turnRate = 8 })
+            self.gameObject:dispatchEvent("onPhysicsUpdate", { delay = 150, currentRotation = final, turnRate = 8 })
 
         elseif object:getType() == "npc" then
             if manada.random:range(1, 10) > 7 then
                 local rotation = self.gameObject:getRotation() + manada.random:range(-135, 135)
-                self.gameObject:dispatchEvent("updatePhysics", { delay = 150, currentRotation = rotation, turnRate = 8 })
+                self.gameObject:dispatchEvent("onPhysicsUpdate", { delay = 150, currentRotation = rotation, turnRate = 8 })
             end
         end
     end
@@ -107,8 +107,8 @@ function Component:attackTo(npc)
         speedRate = 0
     end
 
-    self.gameObject:dispatchEvent("updatePhysics", { currentRotation = rotation, turnRate = 8, speedRate = speedRate })
-    self.gameObject:dispatchEvent("updateWeapon", { phase = "start" })
+    self.gameObject:dispatchEvent("onPhysicsUpdate", { currentRotation = rotation, turnRate = 8, speedRate = speedRate })
+    self.gameObject:dispatchEvent("onWeaponUpdate", { phase = "start" })
 end
 
 function Component:isAlly(npc)
