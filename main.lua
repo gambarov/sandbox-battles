@@ -14,8 +14,6 @@ manada.isheet:add("weapons")
 
 local default = require("src.defaultData")
 
-print(type(default))
-
 -- Первый запуск приложения или добавление новой настройки
 for name, value in pairs(default) do
     if manada.data:get(name) == nil then

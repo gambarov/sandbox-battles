@@ -130,7 +130,7 @@ data.bullets =
         w = 35,
         h = 6,
         color = { 1, 0.7, 0.15 },
-        speed = 5000,
+        speed = 1000,
         damage = 15
     }
 }
